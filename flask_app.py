@@ -12,7 +12,8 @@ connection = pymysql.connect(host=os.environ.get('CLEARDB_DATABASE_HOST'),
                              user=os.environ.get('CLEARDB_DATABASE_USER'),
                              password=os.environ.get('CLEARDB_DATABASE_PASSWORD'),
                              db=os.environ.get('CLEARDB_DATABASE_DB'),
-                             charset='utf8mb4')
+                             charset='utf8mb4',
+                             cursorclass=pymysql.cursors.DictCursor)
 
 with connection.cursor() as cursor:
     # Create a new record
@@ -24,13 +25,15 @@ connection.commit()
 
 @app.route('/')
 def hello():
+    """
     with connection.cursor() as cursor:
         # Read a single record
         sql = "SELECT `id`, `email` FROM `users` WHERE `email`=%s"
         cursor.execute(sql, ('webmaster@python.org',))
         result = cursor.fetchone()
         print(result)
-    return f'Hello, Heroku {result["email"]}!'
+    """
+    return f'Hello, Jerry!'
 
 if __name__ == 'main':
 
