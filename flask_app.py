@@ -18,7 +18,7 @@ connection = pymysql.connect(host=os.environ.get('CLEARDB_DATABASE_HOST'),
 with connection.cursor() as cursor:
     # Create a new record
     sql = "INSERT INTO `users` (`email`, `password`) VALUES (%s, %s)"
-    cursor.execute(sql, ('lulala@gmail.com', 'QQQQQQ'))
+    cursor.execute(sql, ('12/17@gmail.com', 'QQQQQQ'))
 
 connection.commit()
 
@@ -34,7 +34,7 @@ def hello():
         print(result)
     return f'Hello, Heroku {result["email"]}!'
     """
-    return render_template("template/index.html")
+    return render_template("index.html")
 
 if __name__ == 'main':
 
