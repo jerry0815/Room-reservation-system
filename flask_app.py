@@ -37,5 +37,5 @@ def hello():
     return render_template("index.html")
 
 if __name__ == 'main':
-
+    app.debug = True
     app.run() #啟動伺服器
