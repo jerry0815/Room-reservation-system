@@ -15,13 +15,14 @@ connection = pymysql.connect(host=os.environ.get('CLEARDB_DATABASE_HOST'),
                              charset='utf8mb4',
                              cursorclass=pymysql.cursors.DictCursor)
 
+"""
 with connection.cursor() as cursor:
     # Create a new record
     sql = "INSERT INTO `users` (`email`, `password`) VALUES (%s, %s)"
     cursor.execute(sql, ('12/17@gmail.com', 'QQQQQQ'))
 
 connection.commit()
-
+"""
 
 @app.route('/')
 def hello():
