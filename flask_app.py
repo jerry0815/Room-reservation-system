@@ -1,4 +1,4 @@
-from flask import Flask, request
+from flask import Flask, request , render_template
 import os
 
 import pymysql
@@ -25,6 +25,7 @@ connection.commit()
 
 @app.route('/')
 def hello():
+    """
     with connection.cursor() as cursor:
         # Read a single record
         sql = "SELECT `id`, `email` FROM `users` WHERE `email`=%s"
@@ -32,6 +33,8 @@ def hello():
         result = cursor.fetchone()
         print(result)
     return f'Hello, Heroku {result["email"]}!'
+    """
+    return render_template("template/index.html")
 
 if __name__ == 'main':
 
