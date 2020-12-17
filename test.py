@@ -6,7 +6,7 @@ app = Flask(__name__)
 def hello():
     if request.method =='POST':
         if request.values['send']=='Search':
-            return render_template('index.html',name=request.values['user'])
+            return render_template('index.html',name=request.values['user'] , id = 1)
     return render_template("index.html",name="")
 
 if __name__ == '__main__':

@@ -31,10 +31,10 @@ def hello():
             with connection.cursor() as cursor:
                 # Read a single record
                 sql = "SELECT `id`, `email` FROM `users` WHERE `email`=%s"
-                cursor.execute(sql, (request.values['user'],))
+                cursor.execute(sql, (request.values['user']))
                 result = cursor.fetchone()
                 print(result)
-                return render_template('index.html',name=result["email"])
+                return render_template('index.html',name=result["email"] , id = result["id"])
     return render_template("index.html",name="")
 
 if __name__ == '__main__':
