@@ -18,7 +18,7 @@ connection = pymysql.connect(host=os.environ.get('CLEARDB_DATABASE_HOST'),
 
 with connection.cursor() as cursor:
     # Create a new record
-    sql = "INSERT INTO `Account` (`email`, `password` , ˋnameˋ) VALUES (%s, %s , %s)"
+    sql = "INSERT INTO `Account` (`email`, `password` , `name`) VALUES (%s, %s , %s)"
     cursor.execute(sql, ('jerry@gmail.com', 'QQQQQQ' , 'Lulala'))
 
 connection.commit()
