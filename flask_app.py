@@ -34,7 +34,8 @@ def hello():
                 sql = "SELECT `id`, `email`,`name`FROM `Account` WHERE `email`=%s"
                 cursor.execute(sql, (request.values['user']))
                 result = cursor.fetchone()
-                print(result)
+                if result == None:
+                    return render_template("index.html",name="")
                 return render_template('index.html',name=result["name"] , id = result["id"])
         elif request.values['send']=='Register':
             return redirect(url_for('register'))
