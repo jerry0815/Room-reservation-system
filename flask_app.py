@@ -19,12 +19,12 @@ connection = pymysql.connect(host=os.environ.get('CLEARDB_DATABASE_HOST'),
 with connection.cursor() as cursor:
     # Create a new record
     sql = "INSERT INTO `Account` (`email`, `password` , `name`) VALUES (%s, %s , %s)"
-    cursor.execute(sql, ('wacky@gmail.com', 'QQQQQQ' , 'HaHaOWO'))
+    cursor.execute(sql, ('alien@gmail.com', 'QQQQQQ' , 'Alien'))
 
 connection.commit()
 
 
-@app.route('/')
+@app.route('/',methods=['POST','GET'])
 def hello():
     if request.method =='POST':
         if request.values['send']=='Search':
