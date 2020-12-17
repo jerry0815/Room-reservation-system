@@ -49,6 +49,7 @@ def register():
             with connection.cursor() as cursor:
                 sql = "INSERT INTO `Account` (`email`, `password` , `name`) VALUES (%s, %s , %s)"
                 cursor.execute(sql, (request.values['email'], request.values['pwd'] , request.values['name']))
+            connection.commit()
             return redirect(url_for('hello'))
     return render_template("register.html")
 if __name__ == '__main__':
