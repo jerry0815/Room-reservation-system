@@ -15,25 +15,20 @@ connection = pymysql.connect(host=os.environ.get('CLEARDB_DATABASE_HOST'),
                              charset='utf8mb4',
                              cursorclass=pymysql.cursors.DictCursor)
 
-def reConnect(self):
-	try:
-		self.connection.ping()
-	except:
-		self.connection()
 """
 with connection.cursor() as cursor:
     # Create a new record
     sql = "INSERT INTO `Account` (`email`, `password` , `name`) VALUES (%s, %s , %s)"
     cursor.execute(sql, ('alien@gmail.com', 'QQQQQQ' , 'Alien'))
-"""
-connection.commit()
 
+connection.commit()
+"""
 
 @app.route('/',methods=['POST','GET'])
 def hello():
     if request.method =='POST':
         if request.values['send']=='Search':
-            reConnect(connection)
+            connection.ping(reconnect = True)
             with connection.cursor() as cursor:
                 # Read a single record
                 sql = "SELECT `id`, `email`,`name`FROM `Account` WHERE `email`=%s"
@@ -49,7 +44,7 @@ def hello():
 def register():
     if request.method =='POST':
         if request.values['send']=='Submit':
-            reConnect(connection)
+            connection.ping(reconnect = True)
             with connection.cursor() as cursor:
                 sql = "INSERT INTO `Account` (`email`, `password` , `name`) VALUES (%s, %s , %s)"
                 cursor.execute(sql, (request.values['email'], request.values['pwd'] , request.values['name']))
