@@ -20,23 +20,23 @@ with connection.cursor() as cursor:
     # Create a new record
     sql = "INSERT INTO `users` (`email`, `password`) VALUES (%s, %s)"
     cursor.execute(sql, ('12/17@gmail.com', 'QQQQQQ'))
-
-connection.commit()
 """
+connection.commit()
+
 
 @app.route('/')
 def hello():
-    """
-    with connection.cursor() as cursor:
-        # Read a single record
-        sql = "SELECT `id`, `email` FROM `users` WHERE `email`=%s"
-        cursor.execute(sql, ('jerry.com',))
-        result = cursor.fetchone()
-        print(result)
-    return f'Hello, Heroku {result["email"]}!'
-    """
-    return render_template("index.html")
+    if request.method =='POST':
+        if request.values['send']=='Search':
+            with connection.cursor() as cursor:
+                # Read a single record
+                sql = "SELECT `id`, `email` FROM `users` WHERE `email`=%s"
+                cursor.execute(sql, (request.values['user'],))
+                result = cursor.fetchone()
+                print(result)
+                return render_template('index.html',name=result["email"])
+    return render_template("index.html",name="")
 
-if __name__ == 'main':
+if __name__ == '__main__':
     app.debug = True
     app.run() #啟動伺服器
