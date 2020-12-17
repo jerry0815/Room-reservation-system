@@ -21,12 +21,12 @@ while True:
         break
     except:
         connection.ping(True)
-
+"""
 with connection.cursor() as cursor:
     # Create a new record
     sql = "INSERT INTO `Account` (`email`, `password` , `name`) VALUES (%s, %s , %s)"
     cursor.execute(sql, ('alien@gmail.com', 'QQQQQQ' , 'Alien'))
-
+"""
 connection.commit()
 
 
@@ -42,7 +42,7 @@ def hello():
                 print(result)
                 return render_template('index.html',name=result["name"] , id = result["id"])
         elif request.values['send']=='Register':
-            redirect(url_for('register'))
+            return redirect(url_for('register'))
     return render_template("index.html",name="")
 
 @app.route('/register',methods=['POST','GET'])
