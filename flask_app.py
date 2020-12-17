@@ -19,7 +19,7 @@ connection = pymysql.connect(host=os.environ.get('CLEARDB_DATABASE_HOST'),
 with connection.cursor() as cursor:
     # Create a new record
     sql = "INSERT INTO `Account` (`email`, `password` , `name`) VALUES (%s, %s , %s)"
-    cursor.execute(sql, ('jerry@gmail.com', 'QQQQQQ' , 'Lulala'))
+    cursor.execute(sql, ('wacky@gmail.com', 'QQQQQQ' , 'HaHaOWO'))
 
 connection.commit()
 
@@ -30,11 +30,11 @@ def hello():
         if request.values['send']=='Search':
             with connection.cursor() as cursor:
                 # Read a single record
-                sql = "SELECT `id`, `email` FROM `users` WHERE `email`=%s"
+                sql = "SELECT `id`, `email`,`name`FROM `Account` WHERE `email`=%s"
                 cursor.execute(sql, (request.values['user']))
                 result = cursor.fetchone()
                 print(result)
-                return render_template('index.html',name=result["email"] , id = result["id"])
+                return render_template('index.html',name=result["name"] , id = result["id"])
     return render_template("index.html",name="")
 
 if __name__ == '__main__':
