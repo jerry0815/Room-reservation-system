@@ -15,7 +15,8 @@
 		}
 
 		function getCookie(cname) {
-			var arr = document.cookie.split(';');
+			var t = document.cookie;
+			var arr = t.split(';');
 			for(var i = 0; i < arr.length; i++){
 				var temp = arr[i].split('=');
 				if(temp[0] == cname){
@@ -28,7 +29,7 @@
 		function check_Cookie() {
 		alert("check cookie");
 		var user=getCookie("username");
-		var userid=getCookie("cid");
+		var userid=getCookie("id_value");
 		alert("user = " + user + " id = " + userid)
 		if (user != "" && userid != "") {
 			document.getElementById("test_1").innerHTML = "this is {{name}}";
@@ -42,9 +43,9 @@
 			alert("no cookie")
 			if("{{name}}" != "")
 			{
-				alert("set cookie")
+				alert("set cookie id = {{id}}")
 				setCookie("username","{{name}}" , 30)
-				setCookie("cid","{{id}}" , 30)
+				setCookie("id_value","{{id}}" , 30)
 			}
 		}
 		}
