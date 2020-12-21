@@ -41,9 +41,9 @@
 		else {
 			document.getElementById("test_2").innerHTML = "this is {{id}}";
 			alert("no cookie")
-			if("{{name}}" != "")
+			if("{{name}}" != "" && "{{id}}" != "")
 			{
-				alert("set cookie id = {{id}}")
+				alert("set cookie id = {{id}} , name = {{name}}")
 				setCookie("username","{{name}}" , 30)
 				setCookie("id_value","{{id}}" , 30)
 			}
