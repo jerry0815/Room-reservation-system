@@ -31,15 +31,18 @@
 		}
 
 		function check_Cookie(name , id) {
+		alert("check cookie");
 		var user=getCookie("username");
 		var userid=getCookie("cid");
 		if (user != "" && userid != "") {
+			document.getElementById("test_1").innerHTML = name;
 			var tmp = "Hello " + user + " your id is " + userid;
 			alert("have cookie " + tmp);
 			//"Hello {{user}} your id is {{userid}}"
 			document.getElementById("hello").innerHTML = tmp;
 		}
 		else {
+			document.getElementById("test_1").innerHTML = id;
 			alert("no cookie")
 			if(name != "")
 			{
@@ -81,6 +84,7 @@
 		<h3>Navbar With Dropdown</h3>
 		<p id="hello">Hello {{name}} world {{id}}</p>
 		<p>This example adds a dropdown menu for the "Page 1" button in the navigation bar.</p>
+		<p id="test_1">I am test</p>
 	</div>
 </body>                                                                                             
 <head>                                                                                                                                                                           
