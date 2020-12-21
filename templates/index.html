@@ -15,19 +15,14 @@
 		}
 
 		function getCookie(cname) {
-		var tname = cname + "=";
-		var decodedCookie = decodeURIComponent(document.cookie);
-		var ca = decodedCookie.split(';');
-		for(var i = 0; i < ca.length; i++) {
-			var c = ca[i];
-			while (c.charAt(0) == ' ') {
-			c = c.substring(1);
+			var arr = document.cookie.split(';');
+			for(var i = 0; i < arr.length; i++){
+				var temp = arr[i].split('=');
+				if(temp[0] == cname){
+				return temp[1];
+				}
 			}
-			if (c.indexOf(tname) == 0) {
-			return c.substring(tname.length, c.length);
-			}
-		}
-		return "";
+			return '';
 		}
 
 		function check_Cookie() {
