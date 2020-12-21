@@ -40,11 +40,11 @@
 		else {
 			document.getElementById("test_2").innerHTML = "this is {{id}}";
 			alert("no cookie")
-			if({name} != "")
+			if("{{name}}" != "")
 			{
 				alert("set cookie")
-				setCookie("username",{name} , 30)
-				setCookie("cid",{id} , 30)
+				setCookie("username","{{name}}" , 30)
+				setCookie("cid","{{id}}" , 30)
 			}
 		}
 		}
