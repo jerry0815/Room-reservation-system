@@ -32,14 +32,16 @@
 
 		function checkCookie() {
 		var user=getCookie("username");
-		if (user != "") {
-			document.getElementById("hello").innerHTML = "Hello {{name}} your id is {{id}}";
+		var userid=getCookie("cid");
+		if (user != "" && userid != "") {
+			document.getElementById("hello").innerHTML = "Hello {{user}} your id is {{userid}}";
 		}
 		else {
 			if(name != "")
 			{
 				setCookie("username",name , "cid" , id , 30)
 			}
+		}
 		}
 	</script>  
 </head>
