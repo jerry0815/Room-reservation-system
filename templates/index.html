@@ -40,8 +40,10 @@
 			document.getElementById("hello").innerHTML = tmp;
 		}
 		else {
+			alert("no cookie")
 			if(name != "")
 			{
+				alert("set cookie")
 				setCookie("username",name , "cid" , id , 30)
 			}
 		}
