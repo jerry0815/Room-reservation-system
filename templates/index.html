@@ -30,7 +30,7 @@
 		return "";
 		}
 
-		function check_Cookie() {
+		function check_Cookie(name , id) {
 		var user=getCookie("username");
 		var userid=getCookie("cid");
 		if (user != "" && userid != "") {
@@ -50,7 +50,7 @@
 		}
 	</script>  
 </head>
-<body onload="check_Cookie()">
+<body onload="check_Cookie(name , id)">
 	<nav class="navbar navbar-inverse">
 		<div class="container-fluid">
 		  <div class="navbar-header">
@@ -79,7 +79,7 @@
 	</nav>
 	<div class="container">
 		<h3>Navbar With Dropdown</h3>
-		<p id="hello">Hello world</p>
+		<p id="hello">Hello {{name}} world {{id}}</p>
 		<p>This example adds a dropdown menu for the "Page 1" button in the navigation bar.</p>
 	</div>
 </body>                                                                                             
