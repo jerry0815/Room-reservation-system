@@ -39,7 +39,7 @@ def hello():
                 return render_template('index.html',name=result["name"] , id = result["id"])
         elif request.values['send']=='Register':
             return redirect(url_for('register'))
-    return render_template("index.html",name="")
+    return render_template("index.html",name="" , id="")
 
 @app.route('/register',methods=['POST','GET'])
 def register():
