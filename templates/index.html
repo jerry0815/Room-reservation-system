@@ -21,7 +21,7 @@
 		}
 		function getCookie(cname) {
 			var t = document.cookie;
-			alert(cname + " get coockie; " + t)
+			//alert(cname + " get coockie; " + t)
 			var arr = t.split('; ');
 			for(var i = 0; i < arr.length; i++){
 				var temp = arr[i].split('=');
@@ -33,23 +33,23 @@
 		}
 
 		function check_Cookie() {
-		alert("check cookie");
+		//alert("check cookie");
 		var user=getCookie("username");
 		var userid=getCookie("idvalue");
-		alert("user = " + user + " id = " + userid)
+		//alert("user = " + user + " id = " + userid)
 		if (user != "" && userid != "") {
 			document.getElementById("test_1").innerHTML = "this is {{name}}";
-			var tmp = "Hello " + user + " your id is " + userid;
-			alert("have cookie " + tmp);
+			var tmp = "Hello " + user + " your id is " + userid + " this is cookie.";
+			//alert("have cookie " + tmp);
 			//"Hello {{user}} your id is {{userid}}"
 			document.getElementById("hello").innerHTML = tmp;
 		}
 		else {
 			document.getElementById("test_2").innerHTML = "this is {{id}}";
-			alert("no cookie")
+			//alert("no cookie")
 			if("{{name}}" != "" && "{{id}}" != "")
 			{
-				alert("set cookie id = {{id}} , name = {{name}}")
+				//alert("set cookie id = {{id}} , name = {{name}}")
 				setCookie("username","{{name}}" , 30)
 				setCookie("idvalue","{{id}}" , 30)
 			}
@@ -86,7 +86,7 @@
 	</nav>
 	<div class="container">
 		<h3>Navbar With Dropdown</h3>
-		<p id="hello">Hello {{name}} world {{id}}</p>
+		<p id="hello">Hello {{name}} world {{id}} this is not cookie</p>
 		<p>This example adds a dropdown menu for the "Page 1" button in the navigation bar.</p>
 		<p id="test_1">I am test1</p>
 		<p id="test_2">I am test2</p>
