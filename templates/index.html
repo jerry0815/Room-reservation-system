@@ -5,9 +5,45 @@
 	<title>Lulala page</title>    
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
   	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-  	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+	<script>
+		function setCookie(cname,cvalue,cid,cidvalue,exdays) {
+		var d = new Date();
+		d.setTime(d.getTime() + (exdays*24*60*60*1000));
+		var expires = "expires=" + d.toGMTString();
+		document.cookie = cname + "=" + cvalue + ";" + cid + "=" + cidvalue + ";"+ expires + ";path=/";
+		}
+
+		function getCookie(cname) {
+		var tname = cname + "=";
+		var decodedCookie = decodeURIComponent(document.cookie);
+		var ca = decodedCookie.split(';');
+		for(var i = 0; i < ca.length; i++) {
+			var c = ca[i];
+			while (c.charAt(0) == ' ') {
+			c = c.substring(1);
+			}
+			if (c.indexOf(tname) == 0) {
+			return c.substring(tname.length, c.length);
+			}
+		}
+		return "";
+		}
+
+		function checkCookie() {
+		var user=getCookie("username");
+		if (user != "") {
+			document.getElementById("hello").innerHTML = "Hello {{name}} your id is {{id}}";
+		}
+		else {
+			if(name != "")
+			{
+				setCookie("username",name , "cid" , id , 30)
+			}
+		}
+	</script>  
 </head>
-<body>
+<body onload="checkCookie()">
 	<nav class="navbar navbar-inverse">
 		<div class="container-fluid">
 		  <div class="navbar-header">
@@ -34,10 +70,9 @@
 		  
 		</div>
 	</nav>
-		
 	<div class="container">
 		<h3>Navbar With Dropdown</h3>
-		<p>Hello {{name}} your id is {{id}}</p>
+		<p id="hello">Hello world</p>
 		<p>This example adds a dropdown menu for the "Page 1" button in the navigation bar.</p>
 	</div>
 </body>                                                                                             
