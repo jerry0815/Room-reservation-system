@@ -34,6 +34,7 @@
 		alert("check cookie");
 		var user=getCookie("username");
 		var userid=getCookie("cid");
+		alert("user = " + user + " id = " + userid)
 		if (user != "" && userid != "") {
 			document.getElementById("test_1").innerHTML = "this is {{name}}";
 			var tmp = "Hello " + user + " your id is " + userid;
