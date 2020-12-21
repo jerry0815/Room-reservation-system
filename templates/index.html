@@ -34,7 +34,10 @@
 		var user=getCookie("username");
 		var userid=getCookie("cid");
 		if (user != "" && userid != "") {
-			document.getElementById("hello").innerHTML = "Hello {{user}} your id is {{userid}}";
+			alert("have cookie");
+			var tmp = "Hello " + user + " your id is " + userid;
+			//"Hello {{user}} your id is {{userid}}"
+			document.getElementById("hello").innerHTML = tmp;
 		}
 		else {
 			if(name != "")
