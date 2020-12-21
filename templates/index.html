@@ -7,11 +7,11 @@
   	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 	<script>
-		function setCookie(cname,cvalue,cid,cidvalue,exdays) {
+		function setCookie(cname,cvalue,exdays) {
 		var d = new Date();
 		d.setTime(d.getTime() + (exdays*24*60*60*1000));
 		var expires = "expires=" + d.toGMTString();
-		document.cookie = cname + "=" + cvalue + ";" + cid + "=" + cidvalue + ";"+ expires + ";path=/";
+		document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
 		}
 
 		function getCookie(cname) {
@@ -47,7 +47,8 @@
 			if({name} != "")
 			{
 				alert("set cookie")
-				setCookie("username",{name} , "cid" , {id} , 30)
+				setCookie("username",{name} , 30)
+				setCookie("cid",{id} , 30)
 			}
 		}
 		}
