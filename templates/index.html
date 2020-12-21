@@ -30,12 +30,12 @@
 		return "";
 		}
 
-		function checkCookie() {
+		function check_Cookie() {
 		var user=getCookie("username");
 		var userid=getCookie("cid");
 		if (user != "" && userid != "") {
-			alert("have cookie");
 			var tmp = "Hello " + user + " your id is " + userid;
+			alert("have cookie " + tmp);
 			//"Hello {{user}} your id is {{userid}}"
 			document.getElementById("hello").innerHTML = tmp;
 		}
@@ -48,7 +48,7 @@
 		}
 	</script>  
 </head>
-<body onload="checkCookie()">
+<body onload="check_Cookie()">
 	<nav class="navbar navbar-inverse">
 		<div class="container-fluid">
 		  <div class="navbar-header">
