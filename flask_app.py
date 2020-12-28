@@ -106,7 +106,7 @@ def listIdToStr(id_list):
         participant = participant + "," + str(i)
     return participant
 
-def insertRecord(title = "testing record", roomname  = "TR-203", startDate = "12/30", startSection  = "5", endDate = "12/30", endSection  = "8", participant = ['jerry','alien','wacky'], bookName = "jerry"):
+def insertRecord(title = "testing record", roomname  = "TR-204", startDate = "12/30", startSection  = "5", endDate = "12/30", endSection  = "8", participant = ['jerry','alien','wacky'], bookName = "jerry"):
 
     #get booker userid
     sql = "SELECT  `userID` FROM `users` WHERE `userName`= %s"
