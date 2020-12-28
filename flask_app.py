@@ -31,7 +31,6 @@ def validateLogin(userName , password):
     with connection.cursor() as cursor:
         cursor.execute(sql,userName)
         result = cursor.fetchone()
-    if result == None 
     if result["password"] != password:
         return None
     else:
@@ -207,10 +206,8 @@ def testDB_classroom():
 @app.route('/testDB_users',methods=['POST','GET'])
 def testDB_users():
     result = validateLogin("jerry","123456789")
-    """
     if result == None:
         return render_template("testDB_users.html" , data = result , status = 1)
-    """
     return render_template("testDB_users.html" , data = result , status = 0)
     #return result
 
