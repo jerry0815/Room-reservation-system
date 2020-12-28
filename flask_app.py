@@ -28,7 +28,7 @@ def insertClassroom():
         connection.commit()
 
 def showClassroom():
-    sql = "SELECT `CR_ID`, `roomname` FROM `Classroom`"
+    sql = "SELECT * FROM Classroom"
     connection.ping(reconnect = True)
     with connection.cursor() as cursor:
         cursor.execute(sql)
@@ -94,8 +94,8 @@ def register():
 @app.route('/testDB',methods=['POST','GET'])
 def testDB():
     result = showClassroom()
-    #return render_template("testDB.html" , data = result)
-    return result
+    return render_template("testDB.html" , data = result)
+    #return result
 
 if __name__ == '__main__':
     app.debug = True
