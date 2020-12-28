@@ -94,7 +94,8 @@ def register():
 @app.route('/testDB',methods=['POST','GET'])
 def testDB():
     result = showClassroom()
-    return render_template("testDB.html" , data = result)
+    #return render_template("testDB.html" , data = result)
+    return result
 
 if __name__ == '__main__':
     app.debug = True
