@@ -59,6 +59,8 @@ with connection.cursor() as cursor:
 
 connection.commit()
 """
+insertClassroom()
+showClassroom()
 
 @app.route('/',methods=['POST','GET'])
 def hello():
@@ -94,7 +96,5 @@ def testDB():
     return render_template("testDB.html")
 
 if __name__ == '__main__':
-    insertClassroom()
-    showClassroom()
     app.debug = True
     app.run() #啟動伺服器
