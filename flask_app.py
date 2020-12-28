@@ -100,9 +100,9 @@ def showClassroom():
 #=======================================================================
 #transform list of id to str
 def listIdToStr(id_list):
-    participant = str(id_list["userID"][0])
+    participant = str(id_list[0])
     for i in range(1 , len(id_list)):
-        participant = participant + "," + id_list["userID"][i]
+        participant = participant + "," + id_list[i]
     return participant
 
 def insertRecord(title = "testing record", roomname  = "TR-206", startDate = "12/30", startSection  = "5", endDate = "12/30", endSection  = "8", participant = ['jerry','alien','wacky'], bookName = "jerry"):
@@ -129,7 +129,7 @@ def insertRecord(title = "testing record", roomname  = "TR-206", startDate = "12
         with connection.cursor() as cursor:
             cursor.execute(sql,ppl)
             result = cursor.fetchone()
-            p_id.append(result)
+            p_id.append(result["userID"])
     p_id_str = listIdToStr(p_id)
     print("p_id_str = " + str(p_id_str))
     #insert record into database
