@@ -67,7 +67,7 @@ with connection.cursor() as cursor:
 
 connection.commit()
 """
-insertClassroom()
+#insertClassroom()
 #showClassroom()
 
 @app.route('/',methods=['POST','GET'])
