@@ -21,16 +21,20 @@ def insertUser():
             cursor.execute(sql,("jerry","lulala","123456798","jerry@gmail.com",'0','0'))
             connection.commit()
 def insertClassroom():
+    record = []
     sql = "INSERT INTO `classroom` (`building`, `roomname` , `capacity`) VALUES (%s, %s , %s)"
     build = ["TR" , "T4" , "RB" , "IB" , "EE"]
-    connection.ping(reconnect = True)
-    with connection.cursor() as cursor:
-        for b in build:
-            for story in range(2,5):
-                for i in range(5,8):
-                    name = b + "-" + str(story) + "0" + str(i)
-                    cursor.execute(sql,(b,name,"50"))
-                    connection.commit()
+    for b in build:
+        for story in range(2,5):
+            for i in range(5,8):
+                name = b + "-" + str(story) + "0" + str(i)
+                l = [b , name]
+                record.append(l)
+    for tmp in record:
+        connection.ping(reconnect = True)
+        with connection.cursor() as cursor:
+            cursor.execute(sql,(tmp[0],tmp[1],"50"))
+            connection.commit()
 
 def showClassroom():
     sql = "SELECT * FROM Classroom"
@@ -64,7 +68,7 @@ with connection.cursor() as cursor:
 
 connection.commit()
 """
-#insertClassroom()
+insertClassroom()
 #showClassroom()
 
 @app.route('/',methods=['POST','GET'])
