@@ -14,12 +14,62 @@ connection = pymysql.connect(host=os.environ.get('CLEARDB_DATABASE_HOST'),
                              charset='utf8mb4',
                              cursorclass=pymysql.cursors.DictCursor)
 
-def insertUser():
-        sql = "INSERT INTO `users` (`userName`, `nickName`,`password` , `email` , `identity` , `banned`) VALUES (%s,%s,%s,%s,%s,%s)"
-        connection.ping(reconnect = True)
-        with connection.cursor() as cursor:
-            cursor.execute(sql,("jerry","lulala","123456798","jerry@gmail.com",'1','0'))
-            connection.commit()
+#======================================================================
+#user table
+#insert user into database userName , nickName , password , email,identity , banned
+def insertUser(userName = "jerry", nickName = "lulala", password = "123456798", email = "jerry@gmail.com", identity = '0' , banned = '0'):
+    sql = "INSERT INTO `users` (`userName`, `nickName`,`password` , `email` , `identity` , `banned`) VALUES (%s,%s,%s,%s,%s,%s)"
+    connection.ping(reconnect = True)
+    with connection.cursor() as cursor:
+        cursor.execute(sql,(userName , nickName , password , email,identity , banned))
+        connection.commit()
+
+#login and return user information. return none when password is wrong
+def validateLogin(userName , password):
+    sql = "SELECT * FROM users WHERE `userName`=%s"
+    connection.ping(reconnect = True)
+    with connection.cursor() as cursor:
+        cursor.execute(sql,userName)
+        result = cursor.fetchone()
+    if result["password"] != password:
+        return None
+    else:
+        return result
+
+#modify user's nickname 
+def modifyNickName(userName , nickName):
+    sql = " UPDATE users SET nickName = %s WHERE userName = %s "
+    connection.ping(reconnect = True)
+    with connection.cursor() as cursor:
+        cursor.execute(sql , (nickName,userName))
+        connection.commit()
+
+#display all users
+def showUsers():
+    sql = "SELECT * FROM users"
+    connection.ping(reconnect = True)
+    with connection.cursor() as cursor:
+        cursor.execute(sql)
+        result = cursor.fetchall()
+    print(result)
+    return result
+
+# return all information about users ["userID","userName", "nickName","password" , "email" , "identity" , "banned"]
+def getUser(userName):
+    sql = "SELECT * FROM `users` WHERE `userName`=%s"
+    connection.ping(reconnect = True)
+    with connection.cursor() as cursor:
+        cursor.execute(sql,userName)
+        result = cursor.fetchone()
+    print(result)
+    return result
+
+#=======================================================================
+
+
+#=======================================================================
+#classroom table
+#insert some default classroom
 def insertClassroom():
     record = []
     sql = "INSERT INTO `classroom` (`building`, `roomname` , `capacity`) VALUES (%s, %s , %s)"
@@ -35,6 +85,7 @@ def insertClassroom():
         cursor.executemany(sql,record)
         connection.commit()
 
+#display all classroom
 def showClassroom():
     sql = "SELECT * FROM Classroom"
     connection.ping(reconnect = True)
@@ -43,22 +94,68 @@ def showClassroom():
         result = cursor.fetchall()
     print(result)
     return result
+#=======================================================================
 
-def getUser(userName):
-    sql = "SELECT `id`, `email`,`name`FROM `Account` WHERE `userName`=%s"
+
+#=======================================================================
+#transform list of id to str
+def listIdToStr(id_list):
+    participant = str(id_list[0])
+    for i in range(1 , len(id_list)):
+        participant = participant + "," + str(i)
+    return participant
+
+def insertRecord(title , roomname , startDate , startSection , endDate, endSection , participant , bookName):
+
+    #get booker userid
+    sql = "SELECT  `userID` FROM `users` WHERE `userName`= %s"
     connection.ping(reconnect = True)
     with connection.cursor() as cursor:
-        cursor.execute(sql,userName)
-        result = cursor.fetchone()
+        cursor.execute(sql,bookName)
+        B_ID = cursor.fetchone()
+
+    #get classroom CR_ID
+    sql = "SELECT  `CR_ID` FROM `classroom` WHERE `roomname`= %s"
+    connection.ping(reconnect = True)
+    with connection.cursor() as cursor:
+        cursor.execute(sql,roomName)
+        CR_ID = cursor.fetchone()
+
+    #process participant
+    p_id = []
+    sql = "SELECT  `userID` FROM `users` WHERE `userName`= %s"
+    for ppl in participant:
+        connection.ping(reconnect = True)
+        with connection.cursor() as cursor:
+            cursor.execute(sql,ppl)
+            result = cursor.fetchone()
+            p_id.append(result)
+    p_id_str = listIdToStr(p_id)
+
+    #insert record into database
+    sql = "INSERT INTO `record` (`title`, `CR_ID`,`startDate` , `startSection` , `endDate` , `endSection` , `participant` ,  `B_ID`) \
+    VALUES (%s,%s,%s,%s,%s,%s)"
+    connection.ping(reconnect = True)
+    with connection.cursor() as cursor:
+        cursor.execute(sql,(title,CR_ID,startDate , startSection , endDate, endSection , p_id_str,B_ID))
+        connection.commit()
+
+#
+def getRecord(startDate , startSection , endDate, endSection , roomname):
+
+def getRecordByBooker(username):
+
+#display all record
+def showRecord():
+    sql = "SELECT * FROM record"
+    connection.ping(reconnect = True)
+    with connection.cursor() as cursor:
+        cursor.execute(sql)
+        result = cursor.fetchall()
     print(result)
     return result
+#=======================================================================
 
-def show():
-    connection.ping(reconnect = True)
-    with connection.cursor() as cursor:
-        cursor.execute("SHOW TABLES")
-        for x in cursor:
-            print(x)
 """
 with connection.cursor() as cursor:
     # Create a new record
@@ -67,8 +164,9 @@ with connection.cursor() as cursor:
 
 connection.commit()
 """
-#insertClassroom()
-#showClassroom()
+
+insertUser()
+
 
 @app.route('/',methods=['POST','GET'])
 def hello():
@@ -99,10 +197,22 @@ def register():
             return redirect(url_for('hello'))
     return render_template("register.html")
 
-@app.route('/testDB',methods=['POST','GET'])
-def testDB():
+@app.route('/testDB_classroom',methods=['POST','GET'])
+def testDB_classroom():
     result = showClassroom()
-    return render_template("testDB.html" , data = result)
+    return render_template("testDB_classroom.html" , data = result)
+    #return result
+
+@app.route('/testDB_users',methods=['POST','GET'])
+def testDB_users():
+    result = showUsers()
+    return render_template("testDB_users.html" , data = result)
+    #return result
+
+@app.route('/testDB_record',methods=['POST','GET'])
+def testDB_record():
+    result = showRecord()
+    return render_template("testDB_record.html" , data = result)
     #return result
 
 if __name__ == '__main__':
