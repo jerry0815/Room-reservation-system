@@ -165,7 +165,7 @@ with connection.cursor() as cursor:
 connection.commit()
 """
 
-insertUser()
+#insertUser()
 
 
 @app.route('/',methods=['POST','GET'])
