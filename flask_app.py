@@ -120,7 +120,7 @@ def insertRecord(title = "testing record", roomname  = "TR-206", startDate = "12
     with connection.cursor() as cursor:
         cursor.execute(sql,roomname)
         CR_ID = cursor.fetchone()
-    print("CR_ID = "  + str(CR_ID))
+    print("CR_ID = "  + str(CR_ID["CR_ID"]))
     #process participant
     p_id = []
     sql = "SELECT  `userID` FROM `users` WHERE `userName`= %s"
