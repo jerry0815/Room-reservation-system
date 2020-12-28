@@ -26,11 +26,11 @@ def insertClassroom():
     connection.ping(reconnect = True)
     with connection.cursor() as cursor:
         for b in build:
-        for story in range(2,5):
-            for i in range(5,8):
-                name = b + "-" + str(story) + "0" + str(i)
-                cursor.execute(sql,(b,name,"50"))
-                connection.commit()
+            for story in range(2,5):
+                for i in range(5,8):
+                    name = b + "-" + str(story) + "0" + str(i)
+                    cursor.execute(sql,(b,name,"50"))
+                    connection.commit()
 
 def showClassroom():
     sql = "SELECT * FROM Classroom"
@@ -64,7 +64,7 @@ with connection.cursor() as cursor:
 
 connection.commit()
 """
-#insertClassroom()
+insertClassroom()
 #showClassroom()
 
 @app.route('/',methods=['POST','GET'])
