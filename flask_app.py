@@ -112,15 +112,14 @@ def insertRecord(title = "testing record", roomname  = "TR-206", startDate = "12
     connection.ping(reconnect = True)
     with connection.cursor() as cursor:
         cursor.execute(sql,bookName)
-        B_ID = cursor.fetchone()
+        B_ID = cursor.fetchone()["userID"]
 
     #get classroom CR_ID
     sql = "SELECT  `CR_ID` FROM `classroom` WHERE `roomname`= %s"
     connection.ping(reconnect = True)
     with connection.cursor() as cursor:
         cursor.execute(sql,roomname)
-        CR_ID = cursor.fetchone()
-        CR_ID = CR_ID["CR_ID"]
+        CR_ID = cursor.fetchone()["CR_ID"]
     print("CR_ID = "  + str(CR_ID))
     #process participant
     p_id = []
@@ -129,8 +128,8 @@ def insertRecord(title = "testing record", roomname  = "TR-206", startDate = "12
         connection.ping(reconnect = True)
         with connection.cursor() as cursor:
             cursor.execute(sql,ppl)
-            result = cursor.fetchone()
-            p_id.append(result["userID"])
+            result = cursor.fetchone()["userID"]
+            p_id.append(result)
     p_id_str = listIdToStr(p_id)
     print("p_id_str = " + str(p_id_str))
     #insert record into database
