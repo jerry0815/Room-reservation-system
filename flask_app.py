@@ -141,9 +141,9 @@ def insertRecord(title , roomname , startDate , startSection , endDate, endSecti
         connection.commit()
 
 #
-def getRecord(startDate , startSection , endDate, endSection , roomname):
+#def getRecord(startDate , startSection , endDate, endSection , roomname):
 
-def getRecordByBooker(username):
+#def getRecordByBooker(username):
 
 #display all record
 def showRecord():
