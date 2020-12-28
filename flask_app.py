@@ -102,7 +102,7 @@ def showClassroom():
 def listIdToStr(id_list):
     participant = str(id_list[0])
     for i in range(1 , len(id_list)):
-        participant = participant + "," + id_list[i]
+        participant = participant + "," + str(id_list[i])
     return participant
 
 def insertRecord(title = "testing record", roomname  = "TR-206", startDate = "12/30", startSection  = "5", endDate = "12/30", endSection  = "8", participant = ['jerry','alien','wacky'], bookName = "jerry"):
