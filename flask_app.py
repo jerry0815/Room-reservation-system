@@ -28,13 +28,12 @@ def insertClassroom():
         for story in range(2,5):
             for i in range(5,8):
                 name = b + "-" + str(story) + "0" + str(i)
-                l = [b , name]
+                l = [b , name , "50"]
                 record.append(l)
-    for tmp in record:
-        connection.ping(reconnect = True)
-        with connection.cursor() as cursor:
-            cursor.execute(sql,(tmp[0],tmp[1],"50"))
-            connection.commit()
+    connection.ping(reconnect = True)
+    with connection.cursor() as cursor:
+        cursor.executemany(sql,record)
+        connection.commit()
 
 def showClassroom():
     sql = "SELECT * FROM Classroom"
