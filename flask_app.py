@@ -18,7 +18,7 @@ def insertUser():
         sql = "INSERT INTO `users` (`userName`, `nickName`,`password` , `email` , `identity` , `banned`) VALUES (%s,%s,%s,%s,%s,%s)"
         connection.ping(reconnect = True)
         with connection.cursor() as cursor:
-            cursor.execute(sql,("jerry","lulala","123456798","jerry@gmail.com",'0','0'))
+            cursor.execute(sql,("jerry","lulala","123456798","jerry@gmail.com",'1','0'))
             connection.commit()
 def insertClassroom():
     record = []
