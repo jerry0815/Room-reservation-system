@@ -118,7 +118,7 @@ def insertRecord(title = "testing record", roomname  = "TR-204", startDate = "12
     sql = "SELECT  `CR_ID` FROM `classroom` WHERE `roomname`= %s"
     connection.ping(reconnect = True)
     with connection.cursor() as cursor:
-        cursor.execute(sql,roomName)
+        cursor.execute(sql,roomname)
         CR_ID = cursor.fetchone()
 
     #process participant
