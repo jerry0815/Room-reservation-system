@@ -31,6 +31,7 @@ def validateLogin(userName , password):
     with connection.cursor() as cursor:
         cursor.execute(sql,userName)
         result = cursor.fetchone()
+    if result == None 
     if result["password"] != password:
         return None
     else:
@@ -105,7 +106,7 @@ def listIdToStr(id_list):
         participant = participant + "," + str(i)
     return participant
 
-def insertRecord(title , roomname , startDate , startSection , endDate, endSection , participant , bookName):
+def insertRecord(title = "testing record", roomname  = "TR-203", startDate = "12/30", startSection  = "5", endDate = "12/30", endSection  = "8", participant = ['jerry','alien','wacky'], bookName = "jerry"):
 
     #get booker userid
     sql = "SELECT  `userID` FROM `users` WHERE `userName`= %s"
@@ -165,7 +166,7 @@ with connection.cursor() as cursor:
 connection.commit()
 """
 
-#insertUser()
+insertRecord()
 
 
 @app.route('/',methods=['POST','GET'])
@@ -205,8 +206,11 @@ def testDB_classroom():
 
 @app.route('/testDB_users',methods=['POST','GET'])
 def testDB_users():
-    result = showUsers()
-    return render_template("testDB_users.html" , data = result)
+    result = validateLogin("jerry","123456789")
+    if result == None:
+        return render_template("testDB_users.html" , data = result , status = 1)
+
+    return render_template("testDB_users.html" , data = result , status = 0)
     #return result
 
 @app.route('/testDB_record',methods=['POST','GET'])
