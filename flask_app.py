@@ -120,7 +120,7 @@ def insertRecord(title = "testing record", roomname  = "TR-204", startDate = "12
     with connection.cursor() as cursor:
         cursor.execute(sql,roomname)
         CR_ID = cursor.fetchone()
-
+    print("CR_ID = "  + str(CR_ID))
     #process participant
     p_id = []
     sql = "SELECT  `userID` FROM `users` WHERE `userName`= %s"
@@ -131,13 +131,13 @@ def insertRecord(title = "testing record", roomname  = "TR-204", startDate = "12
             result = cursor.fetchone()
             p_id.append(result)
     p_id_str = listIdToStr(p_id)
-
+    print("p_id_str = " + str(p_id_str))
     #insert record into database
     sql = "INSERT INTO `record` (`title`, `CR_ID`,`startDate` , `startSection` , `endDate` , `endSection` , `participant` ,  `B_ID`) \
     VALUES (%s,%s,%s,%s,%s,%s,%s,%s)"
     connection.ping(reconnect = True)
     with connection.cursor() as cursor:
-        cursor.execute(sql,(title,CR_ID,startDate , startSection , endDate, endSection , p_id_str,B_ID))
+        cursor.execute(sql,(title,CR_ID,startDate , startSection , endDate, endSection , p_id_str , B_ID))
         connection.commit()
 
 #
