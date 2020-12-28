@@ -134,7 +134,7 @@ def insertRecord(title = "testing record", roomname  = "TR-204", startDate = "12
 
     #insert record into database
     sql = "INSERT INTO `record` (`title`, `CR_ID`,`startDate` , `startSection` , `endDate` , `endSection` , `participant` ,  `B_ID`) \
-    VALUES (%s,%s,%s,%s,%s,%s)"
+    VALUES (%s,%s,%s,%s,%s,%s,%s,%s)"
     connection.ping(reconnect = True)
     with connection.cursor() as cursor:
         cursor.execute(sql,(title,CR_ID,startDate , startSection , endDate, endSection , p_id_str,B_ID))
