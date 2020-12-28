@@ -22,10 +22,15 @@ def insertUser():
             connection.commit()
 def insertClassroom():
     sql = "INSERT INTO `classroom` (`building`, `roomname` , `capacity`) VALUES (%s, %s , %s)"
+    build = ["TR" , "T4" , "RB" , "IB" , "EE"]
     connection.ping(reconnect = True)
     with connection.cursor() as cursor:
-        cursor.execute(sql,("TR","TR-309","50"))
-        connection.commit()
+        for b in build:
+        for story in range(2,5):
+            for i in range(5,8):
+                name = b + "-" + str(story) + "0" + str(i)
+                cursor.execute(sql,(b,name,"50"))
+                connection.commit()
 
 def showClassroom():
     sql = "SELECT * FROM Classroom"
