@@ -16,25 +16,50 @@ connection = pymysql.connect(host=os.environ.get('CLEARDB_DATABASE_HOST'),
 
 #======================================================================
 #user table
-#insert user into database userName , nickName , password , email,identity , banned
-def insertUser(userName = "jerry", nickName = "lulala", password = "123456798", email = "jerry@gmail.com", identity = '0' , banned = '0'):
+#insert user into database userName , nickName , password , email , identity , banned
+def insertUser(userName = "jerry", nickName = "", password = "123456798", email = "jerry@gmail.com", identity = '0' , banned = '0'):
+    if nickName = "":
+        nickName = userName
     sql = "INSERT INTO `users` (`userName`, `nickName`,`password` , `email` , `identity` , `banned`) VALUES (%s,%s,%s,%s,%s,%s)"
     connection.ping(reconnect = True)
     with connection.cursor() as cursor:
         cursor.execute(sql,(userName , nickName , password , email,identity , banned))
         connection.commit()
 
-#login and return user information. return none when password is wrong
-def validateLogin(userName , password):
-    sql = "SELECT * FROM users WHERE `userName`=%s"
+#login and return user information. return status,result
+#status:
+# 0:success 1:wrong email 2:wrong passward
+def validateLogin(email , password):
+    sql = "SELECT * FROM users WHERE `email`=%s"
     connection.ping(reconnect = True)
     with connection.cursor() as cursor:
-        cursor.execute(sql,userName)
+        cursor.execute(sql,email)
         result = cursor.fetchone()
+    #wrong email
+    if result == None:
+        return (1 , None)
+    #wrong passward
     if result["password"] != password:
-        return None
+        return (2,None)
     else:
-        return result
+        return (0,result)
+
+#for cookie
+def loginCheck(email,passward):
+    sql = "SELECT passward FROM users WHERE `email`=%s"
+    connection.ping(reconnect = True)
+    with connection.cursor() as cursor:
+        cursor.execute(sql,email)
+        result = cursor.fetchone()
+    #wrong email
+    if result == None:
+        return 1
+    #wrong passward
+    if result["password"] != password:
+        return 2
+    else:
+        return 0
+
 
 #modify user's nickname 
 def modifyNickName(userName , nickName):
@@ -85,6 +110,8 @@ def insertClassroom():
         cursor.executemany(sql,record)
         connection.commit()
 
+
+
 #display all classroom
 def showClassroom():
     sql = "SELECT * FROM Classroom"
@@ -98,14 +125,15 @@ def showClassroom():
 
 
 #=======================================================================
-#transform list of id to str
+#transform list of id to str O
 def listIdToStr(id_list):
     participant = str(id_list[0])
     for i in range(1 , len(id_list)):
         participant = participant + "," + str(id_list[i])
     return participant
 
-def insertRecord(title = "testing record", roomname  = "TR-306", startDate = "2020-12-30", startSection  = "5", endDate = "2020-12-30", endSection  = "8", participant = ['jerry','alien','wacky'], bookName = "jerry"):
+#insert record O
+def insertRecord(title = "testing record", roomname  = "TR-306", startDate = "2020-12-30", startSection  = "5", endDate = "2020-12-30", endSection  = "8", participant = ['jerry','alien','wacky'], bookName = "jerry",type = "0"):
 
     #get booker userid
     sql = "SELECT  `userID` FROM `users` WHERE `userName`= %s"
@@ -133,17 +161,132 @@ def insertRecord(title = "testing record", roomname  = "TR-306", startDate = "20
     p_id_str = listIdToStr(p_id)
     print("p_id_str = " + str(p_id_str))
     #insert record into database
-    sql = "INSERT INTO `record` (`title`, `CR_ID`,`startDate` , `startSection` , `endDate` , `endSection` , `participant` ,  `B_ID`) \
-    VALUES (%s,%s,%s,%s,%s,%s,%s,%s)"
+    sql = "INSERT INTO `record` (`title`, `CR_ID`,`startDate` , `startSection` , `endDate` , `endSection` , `participant` ,  `B_ID` , `type`) \
+    VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s)"
     connection.ping(reconnect = True)
     with connection.cursor() as cursor:
-        cursor.execute(sql,(title,CR_ID,startDate , startSection , endDate, endSection , p_id_str , B_ID))
+        cursor.execute(sql,(title,CR_ID,startDate , startSection , endDate, endSection , p_id_str , B_ID,type))
         connection.commit()
+
+#XX not for front-end , return dict of records(one section one record) retrun none if date not match
+def processRecord(record,date):
+    if str(record["startDate"]) != date:
+        return None
+    if record["startDate"] < record["endDate"]:
+        endSection = 14
+    else :
+        endSection = record["endSection"]
+    recordDict = {}
+    for i in range(record["startSection"] , endSection + 1):
+        #type , title , bookerName
+        sql = "SELECT  `userName` FROM `users` WHERE `userID`= %s"
+        connection.ping(reconnect = True)
+        with connection.cursor() as cursor:
+            cursor.execute(sql,record["B_ID"])
+            name = cursor.fetchone()["userName"]
+        recordDict[i] = (record["type"],record["title"] , name)
+    return recordDict
+
+#give the condition to search classroom
+#parameter (building ,capacity ,roomname ,date)
+def searchClassroom(building = "" , capacity = -1 , roomname = "" , date = "2020-01-01"):
+    if roomname != "":
+        if  building != "":
+            if roomname[0:2] != building:
+                return None
+        if capacity > 0 :
+            sql = "SELECT * FROM classroom WHERE `roomname` = %s AND `capacity` > %s"
+            condition = (roomname,capacity)
+        else:
+            sql = "SELECT * FROM classroom WHERE `roomname` = %s"
+            condition = roomname
+    else:
+        if capacity > 0 :
+            if building != "":
+                sql = "SELECT * FROM classroom WHERE `building` = %s AND `capacity` > %s"
+                condition = (building,capacity)
+            else:
+                sql = "SELECT * FROM classroom WHERE `capacity` = %s"
+                condition = capacity
+        elif building != "":
+            sql = "SELECT * FROM classroom WHERE `building` = %s"
+            condition = building
+        else:
+            print("no condition")
+    
+    with connection.cursor() as cursor:
+        cursor.execute(sql,condition)
+        result = cursor.fetchall()
+    print(result)
+    print("==========================")
+    output = []
+    sql = "SELECT * FROM record WHERE `CR_ID` = %s AND `startDate` = %s"
+    for i in result:
+        with connection.cursor() as cursor:
+            cursor.execute(sql,(i["CR_ID"],date))
+            tmp = cursor.fetchall()
+            if tmp != ():
+                for j in tmp:
+                    item = processRecord(j)
+                    #building , capacity , roomname , status
+                    item = (i["building"] , i["capacity"] , i["roomname"] , item)
+                    output.append(item)          
+    print(output)
+    return result
+
+#search for one classroom and return records of a week
+# return format:  list[ building , capacity , roomname , dict{id : tuple()}(7days) ]
+#parameter (classroom name , date of the week)
+def searchOneClassroom(roomname = "" , date = "2020-12-29") :
+    sql = "SELECT * FROM classroom WHERE `roomname` = %s"
+    with connection.cursor() as cursor:
+        cursor.execute(sql,roomname)
+        result = cursor.fetchone()
+    building = result["building"]
+    capacity = result["capacity"]
+    CR_ID = result["CR_ID"]
+    today = datetime.datetime.fromisoformat(date)
+    n = today.weekday()
+    delta = datetime.timedelta(days = n)
+    startDay = str((today - delta).date())
+    delta = datetime.timedelta(days = 6 - n)
+    endDay = str((today + delta).date())
+    print(startDay + " ~ " + endDay)
+    sql = "SELECT * FROM record WHERE `CR_ID` = %s AND `startDate` >= %s AND `endDate` <= %s"
+    output = []
+    with connection.cursor() as cursor:
+        cursor.execute(sql,(CR_ID,startDay,endDay))
+        tmp = cursor.fetchall()
+        if tmp != ():
+            for d in range(0,6):
+                delta = datetime.timedelta(days = n - d)
+                dailyItem = {}
+                for j in tmp:
+                    item = processRecord(j,str((today - delta).date()))
+                    if item != None:
+                        dailyItem.update(item)
+                output.append(dailyItem)  
+            return [building , capacity , roomname , output]
+
 
 #
 #def getRecord(startDate , startSection , endDate, endSection , roomname):
 
-#def getRecordByBooker(username):
+#search the records the user book
+def getRecordByBooker(userName):
+    sql = "SELECT  `userID` FROM `users` WHERE `userName`= %s"
+    connection.ping(reconnect = True)
+    with connection.cursor() as cursor:
+        cursor.execute(sql,userName)
+        B_ID = cursor.fetchone()["userID"]
+
+    sql = "SELECT  * FROM `record` WHERE `B_ID`= %s"
+    connection.ping(reconnect = True)
+    with connection.cursor() as cursor:
+        cursor.execute(sql,B_ID)
+        result = cursor.fetchall()
+    return result
+
 
 #display all record
 def showRecord():
@@ -165,7 +308,7 @@ with connection.cursor() as cursor:
 connection.commit()
 """
 
-insertRecord()
+#insertRecord()
 
 
 @app.route('/',methods=['POST','GET'])
@@ -216,6 +359,10 @@ def testDB_record():
     result = showRecord()
     return render_template("testDB_record.html" , data = result)
     #return result
+
+@app.route('/googlea52fc5fa35bcff6f.html')
+def googlea52fc5fa35bcff6f():
+    return "google-site-verification: googlea52fc5fa35bcff6f.html"
 
 if __name__ == '__main__':
     app.debug = True
