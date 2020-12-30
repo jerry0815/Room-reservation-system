@@ -360,9 +360,9 @@ def testDB_record():
     return render_template("testDB_record.html" , data = result)
     #return result
 
-@app.route('/googlea52fc5fa35bcff6f.html')
-def googlea52fc5fa35bcff6f():
-    return "google-site-verification: googlea52fc5fa35bcff6f.html"
+@app.route('/google390a5a29c97e707c.html')
+def google390a5a29c97e707c():
+    return "google-site-verification: google390a5a29c97e707c.html"
 
 if __name__ == '__main__':
     app.debug = True
