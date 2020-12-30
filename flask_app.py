@@ -18,7 +18,7 @@ connection = pymysql.connect(host=os.environ.get('CLEARDB_DATABASE_HOST'),
 #user table
 #insert user into database userName , nickName , password , email , identity , banned
 def insertUser(userName = "jerry", nickName = "", password = "123456798", email = "jerry@gmail.com", identity = '0' , banned = '0'):
-    if nickName = "":
+    if nickName == "":
         nickName = userName
     sql = "INSERT INTO `users` (`userName`, `nickName`,`password` , `email` , `identity` , `banned`) VALUES (%s,%s,%s,%s,%s,%s)"
     connection.ping(reconnect = True)
