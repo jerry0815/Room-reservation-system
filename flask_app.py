@@ -467,7 +467,7 @@ def test_api_request():
                                         maxResults=10, singleEvents=True,
                                         orderBy='startTime').execute()
     events = events_result.get('items', [])
-    tmp = []
+    tmp = tuple()
     if not events:
         print('No upcoming events found.')
     for event in events:
