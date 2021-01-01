@@ -383,11 +383,11 @@ def insertEvent(service , title , roomname , startDate , startSection , endDate 
     'location': ('NTUST ' + roomname) ,
     'description': 'An event from room reservation',
     'start': {
-        'dateTime': startDate,
+        'dateTime': 'dateTime': '2021-01-10T09:00:00-07:00',
         'timeZone': 'Asia/Taipei',
     },
     'end': {
-        'dateTime': endDate,
+        'dateTime':'dateTime': '2021-01-10T09:00:00-07:00',
         'timeZone': 'Asia/Taipei',
     },
     """
