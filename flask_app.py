@@ -401,36 +401,6 @@ def insertEvent(service , title , roomname , startDate , startSection , endDate 
         ],
     },
     }
-    """
-    event = {
-    'summary': 'Google calendar my test',
-    'location': 'NTUST TR-313',
-    'description': 'An insert test',
-    'start': {
-        'dateTime': '2021-01-10T09:00:00-07:00',
-        'timeZone': 'Asia/Taipei',
-    },
-    'end': {
-        'dateTime': '2021-01-10T09:00:00-07:00',
-        'timeZone': 'Asia/Taipei',
-    },
-    'recurrence': [
-        'RRULE:FREQ=HOURLY;COUNT=1'
-    ],
-    'attendees': [
-        {'email': 'jerrylulala@gmail.com'},
-        {'email': 'lpage@example.com'},
-        {'email': 'sbrin@example.com'},
-    ],
-    'reminders': {
-        'useDefault': False,
-        'overrides': [
-        {'method': 'email', 'minutes': 24 * 60},
-        {'method': 'popup', 'minutes': 10},
-        ],
-    },
-    }
-    """
     event_result = service.events().insert(calendarId='primary', body=event).execute()
     print("created event")
     print("id: ", event_result['id'])
@@ -456,12 +426,13 @@ app.secret_key = 'REPLACE ME - this value is here as a placeholder.'
 def test_api_request():
     if 'credentials' not in flask.session:
         return flask.redirect('authorize')
-
+    cred = **flask.session['credentials']
+    if cred['refresh_token']:
+        print("I right")
+        return flask.redirect('authorize')
     # Load credentials from the session.
     credentials = google.oauth2.credentials.Credentials(
         **flask.session['credentials'])
-    if credentials and credentials.expired and credentials.refresh_token:
-        return flask.redirect('authorize')
     service = googleapiclient.discovery.build(
         API_SERVICE_NAME, API_VERSION, credentials=credentials)
 
