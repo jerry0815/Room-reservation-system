@@ -376,6 +376,7 @@ def insertEvent(service , title , roomname , startDate , startSection , endDate 
     endHours = datetime.timedelta(hours= endSection + 8)
     startTime = startTime + startHours
     endTime = endTime + endHours
+    """
     event = {
     'summary': title,
     'location': ('NTUST ' + roomname) ,
@@ -392,7 +393,36 @@ def insertEvent(service , title , roomname , startDate , startSection , endDate 
         'RRULE:FREQ=DAILY;COUNT=2'
     ],
     'attendees': [
-        {'email': i} for i in participants
+        {'email': 'linjerry890815@gmail.com'} 
+    ],
+    'reminders': {
+        'useDefault': False,
+        'overrides': [
+        {'method': 'email', 'minutes': 24 * 60},
+        {'method': 'popup', 'minutes': 10},
+        ],
+    },
+    }
+    """
+    event = {
+    'summary': 'Google calendar my test',
+    'location': 'NTUST TR-313',
+    'description': 'An insert test',
+    'start': {
+        'dateTime': '2021-01-10T09:00:00-07:00',
+        'timeZone': 'Asia/Taipei',
+    },
+    'end': {
+        'dateTime': '2021-01-10T09:00:00-07:00',
+        'timeZone': 'Asia/Taipei',
+    },
+    'recurrence': [
+        'RRULE:FREQ=DAILY;COUNT=2'
+    ],
+    'attendees': [
+        {'email': 'jerrylulala@gmail.com'},
+        {'email': 'lpage@example.com'},
+        {'email': 'sbrin@example.com'},
     ],
     'reminders': {
         'useDefault': False,
@@ -431,7 +461,8 @@ def test_api_request():
     # Load credentials from the session.
     credentials = google.oauth2.credentials.Credentials(
         **flask.session['credentials'])
-
+    if credentials and credentials.expired and credentials.refresh_token:
+        return flask.redirect('authorize')
     service = googleapiclient.discovery.build(
         API_SERVICE_NAME, API_VERSION, credentials=credentials)
 
