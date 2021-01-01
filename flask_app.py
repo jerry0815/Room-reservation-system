@@ -460,7 +460,9 @@ def test_api_request():
 
     service = googleapiclient.discovery.build(
         API_SERVICE_NAME, API_VERSION, credentials=credentials)
-
+    # Call the Calendar API
+    now = datetime.datetime.utcnow().isoformat() + 'Z' # 'Z' indicates UTC time
+    print('Getting the upcoming 10 events')
     events_result = service.events().list(calendarId="primary", timeMin=now,
                                         maxResults=10, singleEvents=True,
                                         orderBy='startTime').execute()
