@@ -383,18 +383,13 @@ def insertEvent(service , title , roomname , startDate , startSection , endDate 
     'location': ('NTUST ' + roomname) ,
     'description': 'An event from room reservation',
     'start': {
-        'dateTime': 'dateTime': '2021-01-10T09:00:00-07:00',
+        'dateTime': startTime.strftime("%Y-%m-%dT%H:%M:%S"),
         'timeZone': 'Asia/Taipei',
     },
     'end': {
-        'dateTime':'dateTime': '2021-01-10T09:00:00-07:00',
+        'dateTime': endTime.strftime("%Y-%m-%dT%H:%M:%S"),
         'timeZone': 'Asia/Taipei',
     },
-    """
-    'recurrence': [
-        'RRULE:FREQ=HOURLY;COUNT=1'
-    ],
-    """
     'attendees': [
         {'email': 'linjerry890815@gmail.com'} 
     ],
