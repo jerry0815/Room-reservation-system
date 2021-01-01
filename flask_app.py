@@ -3,7 +3,6 @@ import os
 import pymysql
 import pymysql.cursors
 
-from __future__ import print_function
 import datetime
 import pickle
 import os.path
