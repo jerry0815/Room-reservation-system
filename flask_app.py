@@ -427,6 +427,7 @@ def test_api_request():
     if 'credentials' not in flask.session:
         return flask.redirect('authorize')
     cred = flask.session['credentials']
+    print(cred)
     if cred['refresh_token']:
         print("I right")
         return flask.redirect('authorize')
