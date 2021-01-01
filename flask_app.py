@@ -467,13 +467,11 @@ def test_api_request():
                                         maxResults=10, singleEvents=True,
                                         orderBy='startTime').execute()
     events = events_result.get('items', [])
-    tmp = tuple()
     if not events:
         print('No upcoming events found.')
     for event in events:
         start = event['start'].get('dateTime', event['start'].get('date'))
-        tmp.append([start + " " + event['summary']])
-        print(start, event['summary'])
+        tmp = start + " " + event['summary']
     return tmp
 
     # Save credentials back to session in case access token was refreshed.
