@@ -424,6 +424,7 @@ API_VERSION = 'v3'
 app.secret_key = 'REPLACE ME - this value is here as a placeholder.'
 @app.route('/test')
 def test_api_request():
+    flask.session['credentials'] = None
     if 'credentials' not in flask.session:
         return flask.redirect('authorize')
     cred = flask.session['credentials']
