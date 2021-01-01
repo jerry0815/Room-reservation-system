@@ -369,72 +369,46 @@ def testDB_record():
     return render_template("testDB_record.html" , data = result)
     #return result
 
-"""
-def get_calendar_service():
-    # If modifying these scopes, delete the file token.pickle.
-    SCOPES = ['https://www.googleapis.com/auth/calendar']
-    #Shows basic usage of the Google Calendar API.
-    #Prints the start and name of the next 10 events on the user's calendar.
-    creds = None
-    # The file token.pickle stores the user's access and refresh tokens, and is
-    # created automatically when the authorization flow completes for the first
-    # time.
-
-    if os.path.exists('token.pickle'):
-        with open('token.pickle', 'rb') as token:
-            creds = pickle.load(token)
-    # If there are no (valid) credentials available, let the user log in.
-    if not creds or not creds.valid:
-        if creds and creds.expired and creds.refresh_token:
-            creds.refresh(Request())
-        else:
-            flow = InstalledAppFlow.from_client_secrets_file(
-                'credentials.json', SCOPES)
-            creds = flow.run_console()
-        # Save the credentials for the next run
-        with open('token.pickle', 'wb') as token:
-            pickle.dump(creds, token)
-    service = build('calendar', 'v3', credentials=creds)
-    return service
-
-
-@app.route('/calendar')
-def calendar():
-    while(True):
-        try:
-            service = get_calendar_service()
-            break
-        except:
-            Request.
-    # Call the Calendar API
-    print('Getting list of calendars')
-    calendars_result = service.calendarList().list().execute()
-
-    calendars = calendars_result.get('items', [])
-
-    if not calendars:
-        print('No calendars found.')
-    for calendar in calendars:
-        summary = calendar['summary']
-        id = calendar['id']
-        primary = "Primary" if calendar.get('primary') else ""
-        print("%s\t%s\t%s" % (summary, id, primary))
-    now = datetime.datetime.utcnow().isoformat() + 'Z' # 'Z' indicates UTC time
-    print('Getting the upcoming 10 events')
-    
-    events_result = service.events().list(calendarId="primary", timeMin=now,
-                                        maxResults=10, singleEvents=True,
-                                        orderBy='startTime').execute()
-    events = events_result.get('items', [])
-    tmp = []
-    if not events:
-        print('No upcoming events found.')
-    for event in events:
-        start = event['start'].get('dateTime', event['start'].get('date'))
-        tmp.append([start + " " + event['summary']])
-        print(start, event['summary'])
-    return tmp
-"""
+def insertEvent(service , title , roomname , startDate , startSection , endDate , endSection , participants):
+    startTime = datetime.datetime.fromisoformat(startDate)
+    endTime = datetime.datetime.fromisoformat(endDate)
+    startHours = datetime.timedelta(hours= startSection + 7)
+    endHours = datetime.timedelta(hours= endSection + 8)
+    startTime = startTime + startHours
+    endTime = endTime + endHours
+    event = {
+    'summary': title,
+    'location': ('NTUST ' + roomname) ,
+    'description': 'An event from room reservation',
+    'start': {
+        'dateTime': startTime,
+        'timeZone': 'Asia/Taipei',
+    },
+    'end': {
+        'dateTime': endTime,
+        'timeZone': 'Asia/Taipei',
+    },
+    'recurrence': [
+        'RRULE:FREQ=DAILY;COUNT=2'
+    ],
+    'attendees': [
+        {'email': i} for i in participants
+    ],
+    'reminders': {
+        'useDefault': False,
+        'overrides': [
+        {'method': 'email', 'minutes': 24 * 60},
+        {'method': 'popup', 'minutes': 10},
+        ],
+    },
+    }
+    event_result = service.events().insert(calendarId='primary', body=event).execute()
+    print("created event")
+    print("id: ", event_result['id'])
+    print("summary: ", event_result['summary'])
+    print("starts at: ", event_result['start']['dateTime'])
+    print("ends at: ", event_result['end']['dateTime'])
+    return event_result['id']
 
 # This variable specifies the name of a file that contains the OAuth 2.0
 # information for this application, including its client_id and client_secret.
@@ -460,6 +434,9 @@ def test_api_request():
 
     service = googleapiclient.discovery.build(
         API_SERVICE_NAME, API_VERSION, credentials=credentials)
+
+    result = insertEvent(service=service , title = "test insert calendar" , startDate = "2021-01-10" , startSection=5 , endDate = "2021-01-10" , endSection=8,participants=["linjerry890815@gmail.com"])
+    print("insert result eventID: " + result)
     # Call the Calendar API
     now = datetime.datetime.utcnow().isoformat() + 'Z' # 'Z' indicates UTC time
     print('Getting the upcoming 10 events')
@@ -468,7 +445,7 @@ def test_api_request():
                                         orderBy='startTime').execute()
     events = events_result.get('items', [])
     if not events:
-        print('No upcoming events found.')
+        return 'No upcoming events found.'
     tmp = "123"
     event = events[0]
     start = event['start'].get('dateTime', event['start'].get('date'))
@@ -479,8 +456,6 @@ def test_api_request():
     # ACTION ITEM: In a production app, you likely want to save these
     #              credentials in a persistent database instead.
     flask.session['credentials'] = credentials_to_dict(credentials)
-
-    return flask.jsonify(**files)
 
 
 @app.route('/authorize')

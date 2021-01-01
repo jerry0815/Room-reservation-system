@@ -35,18 +35,23 @@ def get_calendar_service():
     service = build('calendar', 'v3', credentials=creds)
     return service
 
-def insertEvent(title , roomname , startDate , startSection , endDate , endSection , participants):
-    now = datetime.datetime(startDate)
+def insertEvent(service , title , roomname , startDate , startSection , endDate , endSection , participants):
+    startTime = datetime.datetime.fromisoformat(startDate)
+    endTime = datetime.datetime.fromisoformat(endDate)
+    startHours = datetime.timedelta(hours= startSection + 7)
+    endHours = datetime.timedelta(hours= endSection + 8)
+    startTime = startTime + startHours
+    endTime = endTime + endHours
     event = {
     'summary': title,
     'location': ('NTUST ' + roomname) ,
     'description': 'An event from room reservation',
     'start': {
-        'dateTime': '2021-01-10T09:00:00-07:00',
+        'dateTime': startTime,
         'timeZone': 'Asia/Taipei',
     },
     'end': {
-        'dateTime': '2021-01-10T09:00:00-07:00',
+        'dateTime': endTime,
         'timeZone': 'Asia/Taipei',
     },
     'recurrence': [
