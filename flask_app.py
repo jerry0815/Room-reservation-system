@@ -376,7 +376,8 @@ def insertEvent(service , title , roomname , startDate , startSection , endDate 
     endHours = datetime.timedelta(hours= endSection + 8)
     startTime = startTime + startHours
     endTime = endTime + endHours
-    """
+    #"2021-01-10"
+    
     event = {
     'summary': title,
     'location': ('NTUST ' + roomname) ,
@@ -389,9 +390,11 @@ def insertEvent(service , title , roomname , startDate , startSection , endDate 
         'dateTime': endDate,
         'timeZone': 'Asia/Taipei',
     },
+    """
     'recurrence': [
-        'RRULE:FREQ=DAILY;COUNT=2'
+        'RRULE:FREQ=HOURLY;COUNT=1'
     ],
+    """
     'attendees': [
         {'email': 'linjerry890815@gmail.com'} 
     ],
@@ -417,7 +420,7 @@ def insertEvent(service , title , roomname , startDate , startSection , endDate 
         'timeZone': 'Asia/Taipei',
     },
     'recurrence': [
-        'RRULE:FREQ=DAILY;COUNT=2'
+        'RRULE:FREQ=HOURLY;COUNT=1'
     ],
     'attendees': [
         {'email': 'jerrylulala@gmail.com'},
@@ -432,6 +435,7 @@ def insertEvent(service , title , roomname , startDate , startSection , endDate 
         ],
     },
     }
+    """
     event_result = service.events().insert(calendarId='primary', body=event).execute()
     print("created event")
     print("id: ", event_result['id'])
