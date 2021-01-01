@@ -2,13 +2,15 @@ from flask import Flask, request , render_template , redirect , url_for
 import os
 import pymysql
 import pymysql.cursors
-
+import requests
 import datetime
 import pickle
 import os.path
 from googleapiclient.discovery import build
-from google_auth_oauthlib.flow import InstalledAppFlow
 from google.auth.transport.requests import Request
+import google.oauth2.credentials
+import google_auth_oauthlib.flow
+import googleapiclient.discovery
 
 app = Flask(__name__)
 
@@ -366,26 +368,20 @@ def testDB_record():
     return render_template("testDB_record.html" , data = result)
     #return result
 
-@app.route('/google390a5a29c97e707c.html')
-def google390a5a29c97e707c():
-    return "google-site-verification: google390a5a29c97e707c.html"
-
-
+"""
 def get_calendar_service():
     # If modifying these scopes, delete the file token.pickle.
     SCOPES = ['https://www.googleapis.com/auth/calendar']
-    """Shows basic usage of the Google Calendar API.
-    Prints the start and name of the next 10 events on the user's calendar.
-    """
+    #Shows basic usage of the Google Calendar API.
+    #Prints the start and name of the next 10 events on the user's calendar.
     creds = None
     # The file token.pickle stores the user's access and refresh tokens, and is
     # created automatically when the authorization flow completes for the first
     # time.
-    """
+
     if os.path.exists('token.pickle'):
         with open('token.pickle', 'rb') as token:
             creds = pickle.load(token)
-    """
     # If there are no (valid) credentials available, let the user log in.
     if not creds or not creds.valid:
         if creds and creds.expired and creds.refresh_token:
@@ -400,9 +396,15 @@ def get_calendar_service():
     service = build('calendar', 'v3', credentials=creds)
     return service
 
+
 @app.route('/calendar')
 def calendar():
-    service = get_calendar_service()
+    while(True):
+        try:
+            service = get_calendar_service()
+            break
+        except:
+            Request.
     # Call the Calendar API
     print('Getting list of calendars')
     calendars_result = service.calendarList().list().execute()
@@ -431,6 +433,104 @@ def calendar():
         tmp.append([start + " " + event['summary']])
         print(start, event['summary'])
     return tmp
+"""
+
+# This variable specifies the name of a file that contains the OAuth 2.0
+# information for this application, including its client_id and client_secret.
+CLIENT_SECRETS_FILE = "credentials.json"
+
+# This OAuth 2.0 access scope allows for full read/write access to the
+# authenticated user's account and requires requests to use an SSL connection.
+SCOPES = ['https://www.googleapis.com/auth/calendar']
+API_SERVICE_NAME = 'calendar'
+API_VERSION = 'v3'
+# Note: A secret key is included in the sample so that it works.
+# If you use this code in your application, replace this with a truly secret
+# key. See https://flask.palletsprojects.com/quickstart/#sessions.
+app.secret_key = 'REPLACE ME - this value is here as a placeholder.'
+@app.route('/test')
+def test_api_request():
+    if 'credentials' not in flask.session:
+        return flask.redirect('authorize')
+
+    # Load credentials from the session.
+    credentials = google.oauth2.credentials.Credentials(
+        **flask.session['credentials'])
+
+    service = googleapiclient.discovery.build(
+        API_SERVICE_NAME, API_VERSION, credentials=credentials)
+
+    events_result = service.events().list(calendarId="primary", timeMin=now,
+                                        maxResults=10, singleEvents=True,
+                                        orderBy='startTime').execute()
+    events = events_result.get('items', [])
+
+    if not events:
+        print('No upcoming events found.')
+    for event in events:
+        start = event['start'].get('dateTime', event['start'].get('date'))
+        print(start, event['summary'])
+
+    # Save credentials back to session in case access token was refreshed.
+    # ACTION ITEM: In a production app, you likely want to save these
+    #              credentials in a persistent database instead.
+    flask.session['credentials'] = credentials_to_dict(credentials)
+
+    return flask.jsonify(**files)
+
+
+@app.route('/authorize')
+def authorize():
+    # Create flow instance to manage the OAuth 2.0 Authorization Grant Flow steps.
+    flow = google_auth_oauthlib.flow.Flow.from_client_secrets_file(
+        CLIENT_SECRETS_FILE, scopes=SCOPES)
+
+    # The URI created here must exactly match one of the authorized redirect URIs
+    # for the OAuth 2.0 client, which you configured in the API Console. If this
+    # value doesn't match an authorized URI, you will get a 'redirect_uri_mismatch'
+    # error.
+    flow.redirect_uri = flask.url_for('oauth2callback', _external=True)
+
+    authorization_url, state = flow.authorization_url(
+        # Enable offline access so that you can refresh an access token without
+        # re-prompting the user for permission. Recommended for web server apps.
+        access_type='offline',
+        # Enable incremental authorization. Recommended as a best practice.
+        include_granted_scopes='true')
+
+    # Store the state so the callback can verify the auth server response.
+    flask.session['state'] = state
+
+    return flask.redirect(authorization_url)
+
+
+@app.route('/oauth2callback')
+def oauth2callback():
+    # Specify the state when creating the flow in the callback so that it can
+    # verified in the authorization server response.
+    state = flask.session['state']
+
+    flow = google_auth_oauthlib.flow.Flow.from_client_secrets_file(
+        CLIENT_SECRETS_FILE, scopes=SCOPES, state=state)
+    flow.redirect_uri = flask.url_for('oauth2callback', _external=True)
+
+    # Use the authorization server's response to fetch the OAuth 2.0 tokens.
+    authorization_response = flask.request.url
+    flow.fetch_token(authorization_response=authorization_response)
+
+    # Store credentials in the session.
+    # ACTION ITEM: In a production app, you likely want to save these
+    #              credentials in a persistent database instead.
+    credentials = flow.credentials
+    flask.session['credentials'] = credentials_to_dict(credentials)
+
+    return flask.redirect(flask.url_for('test_api_request'))
+
 if __name__ == '__main__':
     app.debug = True
     app.run() #啟動伺服器
+
+
+
+
+

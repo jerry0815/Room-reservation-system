@@ -34,6 +34,43 @@ def get_calendar_service():
             pickle.dump(creds, token)
     service = build('calendar', 'v3', credentials=creds)
     return service
+
+def insertEvent(title , roomname , startDate , startSection , endDate , endSection , participants):
+    now = datetime.datetime(startDate)
+    event = {
+    'summary': title,
+    'location': ('NTUST ' + roomname) ,
+    'description': 'An event from room reservation',
+    'start': {
+        'dateTime': '2021-01-10T09:00:00-07:00',
+        'timeZone': 'Asia/Taipei',
+    },
+    'end': {
+        'dateTime': '2021-01-10T09:00:00-07:00',
+        'timeZone': 'Asia/Taipei',
+    },
+    'recurrence': [
+        'RRULE:FREQ=DAILY;COUNT=2'
+    ],
+    'attendees': [
+        for i in participants: {'email: i'}
+    ],
+    'reminders': {
+        'useDefault': False,
+        'overrides': [
+        {'method': 'email', 'minutes': 24 * 60},
+        {'method': 'popup', 'minutes': 10},
+        ],
+    },
+    }
+    event_result = service.events().insert(calendarId='primary', body=event).execute()
+    print("created event")
+    print("id: ", event_result['id'])
+    print("summary: ", event_result['summary'])
+    print("starts at: ", event_result['start']['dateTime'])
+    print("ends at: ", event_result['end']['dateTime'])
+    return event_result['id']
+
 def main():
     service = get_calendar_service()
     # Call the Calendar API
