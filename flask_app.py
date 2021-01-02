@@ -641,6 +641,7 @@ def search_page():
     if not cookie_check():
         return redirect(url_for('login_page'))
     if request.method =='POST':
+        search_result = searchClassroom(building = request.form['building'] , capacity = request.form['capacity'] , roomname = request.form['roomName'] , date = request.form['date'])
         return render_template("search.html", building=buildings, date=request.form['date'], result=search_result)
     print("template")
     return render_template("search.html", building=buildings, date=get_current_time(), result=None)
