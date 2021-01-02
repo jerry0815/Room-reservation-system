@@ -355,7 +355,7 @@ def getRecordByBookerEmail(email):
         with connection.cursor() as cursor:
             cursor.execute(sql2,result['CR_ID'])
             tmp = cursor.fetchone()
-        result['roomName'] = tmp
+        result['roomName'] = tmp['roomName']
         p_name = []
         participants = result['participant']
         participants = participants.split(',')
@@ -737,7 +737,6 @@ def record_page():
     email = request.cookies.get("email")
     if email != None:
         records = getRecordByBookerEmail(email)
-        print(records)
     return render_template("record.html", records=records)
 
 @app.route('/single_record',methods=['POST'])
