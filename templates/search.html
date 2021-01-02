@@ -36,8 +36,7 @@
 						<li class="nav-item mr-3">
 							<p style="vertical-align:top;"> 可容納人數上限 </p>
 							<div class="container border border-dark mt-2">
-								<input class = "w-100" style="height: 35px;" onkeyup="value=value.replace(/[^\d]/g,'') " 　　
-									onbeforepaste="clipboardData.setData('text',clipboardData.getData('text').replace(/[^\d]/g,''))"
+								<input class = "w-100" style="height: 35px;" 
 									　　 id="capacity_input" name="capacity" placeholder="如:10, 25(人)" value={{request.form['capacity']}}> 
 							</div>
 						</li>
@@ -45,8 +44,7 @@
 							<p style="vertical-align:top;"> 教室編號 </p>
 							<div class="container border border-dark mt-2">
 								
-								<input class = "w-100" style="height: 35px;" onkeyup="value=value.replace(/[\W]/g,'') " 　　
-									onbeforepaste="clipboardData.setData('text',clipboardData.getData('text').replace(/[^\d]/g,''))"
+								<input class = "w-100" style="height: 35px;" 
 									　　 id="room_id_input" name="roomName" placeholder="如:TR-313" value={{request.form['roomName']}}>
 							</div>
 						</li>

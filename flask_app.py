@@ -1,15 +1,12 @@
 import flask
-from flask import Flask, request , render_template , redirect , url_for, make_response
+from flask import Flask, request , render_template
+from flask import redirect , url_for, make_response
 import os
 import re
 import pymysql
-import pymysql.cursors
 import requests
 import datetime
-import pickle
 import os.path
-from googleapiclient.discovery import build
-from google.auth.transport.requests import Request
 import google.oauth2.credentials
 import google_auth_oauthlib.flow
 import googleapiclient.discovery
@@ -708,14 +705,8 @@ def search_page():
     if request.method =='POST':
         result = request.form
         building = re.findall("[A-Z]+",result['building'])[0]
-        print(building)
         search_result = searchClassroom(building = building , capacity = result['capacity'] , roomname = result['roomName'] , date = result['date'])
-        print("===")
-        print(search_result)
-        print("===")
         return render_template("search.html", buildings=buildings, date=result['date'], result=search_result)
-    print("template")
-    print(buildings)
     return render_template("search.html", buildings=buildings, date=get_current_time(), result=None)
     
 @app.route('/borrow',methods=['POST','GET'])
