@@ -329,6 +329,37 @@ def getRecordByBooker(userName):
         result['participant'] = p_name
     return results
 
+#search the records the user's email book
+def getRecordByBookerEmail(email):
+    sql = "SELECT  `userID` FROM `users` WHERE `email`= %s"
+    connection.ping(reconnect = True)
+    with connection.cursor() as cursor:
+        cursor.execute(sql,email)
+        B_ID = cursor.fetchone()["userID"]
+
+    sql = "SELECT  * FROM `record` WHERE `B_ID`= %s"
+    connection.ping(reconnect = True)
+    with connection.cursor() as cursor:
+        cursor.execute(sql,B_ID)
+        results = cursor.fetchall()
+    sql = "SELECT `userName`  FROM `users` WHERE `userID`= %s"
+    for result in results:
+        p_name = []
+        participants = result['participant']
+        participants = participants.split(',')
+        for i in participants:
+            connection.ping(reconnect = True)
+            with connection.cursor() as cursor:
+                cursor.execute(sql,i)
+                tmp = cursor.fetchone()
+                if tmp != None:
+                    p_name.append(tmp['userName'])
+                else :
+                    print(i)
+        result['participant'] = p_name
+    return results
+
+
 #get the record by id
 def getRecordById(id):
     sql = "SELECT * FROM record WHERE `recordID` = %s"
@@ -691,7 +722,9 @@ def borrow_page():
 def record_page():
     if not cookie_check():
         return redirect(url_for('login_page'))
-
+    email = request.cookies.get("email")
+    if email != None:
+        records = getRecordByBookerEmail(email)
     return render_template("record.html", records=records)
 
 @app.route('/single_record',methods=['POST'])
