@@ -95,7 +95,6 @@ def loginCheck(email,password):
     else:
         return 0
 
-
 #modify user's nickname 
 def modifyNickName(userName , nickName):
     sql = " UPDATE users SET nickName = %s WHERE userName = %s "
@@ -123,7 +122,6 @@ def getUser(userName):
         result = cursor.fetchone()
     print(result)
     return result
-
 #=======================================================================
 
 #=======================================================================
@@ -355,7 +353,7 @@ def getRecordByBookerEmail(email):
         with connection.cursor() as cursor:
             cursor.execute(sql2,result['CR_ID'])
             tmp = cursor.fetchone()
-        result['roomName'] = tmp['roomName']
+        result['roomName'] = tmp['roomname']
         p_name = []
         participants = result['participant']
         participants = participants.split(',')
@@ -370,7 +368,6 @@ def getRecordByBookerEmail(email):
                     print(i)
         result['participant'] = p_name
     return results
-
 
 #get the record by id
 def getRecordById(id):
@@ -390,8 +387,6 @@ def showRecord():
         result = cursor.fetchall()
     print(result)
     return result
-
-
 #=======================================================================
 
 """
@@ -403,8 +398,7 @@ with connection.cursor() as cursor:
 connection.commit()
 """
 
-#insertRecord()
-
+#test DB route
 @app.route('/testDB_classroom',methods=['POST','GET'])
 def testDB_classroom():
     result = showClassroom()
