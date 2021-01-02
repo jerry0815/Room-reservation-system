@@ -302,8 +302,11 @@ def getRecordByBooker(userName):
             connection.ping(reconnect = True)
             with connection.cursor() as cursor:
                 cursor.execute(sql,i)
-                tmp = cursor.fetchone()["userName"]
-                p_name.append(tmp)
+                tmp = cursor.fetchone()
+                if tmp != None:
+                    p_name.append(tmp['userName'])
+                else :
+                    print(i)
         result['participant'] = p_name
     return results
 
