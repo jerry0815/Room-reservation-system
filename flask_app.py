@@ -37,6 +37,26 @@ def insertUser(userName = "jerry", nickName = "", password = "123456798", email 
         cursor.execute(sql,(userName , nickName , password , email,identity , banned))
         connection.commit()
 
+def isValidMail(email):
+    after = email.split('@')[1]
+    if after == 'gmail.com' or after == 'gapps.ntust.edu.tw':
+        return True
+    else:
+        return False
+
+def register(data):
+    if not isValidMail(data['email']):
+        return False
+    sql = "select * from  `users` where `userName`=%s"
+    connection.ping(reconnect = True)
+    with connection.cursor() as cursor:
+        cursor.execute(sql,data['userName'])
+        result = cursor.fetchone()
+    if result == None:
+        return False
+    insertUser(userName = data['userName'], nickName = "", password = data['passward'], email = data['email'], identity = '0' , banned = '0')
+    return True
+
 #login and return user information. return status,result
 #status:
 # 0:success 1:wrong email 2:wrong passward
@@ -201,14 +221,14 @@ def searchClassroom(building = "" , capacity = -1 , roomname = "" , date = "2020
         if  building != "":
             if roomname[0:2] != building:
                 return None
-        if int(capacity) > 0 :
+        if int(capacity) > 0 and capacity != "":
             sql = "SELECT * FROM classroom WHERE `roomname` = %s AND `capacity` > %s"
             condition = (roomname,capacity)
         else:
             sql = "SELECT * FROM classroom WHERE `roomname` = %s"
             condition = roomname
     else:
-        if int(capacity) > 0 :
+        if int(capacity) > 0 and capacity != "":
             if building != "":
                 sql = "SELECT * FROM classroom WHERE `building` = %s AND `capacity` > %s"
                 condition = (building,capacity)
@@ -305,6 +325,15 @@ def getRecordByBooker(userName):
         result['participant'] = p_name
     return results
 
+#get the record by id
+def getRecordById(id):
+    sql = "SELECT * FROM record WHERE `recordID` = %s"
+    connection.ping(reconnect = True)
+    with connection.cursor() as cursor:
+        cursor.execute(sql,id)
+        result = cursor.fetchone()
+    return result
+
 #display all record
 def showRecord():
     sql = "SELECT * FROM record"
@@ -314,6 +343,8 @@ def showRecord():
         result = cursor.fetchall()
     print(result)
     return result
+
+
 #=======================================================================
 
 """
@@ -326,36 +357,6 @@ connection.commit()
 """
 
 #insertRecord()
-
-"""
-@app.route('/',methods=['POST','GET'])
-def hello():
-    if request.method =='POST':
-        if request.values['send']=='Search':
-            connection.ping(reconnect = True)
-            with connection.cursor() as cursor:
-                # Read a single record
-                sql = "SELECT `id`, `email`,`name`FROM `Account` WHERE `email`=%s"
-                cursor.execute(sql, (request.values['user']))
-                result = cursor.fetchone()
-                if result == None:
-                    return render_template("index.html",name="" , id="")
-                return render_template('index.html',name=result["name"] , id = result["id"])
-        elif request.values['send']=='Register':
-            return redirect(url_for('register'))
-    return render_template("index.html",name="" , id="")
-"""
-@app.route('/register',methods=['POST','GET'])
-def register():
-    if request.method =='POST':
-        if request.values['send']=='Submit':
-            connection.ping(reconnect = True)
-            with connection.cursor() as cursor:
-                sql = "INSERT INTO `Account` (`email`, `password` , `name`) VALUES (%s, %s , %s)"
-                cursor.execute(sql, (request.values['email'], request.values['pwd'] , request.values['name']))
-            connection.commit()
-            return redirect(url_for('hello'))
-    return render_template("register.html")
 
 @app.route('/testDB_classroom',methods=['POST','GET'])
 def testDB_classroom():
@@ -634,6 +635,23 @@ def logout():
 
 
     return redirect(url_for('logout'))
+
+@app.route('/register',methods=['POST','GET'])
+def register_page():
+    if cookie_check():
+        return redirect(url_for('main_page'))
+    if request.method == 'POST':
+        print('yes123')
+        if register(request.form):
+            #註冊成功
+            print("success")
+            return redirect(url_for('login_page'))
+        else:
+            #註冊失敗
+            print("error")
+            return render_template("register.html")
+    return render_template("register.html")
+
 @app.route('/login',methods=['POST','GET'])
 def login_page():
     if cookie_check():
