@@ -368,7 +368,7 @@ def getRecordByBookerEmail(email):
 
 #get the record by id
 def getRecordById(id):
-    sql = "SELECT * FROM record WHERE `recordID` = %s"
+    sql = "SELECT * FROM `record` WHERE `recordID` = %s"
     connection.ping(reconnect = True)
     with connection.cursor() as cursor:
         cursor.execute(sql,id)
@@ -397,6 +397,34 @@ def getRecordById(id):
                 print(i)
     result['participant'] = p_name
     return result
+
+
+#update record by record id
+def updateRecord(id , title ,participants):
+    if title != None and title != "":
+       sql = "UPDATE `record` SET `title` = %s WHERE `recordID` = %s"
+       connection.ping(reconnect = True)
+        with connection.cursor() as cursor:
+            cursor.execute(sql,id)
+            cursor.commit()
+    if participants != None:
+        sql = "SELECT `participant` FROM `record` WHERE `recordID` = %s"
+        connection.ping(reconnect = True)
+        with connection.cursor() as cursor:
+            cursor.execute(sql,id)
+            result = cursor.fetchone()
+        if result == None:
+            print("no id of this result")
+            return None
+        ppl = result['participant']
+        ppl = ppl + ',' + listIdToStr(participants)
+        sql = "UPDATE `record` SET `participant` = %s WHERE `recordID` = %s"
+        connection.ping(reconnect = True)
+            with connection.cursor() as cursor:
+                cursor.execute(sql,(ppl,id))
+                cursor.commit()
+
+
 
 #display all record
 def showRecord():
