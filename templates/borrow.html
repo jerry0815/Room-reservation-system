@@ -4,87 +4,100 @@
 {% endblock %}
 {% block content %}
 	<div>
-		<div class="d-flex justify-content-center align-items-start h-100">
-			<div class="text-black">
-				<h1 class="mb-3">借用登記</h1>
-				<h5 class="mb-4">Borrowing</h5>
+		<div class="d-flex justify-content-center align-items-start h-100 ">
+			<div class="text-dark">
+				<h1 class="text-center mt-3 mb-2">借用登記</h1>
 
+				<h5 class="text-center">Borrowing</h5>		
+				
 			</div>
 		</div>
-		<div class="d-flex justify-content-center align-items-center">
-			<div style="width:75%;border-color:black;border-style:solid;border-width:2px;padding:30px;">
-				<br>
-				會議名稱 Meeting Title：
-				<span>
-					<input class="border border-dark" style="display: inline;width: 50%;left:5%"
-						onkeyup="value=value.replace(/[\W]/g,'') " 　　
-						onbeforepaste="clipboardData.setData('text',clipboardData.getData('text').replace(/[^\d]/g,''))"
-						　　 ID="meeting_title_input" NAME="meeting_title_input">
-				</span>
-				<br>
-				開始：
-				<div>
-					<input style="display: inline ;width: 30%;left:5%" type="date" class="form-control" id="begin_date"
-						name="begin_date" >
-					<span>
-						,&nbsp;&nbsp;第 <input class="border-bottom border-dark" style="width:5%;text-align:center"
-							onkeyup="value=value.replace(/[^\d]/g,'') " 　　
-							onbeforepaste="clipboardData.setData('text',clipboardData.getData('text').replace(/[^\d]/g,''))"
-							　　 ID="begin_section" NAME="begin_section">
-						節
-					</span>
-				</div>
-				<br>
-				結束：
-				<div>
-					<input style="display: inline ;width: 30%;left:5%" type="date" class="form-control" id="end_date"
-						name="end_date">
-					<span>
-						,&nbsp;&nbsp;第 <input class="border-bottom border-dark" style="width:5%;text-align:center"
-							onkeyup="value=value.replace(/[^\d]/g,'') " 　　
-							onbeforepaste="clipboardData.setData('text',clipboardData.getData('text').replace(/[^\d]/g,''))"
-							　　 ID="end_section" NAME="end_section">
-						節
-					</span>
-				</div>
-				<br>
-				<br>
-				<div>
-					大樓 Building：
-					<span><input class="container border border-dark" style="display: inline;width: 50%;left:5%"
-							onkeyup="value=value.replace(/[^\d]/g,'') " 　　
-							onbeforepaste="clipboardData.setData('text',clipboardData.getData('text').replace(/[^\d]/g,''))"
-							　　 ID="building_input" NAME="building_input">
-					</span>
-				</div>
-				<br>
-				<div>
-					教室編號 Room ID：
-					<span><input class="container border border-dark" style="display: inline;width: 50%;left:5%"
-							onkeyup="value=value.replace(/[^\d]/g,'') " 　　
-							onbeforepaste="clipboardData.setData('text',clipboardData.getData('text').replace(/[^\d]/g,''))"
-							　　 ID="room_id_input" NAME="room_id_input">
-					</span>
-				</div>
-				<br>
-				<br>
-				<div>
-					參與人 Participants：
-					<div><input class="container border border-dark" style="width: 25%;left:5%"
-							onkeyup="value=value.replace(/[^\d]/g,'') " 　　
-							onbeforepaste="clipboardData.setData('text',clipboardData.getData('text').replace(/[^\d]/g,''))"
-							　　 ID="participant_{{participants_num}}_input"
-							NAME="participant_{{participants_num}}_input">
+
+		<div class="d-flex justify-content-center align-items-center mt-4">
+			<div style="width:75%;border-color:black;border-style:solid;border-width:1px;padding:30px;">
+				<form>
+					<div class="form-group">
+					  <label for="titleInput">會議名稱(Meeting Title)</label>
+					  <input class="form-control" id="titleInput" aria-describedby="titleHelp" placeholder="輸入名稱" maxlength="10" name="title">
+					  <small id="titleHelp" class="form-text text-muted">會議名稱最多10字</small>
 					</div>
-				</div>
-				<br>
-				<div class="d-flex justify-content-end align-items-center">
-					<a class="btn btn-outline-dark btn-lg" style="width: 200px;"
-						href="{{url_for('search_page')}}" role="button" target="_self">
-						搜尋<br>search
-					</a>
-				</div>
+					<div class="form-group">
+					  <label for="start_date_input">開始</label>
+					  <br>
+					  <input style="display: inline ;width: 30%;left:5%" class="form-control" type="date" id="start_date_input" name="start_date">
+						<span>
+						,&nbsp;&nbsp;第 <input  class="border-bottom border-dark" style="width:5%;text-align:center"
+							onkeyup="value=value.replace(/[^\d]/g,'') " 　　
+							onbeforepaste="clipboardData.setData('text',clipboardData.getData('text').replace(/[^\d]/g,''))"
+							　　 ID="begin_section" name="start_section">
+						節
+						</span>
+					</div>
+					<div class="form-group">
+						<label for="end_date_input">結束</label>
+						<br>
+						<input style="display: inline ;width: 30%;left:5%" class="form-control" type="date" id="end_date_input" name="end_date">
+						<span>
+						  ,&nbsp;&nbsp;第 <input class="border-bottom border-dark" style="width:5%;text-align:center"
+							  onkeyup="value=value.replace(/[^\d]/g,'') " 　　
+							  onbeforepaste="clipboardData.setData('text',clipboardData.getData('text').replace(/[^\d]/g,''))"
+							  　　 id="end_section" name="end_section">
+						  節
+						  </span>
+					  </div>
+
+					<div class="form-group">
+						<label for="buildingSelect">大樓(building)</label>
+						<select class="custom-select mr-sm-2 border border-secondary mt-2 mb-3" 
+							id="buildingSelect" name="building" >
+								<option selected>請選擇大樓...</option>
+								{%for b in buildings%}
+									<option value={{b}}> {{b}} </option>
+								{%endfor%} 
+							</select>
+					</div>
+					<div class="form-group">
+						<label for="room_id_input">教室編號(Room Id)</label>
+						<input class="form-control" id="room_id_input" aria-describedby="roomNameHelp" onkeyup="value=value.replace(/[\W]/g,'') " 　　
+							onbeforepaste="clipboardData.setData('text',clipboardData.getData('text').replace(/[^\d]/g,''))"
+						 	placeholder="輸入教室編號" name="roomName">
+						<small id="roomNameHelp" class="form-text text-muted">如:TR313</small>
+					  </div>
+					
+					<div class="form-group">
+						<div>
+							<label for="room_id_input">參與人(Participants)</label>
+							<button class="btn btn-success ml-3 text-center mb-1" style="width: 60px;"id="addrow" type="button">新增</button>
+						</div>
+						<div class="text-center" style="overflow-y:auto;white-space: nowrap;height: 200px; width: 400px;">
+					<table id="myTable" class="table order-list">
+						
+						<tbody>
+							<tr>
+								<td class="col-sm-4">
+									<input type="text" name="name0" class="form-control" />
+								</td>
+								<td>
+									<input type="button" class="ibtnDel btn btn-md btn-danger "  value="Delete">
+								</td>
+							</tr>
+						</tbody>
+					</table>
+					</div>
+
+					</div>
+					<button type="submit" style="width: 200px;" class="btn btn-primary btn-lg mt-3">
+						搜尋
+						<br>
+						search
+					</button>
+				</form>
 			</div>
 		</div>
 	</div>
+{% endblock %}
+
+{% block script %}
+
+<script src="{{ url_for('static', filename='js/borrow_page/addRow.js' ) }}" type="text/javascript"></script>
 {% endblock %}
