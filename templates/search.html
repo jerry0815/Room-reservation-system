@@ -103,15 +103,15 @@
 							{{r['capacity']}}
 						</th>
 						{%for i in range(1, 15)%}
-							{% if r['type'].get(i) != None %}
-								{% if r['type'][i][0] == 0%}
+							{% if r['status'].get(i) != None %}
+								{% if r['status'][i][0] == 0%}
 									<td class="bg-danger text-center align-middle text-light font-weight-bold">
-										原因: {{r['type'][i][1]}}
+										原因: {{r['status'][i][1]}}
 									</td>
 								{% else %}
 									<td class="bg-info text-center align-middle text-light font-weight-bold">
-									會議名稱: {{r['type'][i][1]}}
-									<br>借用人: {{r['type'][i][2]}}
+									會議名稱: {{r['status'][i][1]}}
+									<br>借用人: {{r['status'][i][2]}}
 								</td>
 								{% endif %}
 							{% else %}
