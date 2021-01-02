@@ -63,7 +63,7 @@ def register(data):
 def validateLogin(email , password):
     if email == "":
         return (1 , None)
-    sql = "SELECT * FROM users WHERE email = '%s'"
+    sql = "SELECT * FROM users WHERE email = %s"
     connection.ping(reconnect = True)
     with connection.cursor() as cursor:
         cursor.execute(sql,email)
@@ -81,7 +81,7 @@ def validateLogin(email , password):
 def loginCheck(email,password):
     if email == "":
         return 1
-    sql = "SELECT password FROM users WHERE email = '%s'"
+    sql = "SELECT password FROM users WHERE email = %s"
     connection.ping(reconnect = True)
     with connection.cursor() as cursor:
         cursor.execute(sql,email)
