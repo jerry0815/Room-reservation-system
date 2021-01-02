@@ -642,8 +642,10 @@ def search_page():
         return redirect(url_for('login_page'))
     if request.method =='POST':
         print(request.form)
+        print('---')
         print(request.form[0])
         print(request.form['building'])
+        print('---')
         search_result = searchClassroom(building = request.form['building'] , capacity = request.form['capacity'] , roomname = request.form['CR_ID'] , date = request.form['date'])
         print("===")
         print(search_result)
