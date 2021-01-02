@@ -1,6 +1,7 @@
 import flask
 from flask import Flask, request , render_template , redirect , url_for, make_response
 import os
+import re
 import pymysql
 import pymysql.cursors
 import requests
@@ -645,7 +646,7 @@ def search_page():
         result = request.form
         print(result)
         print('---')
-        building = "".join(filter(str.isalpha, result['building']))
+        building = re.findall("[A-Z]+",result['building'])[0]
         print(building)
         print('---')
         search_result = searchClassroom(building = building , capacity = result['capacity'] , roomname = result['CR_ID'] , date = result['date'])
