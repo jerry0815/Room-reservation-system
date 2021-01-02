@@ -366,6 +366,7 @@ def testDB_users():
 @app.route('/testDB_record',methods=['POST','GET'])
 def testDB_record():
     result = getRecordByBooker('jerry')
+    print(result)
     return render_template("testDB_record.html" , data = result)
     #return result
 
