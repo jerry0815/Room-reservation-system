@@ -212,19 +212,20 @@ def searchClassroom(building = "" , capacity = -1 , roomname = "" , date = "2020
                 sql = "SELECT * FROM classroom WHERE `building` = %s AND `capacity` > %s"
                 condition = (building,capacity)
             else:
-                sql = "SELECT * FROM classroom WHERE `capacity` = %s"
+                sql = "SELECT * FROM classroom WHERE `capacity` > %s"
                 condition = capacity
         elif building != "":
             sql = "SELECT * FROM classroom WHERE `building` = %s"
             condition = building
         else:
             print("no condition")
-    
+    print(condition)
     with connection.cursor() as cursor:
         cursor.execute(sql,condition)
         result = cursor.fetchall()
     output = []
     sql = "SELECT * FROM record WHERE `CR_ID` = %s AND `startDate` = %s"
+    print(result)
     for i in result:
         with connection.cursor() as cursor:
             cursor.execute(sql,(i["CR_ID"],date))
@@ -235,7 +236,7 @@ def searchClassroom(building = "" , capacity = -1 , roomname = "" , date = "2020
                     #building , capacity , roomname , status
                     item = (i["building"] , i["capacity"] , i["roomname"] , item)
                     output.append(item)          
-    return result
+    return output
 
 #search for one classroom and return records of a week
 # return format:  list[ building , capacity , roomname , dict{id : tuple()}(7days) ]
