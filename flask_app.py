@@ -737,6 +737,7 @@ def record_page():
     email = request.cookies.get("email")
     if email != None:
         records = getRecordByBookerEmail(email)
+        print(records)
     return render_template("record.html", records=records)
 
 @app.route('/single_record',methods=['POST'])
