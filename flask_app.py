@@ -220,14 +220,14 @@ def searchClassroom(building = "" , capacity = -1 , roomname = "" , date = "2020
         if  building != "":
             if roomname[0:2] != building:
                 return None
-        if int(capacity) > 0 and capacity != "" and capacity != None:
+        if  capacity != None and capacity != "" and int(capacity) > 0:
             sql = "SELECT * FROM classroom WHERE `roomname` = %s AND `capacity` > %s"
             condition = (roomname,capacity)
         else:
             sql = "SELECT * FROM classroom WHERE `roomname` = %s"
             condition = roomname
     else:
-        if int(capacity) > 0 and capacity != "" and capacity != None:
+        if capacity != None and capacity != "" and int(capacity) > 0:
             if building != "":
                 sql = "SELECT * FROM classroom WHERE `building` = %s AND `capacity` > %s"
                 condition = (building,capacity)
