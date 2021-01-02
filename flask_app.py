@@ -382,6 +382,8 @@ def testDB_record():
     return render_template("testDB_record.html" , data = result)
     #return result
 
+#==============================================================================
+#calendar part
 def insertEvent(service , title , roomname , startDate , startSection , endDate , endSection , participants):
     startTime = datetime.datetime.fromisoformat(startDate)
     endTime = datetime.datetime.fromisoformat(endDate)
@@ -412,13 +414,74 @@ def insertEvent(service , title , roomname , startDate , startSection , endDate 
         ],
     },
     }
-    event_result = service.events().insert(calendarId='primary', body=event).execute()
+    event_result = service.events().insert(calendarId='primary', body=event , sendUpdates = True).execute()
     print("created event")
     print("id: ", event_result['id'])
     print("summary: ", event_result['summary'])
     print("starts at: ", event_result['start']['dateTime'])
     print("ends at: ", event_result['end']['dateTime'])
     return event_result['id']
+
+def updateEvent(service , startDate , startSection , title = "" , participants = None):
+    startTime = datetime.datetime.fromisoformat(startDate)
+    startHours = datetime.timedelta(hours = startSection + 7)
+    startTime = startTime + startHours
+    events_result = service.events().list(calendarId="primary", timeMin= startTime.strftime("%Y-%m-%dT%H:%M:%S+08:00"),
+                                        maxResults=10, singleEvents=True,
+                                        orderBy='startTime').execute()
+    events = events_result.get('items', [])
+    if not events:
+        print('No upcoming events found.')
+    for event in events:
+        start = event['start'].get('dateTime', event['start'].get('date'))
+        id = event['id']
+        print(start, event['summary'],id)
+    event = events[0]
+    attendees = []
+    for i in event['attendees']:
+        attendees.append(i['email'])
+    attendees = attendees + participants
+    if title == "":
+        title = event['summary']
+    print(title)
+    new_event = {
+    'summary': title,
+    'location': event['location'] ,
+    'description': 'An event from room reservation',
+    'start': {
+        'dateTime': event['start']['dateTime'],
+        'timeZone': 'Asia/Taipei',
+    },
+    'end': {
+        'dateTime': event['end']['dateTime'],
+        'timeZone': 'Asia/Taipei',
+    },
+    'attendees': [
+    ],
+    'reminders': {
+        'useDefault': False,
+        'overrides': [
+        {'method': 'email', 'minutes': 24 * 60},
+        {'method': 'popup', 'minutes': 10},
+        ],
+    },
+    }
+    for i in attendees:
+        new_event['attendees'].append({'email' : i })
+    service.events().update(calendarId = 'primary' , eventId = event['id'] , body = new_event , sendUpdates = True).execute()
+    return new_event
+
+def deleteEvent(service , startDate , startSection):
+    startTime = datetime.datetime.fromisoformat(startDate)
+    startHours = datetime.timedelta(hours = startSection + 7)
+    startTime = startTime + startHours
+    events_result = service.events().list(calendarId="primary", timeMin= startTime.strftime("%Y-%m-%dT%H:%M:%S+08:00"),
+                                        maxResults=10, singleEvents=True,
+                                        orderBy='startTime').execute()
+    events = events_result.get('items', [])
+    event = events[0]
+    print(event)
+    service.events().delete(calendarId = 'primary' , eventId = event['id'] , sendUpdates = True).execute()
 
 # This variable specifies the name of a file that contains the OAuth 2.0
 # information for this application, including its client_id and client_secret.
@@ -468,7 +531,6 @@ def test_api_request():
     # ACTION ITEM: In a production app, you likely want to save these
     #              credentials in a persistent database instead.
     flask.session['credentials'] = credentials_to_dict(credentials)
-
 
 @app.route('/authorize')
 def authorize():
@@ -523,6 +585,9 @@ def oauth2callback():
     flask.session['credentials'] = credentials_to_dict(credentials)
 
     return flask.redirect(flask.url_for('test_api_request'))
+
+#calendar part
+#===============================================================================
 
 if __name__ == '__main__':
     app.debug = True

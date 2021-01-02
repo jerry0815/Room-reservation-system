@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+{% block title %} 
+線上教室預約系統 - 預約紀錄查詢
+{% endblock %}
+{% block content %}
+<div>
+<div class="d-flex justify-content-center align-items-start h-100 ">
+    <div class="text-dark">
+        <h1 class="text-center mt-3 mb-2">預約紀錄</h1>
+
+        <h5 class="text-center mb">Borrowing Record</h5>		
+       
+    </div>
+</div>
+<div class="d-flex justify-content-center align-items-center">
+    <p> 咕你媽逼, 您好！</p>
+</div>
+
+    <div class="text-center m-5 p-3" style="overflow-x:auto;white-space: nowrap;">
+        <table class="table table-bordered ">
+            <thead class="table-secondary">
+                <tr>
+                    <th scope="col">標題</th>
+                    <th scope="col">借用期間</th>
+                    <th scope="col">地點</th>
+                    <th scope="col">與會者</th>
+                    <th scope="col">更動</th>
+                </tr>
+            </thead>
+            <tbody >
+                {%for r in records%}
+                    <tr>
+                    <th class="text-center align-middle">
+                        {{r['title']}}
+                    </th>
+                    <td class="text-center align-middle">
+                        {{r['start_date']}} 第{{r['start_section']}}節
+                        <br>
+                        ~
+                        <br>
+                        {{r['end_date']}} 第{{r['end_section']}}節
+                    </td>
+                   
+                    <td class="text-center align-middle">
+                        {{r['building']}}
+                        <br>
+                        {{r['roomName']}}
+                    </td>
+                  
+                    <td class="text-center align-middle">
+                    {%for p in r['participant']%}
+                        {{p}} <br>
+                    {%endfor%}
+                    </td>
+                    <td class="text-center align-middle">
+                        <form class="mb-2" method="POST" action={{ url_for('single_record_page') }}>
+                            <input type="hidden" name="id" value={{r['recordId']}}>
+                            <button class="btn btn-primary " type="submit">
+                                修改資訊
+                            </button>
+                        </form>
+                        <form>
+                            <input type="hidden" name="id" value={{r['recordId']}}>
+                            <button class="btn btn-danger" type="submit">
+                                取消預約
+                            </button>
+                        </form>
+                    </td>
+                    </tr>
+                {%endfor%}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

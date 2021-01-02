@@ -65,7 +65,7 @@ def insertEvent(service , title , roomname , startDate , startSection , endDate 
         ],
     },
     }
-    event_result = service.events().insert(calendarId='primary', body=event).execute()
+    event_result = service.events().insert(calendarId='primary', body=event , sendUpdates = 'all').execute()
     print("created event")
     print("id: ", event_result['id'])
     print("summary: ", event_result['summary'])
@@ -123,7 +123,7 @@ def updateEvent(service , startDate , startSection , title = "" , participants =
     }
     for i in attendees:
         new_event['attendees'].append({'email' : i })
-    service.events().update(calendarId = 'primary' , eventId = event['id'] , body = new_event).execute()
+    service.events().update(calendarId = 'primary' , eventId = event['id'] , body = new_event , sendUpdates = 'all').execute()
     return new_event
 
 def deleteEvent(service , startDate , startSection):
@@ -136,7 +136,7 @@ def deleteEvent(service , startDate , startSection):
     events = events_result.get('items', [])
     event = events[0]
     print(event)
-    service.events().delete(calendarId = 'primary' , eventId = event['id']).execute()
+    service.events().delete(calendarId = 'primary' , eventId = event['id'] , sendUpdates = 'all').execute()
 
 def main():
     service = get_calendar_service()
@@ -156,7 +156,7 @@ def main():
 
     #result = updateEvent(service  = service , startDate = '2021-01-20' , startSection = 4 , title = 'update calendar test' , participants = ['b10730002@gapps.ntust.edu.tw'])
     #print(result)
-    #result = insertEvent(service=service , title = "test insert calendar" , roomname = "TR-313",startDate = "2021-01-20" , startSection=5 , endDate = "2021-01-20" , endSection=8,participants=["linjerry890815@gmail.com"])
+    result = insertEvent(service=service , title = "test insert calendar" , roomname = "TR-313",startDate = "2021-02-20" , startSection=5 , endDate = "2021-02-20" , endSection=8,participants=["linjerry890815@gmail.com"])
     # Call the Calendar API
     startTime = datetime.datetime.fromisoformat("2021-01-07")
     startHours = datetime.timedelta(hours= 19)
@@ -177,7 +177,7 @@ def main():
         print(start, event['summary'],id)
         id_list.append(id)
 
-    #deleteEvent(service  = service , startDate = '2021-01-20' , startSection = 4)
+    deleteEvent(service  = service , startDate = '2021-01-20' , startSection = 4)
     """
     event = {
     'summary': 'Google calendar my test',

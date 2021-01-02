@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block title %} 
+線上教室預約系統
+{% endblock %}
+{% block content %}
+	<div class="h-auto w-auto ">
+		<div class="d-flex justify-content-center align-items-center h-100 ">
+			<div class="text-dark">
+				<h1 class="text-center mt-5 mb-3">線上教室預約系統</h1>
+				<h5 class="text-center mt-1 mb-5">Welcome to the Virtual Room Reservation Assistant</h5>
+			</div>
+		</div>
+	</div>
+
+	<div class="h-auto d-flex justify-content-center align-items-center m-5 p-5">
+		<a class="btn btn-outline-dark btn-lg m-5 p-2" style="width: 200px;height: 100px; "
+			href="{{url_for('search_page')}}" role="button" target="_self">
+			查詢與借用
+			<br>
+			Look up and Borrow
+		</a>
+		<a class="btn btn-outline-dark btn-lg m-5" style="width: 200px;;height: 100px;"
+			href="{{ url_for('borrow_page') }}" target="_self" role="button">
+			借用登記
+			<br>Borrowing
+		</a>
+		<a class="btn btn-outline-dark btn-lg m-5" style="width: 200px;;height: 100px;"
+			href="{{ url_for('record_page') }}" role="button" target="_self">
+			預約紀錄查詢
+			<br>Borrowing Record
+		</a>
+	</div>
+{% endblock %}

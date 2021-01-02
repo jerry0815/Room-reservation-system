@@ -1,0 +1,87 @@
+{% extends "base.html" %}
+{% block title %} 
+線上教室預約系統 - 修改預約紀錄
+{% endblock %}
+{% block content %}
+	<div>
+		<div class="d-flex justify-content-center align-items-start h-100 ">
+            <div class="text-dark">
+                <h1 class="text-center mt-3 mb-2">修改預約紀錄</h1>
+        
+                <h5 class="text-center mb">Modify Record</h5>		
+               
+            </div>
+        </div>
+
+		<div class="d-flex justify-content-center align-items-center mt-4">
+            
+            <div style="width:75%;border-color:black;border-style:solid;border-width:1px;padding:30px;">
+                <form>
+                <input hidden name='id' value={{record['id']}}>
+				<br>
+				會議名稱 Meeting Title：
+				
+                <div class="container border border-dark mt-2">
+                    <input style="height: 35px;"
+                    onkeyup="value=value.replace(/[\W]/g,'') " 　　
+                    onbeforepaste="clipboardData.setData('text',clipboardData.getData('text').replace(/[^\d]/g,''))"
+                    　　 ID="meeting_title_input" name="title" value={{record['title']}}> 
+                </div>
+				
+                <br>
+                
+                
+				開始：
+				<div>
+					<input style="display: inline ;width: 30%;left:5%" type="date" class="form-control" id="begin_date"
+						name="begin_date" value={{record['start_date']}} readonly>
+					<span>
+                        ,&nbsp;&nbsp;第 <input style="width:5%;text-align:center" 
+                        
+                        value={{record['start_section']}} readonly>
+						節
+					</span>
+				</div>
+				<br>
+				結束：
+				<div>
+					<input style="display: inline ;width: 30%;left:5%" type="date" class="form-control" id="begin_date"
+						name="begin_date" value={{record['end_date']}} readonly>
+					<span>
+                        ,&nbsp;&nbsp;第 <input style="width:5%;text-align:center" 
+                        
+                        value={{record['end_section']}} readonly>
+						節
+					</span>
+				</div>
+				<br>
+				<div>
+					地點：
+                    <br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;{{record['building']}}
+                    <br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;{{record['roomName']}}
+		
+                <br>
+                <br>
+				<div>
+					參與人 Participants：
+					<div><input class="container border border-dark" style="width: 25%;left:5%"
+							onkeyup="value=value.replace(/[^\d]/g,'') " 　　
+							onbeforepaste="clipboardData.setData('text',clipboardData.getData('text').replace(/[^\d]/g,''))"
+							　　 ID="participant_{{participants_num}}_input"
+							NAME="participant_{{participants_num}}_input">
+					</div>
+				</div>
+				<br>
+				<div class="d-flex justify-content-end align-items-center">
+					<button class="btn btn-primary btn-lg" style="width: 200px;"
+                        type="submit">
+						確定
+					</a>
+                </div>
+                </form>
+            </div>
+		</div>
+	</div>
+{% endblock %}
