@@ -645,6 +645,7 @@ def search_page():
         result = request.form
         print(result)
         print('---')
+        result['building'] = "".join(filter(str.isalpha, result['building']))
         print(result['building'])
         print('---')
         search_result = searchClassroom(building = result['building'] , capacity = result['capacity'] , roomname = result['CR_ID'] , date = result['date'])
