@@ -293,8 +293,19 @@ def getRecordByBooker(userName):
     connection.ping(reconnect = True)
     with connection.cursor() as cursor:
         cursor.execute(sql,B_ID)
-        result = cursor.fetchall()
-    return result
+        results = cursor.fetchall()
+    sql = "SELECT `userName`  FROM `users` WHERE `userID`= %s"
+    for result in results:
+        p_name = []
+        participants = result['participant']
+        for i in participants:
+            connection.ping(reconnect = True)
+            with connection.cursor() as cursor:
+                cursor.execute(sql,i)
+                tmp = cursor.fetchone()["userName"]
+                p_name.append(tmp)
+        result['participant'] = p_name
+    return results
 
 
 #display all record
