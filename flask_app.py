@@ -729,7 +729,7 @@ def single_record_page():
     if not cookie_check():
         return redirect(url_for('login_page'))
     if request.method =='POST':
-        return render_template("single_record.html",record=get_record(request.form['id']))
+        return render_template("single_record.html",record=getRecordById(request.form['id']))
     
     return render_template("single_record.html")
 
