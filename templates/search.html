@@ -8,7 +8,7 @@
 			<div class="text-dark">
 				<h1 class="text-center mt-3 mb-2">教室查詢與借用</h1>
 
-				<h5 class="text-center mb">Lookup and Reserve</h5>		
+				<h5 class="text-center">Lookup and Reserve</h5>		
 				
 			</div>
 		</div>
@@ -23,7 +23,7 @@
 							<select class="custom-select mr-sm-2 border border-secondary mt-2 mb-3" 
 							id="inlineFormCustomSelect" name="building" >
 								<option selected>請選擇大樓...</option>
-								{%for b in building%}
+								{%for b in buildings%}
 									{% if b == request.form['building']%}
 										<option value={{b}} selected> {{b}} </option>
 									{% else %}
@@ -36,7 +36,7 @@
 						<li class="nav-item mr-3">
 							<p style="vertical-align:top;"> 可容納人數上限 </p>
 							<div class="container border border-dark mt-2">
-								<input style="height: 35px;" onkeyup="value=value.replace(/[^\d]/g,'') " 　　
+								<input class = "w-100" style="height: 35px;" onkeyup="value=value.replace(/[^\d]/g,'') " 　　
 									onbeforepaste="clipboardData.setData('text',clipboardData.getData('text').replace(/[^\d]/g,''))"
 									　　 id="capacity_input" name="capacity" placeholder="如:10, 25(人)" value={{request.form['capacity']}}> 
 							</div>
@@ -45,9 +45,9 @@
 							<p style="vertical-align:top;"> 教室編號 </p>
 							<div class="container border border-dark mt-2">
 								
-								<input style="height: 35px;" onkeyup="value=value.replace(/[\W]/g,'') " 　　
+								<input class = "w-100" style="height: 35px;" onkeyup="value=value.replace(/[\W]/g,'') " 　　
 									onbeforepaste="clipboardData.setData('text',clipboardData.getData('text').replace(/[^\d]/g,''))"
-									　　 id="room_id_input" name="CR_ID" placeholder="如:TR313" value={{request.form['CR_ID']}}>
+									　　 id="room_id_input" name="roomName" placeholder="如:TR-313" value={{request.form['roomName']}}>
 							</div>
 						</li>
 					
@@ -66,7 +66,7 @@
 	</div>
 
 	<div class="text-center mt-4" style="overflow-x:auto;white-space: nowrap;">
-		<table class="table table-bordered ">
+		<table  class="table table-bordered">
 			<thead class="table-secondary">
 				<tr>
 					<th scope="col">教室位置</th>
@@ -102,16 +102,16 @@
 						<th scope="row" class="text-center align-middle">
 							{{r['capacity']}}
 						</th>
-						{%for i in range(1, 14)%}
-							{% if r['status'].get(i) != None %}
-								{% if r['status'][i][0] == 0%}
+						{%for i in range(1, 15)%}
+							{% if r['type'].get(i) != None %}
+								{% if r['type'][i][0] == 0%}
 									<td class="bg-danger text-center align-middle text-light font-weight-bold">
-										原因: {{r['status'][i][1]}}
+										原因: {{r['type'][i][1]}}
 									</td>
 								{% else %}
 									<td class="bg-info text-center align-middle text-light font-weight-bold">
-									會議名稱: {{r['status'][i][1]}}
-									<br>借用人: {{r['status'][i][2]}}
+									會議名稱: {{r['type'][i][1]}}
+									<br>借用人: {{r['type'][i][2]}}
 								</td>
 								{% endif %}
 							{% else %}

@@ -221,6 +221,7 @@ def searchClassroom(building = "" , capacity = -1 , roomname = "" , date = "2020
         else:
             print("no condition")
     print(condition)
+    connection.ping(reconnect = True)
     with connection.cursor() as cursor:
         cursor.execute(sql,condition)
         result = cursor.fetchall()
@@ -228,6 +229,7 @@ def searchClassroom(building = "" , capacity = -1 , roomname = "" , date = "2020
     sql = "SELECT * FROM record WHERE `CR_ID` = %s AND `startDate` = %s"
     print(result)
     for i in result:
+        connection.ping(reconnect = True)
         with connection.cursor() as cursor:
             cursor.execute(sql,(i["CR_ID"],date))
             tmp = cursor.fetchall()
@@ -646,7 +648,7 @@ def search_page():
         result = request.form
         building = re.findall("[A-Z]+",result['building'])[0]
         print(building)
-        search_result = searchClassroom(building = building , capacity = result['capacity'] , roomname = result['CR_ID'] , date = result['date'])
+        search_result = searchClassroom(building = building , capacity = result['capacity'] , roomname = result['roomName'] , date = result['date'])
         print("===")
         print(search_result)
         print("===")
