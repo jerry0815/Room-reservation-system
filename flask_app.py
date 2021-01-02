@@ -645,10 +645,10 @@ def search_page():
         result = request.form
         print(result)
         print('---')
-        result['building'] = "".join(filter(str.isalpha, result['building']))
-        print(result['building'])
+        building = "".join(filter(str.isalpha, result['building']))
+        print(building)
         print('---')
-        search_result = searchClassroom(building = result['building'] , capacity = result['capacity'] , roomname = result['CR_ID'] , date = result['date'])
+        search_result = searchClassroom(building = building , capacity = result['capacity'] , roomname = result['CR_ID'] , date = result['date'])
         print("===")
         print(search_result)
         print("===")
