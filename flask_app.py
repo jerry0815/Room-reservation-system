@@ -365,7 +365,7 @@ def testDB_users():
 
 @app.route('/testDB_record',methods=['POST','GET'])
 def testDB_record():
-    result = showRecord()
+    result = getRecordByBooker('jerry')
     return render_template("testDB_record.html" , data = result)
     #return result
 
@@ -376,8 +376,6 @@ def insertEvent(service , title , roomname , startDate , startSection , endDate 
     endHours = datetime.timedelta(hours= endSection + 8)
     startTime = startTime + startHours
     endTime = endTime + endHours
-    #"2021-01-10"
-    
     event = {
     'summary': title,
     'location': ('NTUST ' + roomname) ,

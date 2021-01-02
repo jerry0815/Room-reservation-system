@@ -47,18 +47,15 @@ def insertEvent(service , title , roomname , startDate , startSection , endDate 
     'location': ('NTUST ' + roomname) ,
     'description': 'An event from room reservation',
     'start': {
-        'dateTime': startTime,
+        'dateTime': startTime.strftime("%Y-%m-%dT%H:%M:%S"),
         'timeZone': 'Asia/Taipei',
     },
     'end': {
-        'dateTime': endTime,
+        'dateTime': endTime.strftime("%Y-%m-%dT%H:%M:%S"),
         'timeZone': 'Asia/Taipei',
     },
-    'recurrence': [
-        'RRULE:FREQ=DAILY;COUNT=2'
-    ],
     'attendees': [
-        for i in participants: {'email: i'}
+        {'email': 'linjerry890815@gmail.com'} 
     ],
     'reminders': {
         'useDefault': False,
@@ -76,6 +73,71 @@ def insertEvent(service , title , roomname , startDate , startSection , endDate 
     print("ends at: ", event_result['end']['dateTime'])
     return event_result['id']
 
+#how to choose which information change?
+
+def updateEvent(service , startDate , startSection , title = "" , participants = None):
+    startTime = datetime.datetime.fromisoformat(startDate)
+    startHours = datetime.timedelta(hours = startSection + 7)
+    startTime = startTime + startHours
+    events_result = service.events().list(calendarId="primary", timeMin= startTime.strftime("%Y-%m-%dT%H:%M:%S+08:00"),
+                                        maxResults=10, singleEvents=True,
+                                        orderBy='startTime').execute()
+    events = events_result.get('items', [])
+    if not events:
+        print('No upcoming events found.')
+    for event in events:
+        start = event['start'].get('dateTime', event['start'].get('date'))
+        id = event['id']
+        print(start, event['summary'],id)
+    event = events[0]
+    attendees = []
+    for i in event['attendees']:
+        attendees.append(i['email'])
+    attendees = attendees + participants
+    #print(attendees)
+    #print(event)
+    if title == "":
+        title = event['summary']
+    print(title)
+    new_event = {
+    'summary': title,
+    'location': event['location'] ,
+    'description': 'An event from room reservation',
+    'start': {
+        'dateTime': event['start']['dateTime'],
+        'timeZone': 'Asia/Taipei',
+    },
+    'end': {
+        'dateTime': event['end']['dateTime'],
+        'timeZone': 'Asia/Taipei',
+    },
+    'attendees': [
+    ],
+    'reminders': {
+        'useDefault': False,
+        'overrides': [
+        {'method': 'email', 'minutes': 24 * 60},
+        {'method': 'popup', 'minutes': 10},
+        ],
+    },
+    }
+    for i in attendees:
+        new_event['attendees'].append({'email' : i })
+    service.events().update(calendarId = 'primary' , eventId = event['id'] , body = new_event).execute()
+    return new_event
+
+def deleteEvent(service , startDate , startSection):
+    startTime = datetime.datetime.fromisoformat(startDate)
+    startHours = datetime.timedelta(hours = startSection + 7)
+    startTime = startTime + startHours
+    events_result = service.events().list(calendarId="primary", timeMin= startTime.strftime("%Y-%m-%dT%H:%M:%S+08:00"),
+                                        maxResults=10, singleEvents=True,
+                                        orderBy='startTime').execute()
+    events = events_result.get('items', [])
+    event = events[0]
+    print(event)
+    service.events().delete(calendarId = 'primary' , eventId = event['id']).execute()
+
 def main():
     service = get_calendar_service()
     # Call the Calendar API
@@ -92,6 +154,30 @@ def main():
         primary = "Primary" if calendar.get('primary') else ""
         print("%s\t%s\t%s" % (summary, id, primary))
 
+    #result = updateEvent(service  = service , startDate = '2021-01-20' , startSection = 4 , title = 'update calendar test' , participants = ['b10730002@gapps.ntust.edu.tw'])
+    #print(result)
+    #result = insertEvent(service=service , title = "test insert calendar" , roomname = "TR-313",startDate = "2021-01-20" , startSection=5 , endDate = "2021-01-20" , endSection=8,participants=["linjerry890815@gmail.com"])
+    # Call the Calendar API
+    startTime = datetime.datetime.fromisoformat("2021-01-07")
+    startHours = datetime.timedelta(hours= 19)
+    startTime = startTime + startHours
+    print('Getting the upcoming 10 events')
+    now = datetime.datetime.utcnow().isoformat() + 'Z' # 'Z' indicates UTC time
+    print(startTime)
+    events_result = service.events().list(calendarId="primary", timeMin= startTime.strftime("%Y-%m-%dT%H:%M:%S+08:00"),
+                                        maxResults=10, singleEvents=True,
+                                        orderBy='startTime').execute()
+    events = events_result.get('items', [])
+    id_list = []
+    if not events:
+        print('No upcoming events found.')
+    for event in events:
+        start = event['start'].get('dateTime', event['start'].get('date'))
+        id = event['id']
+        print(start, event['summary'],id)
+        id_list.append(id)
+
+    #deleteEvent(service  = service , startDate = '2021-01-20' , startSection = 4)
     """
     event = {
     'summary': 'Google calendar my test',
