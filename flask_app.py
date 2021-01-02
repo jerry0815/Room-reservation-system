@@ -652,10 +652,10 @@ def search_page():
         print("===")
         print(search_result)
         print("===")
-        return render_template("search.html", building=buildings, date=result['date'], result=search_result)
+        return render_template("search.html", buildings=buildings, date=result['date'], result=search_result)
     print("template")
     print(buildings)
-    return render_template("search.html", building=buildings, date=get_current_time(), result=None)
+    return render_template("search.html", buildings=buildings, date=get_current_time(), result=None)
     
 @app.route('/borrow',methods=['POST','GET'])
 def borrow_page():
