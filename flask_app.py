@@ -226,8 +226,6 @@ def searchClassroom(building = "" , capacity = -1 , roomname = "" , date = "2020
     with connection.cursor() as cursor:
         cursor.execute(sql,condition)
         result = cursor.fetchall()
-    print(result)
-    print("==========================")
     output = []
     sql = "SELECT * FROM record WHERE `CR_ID` = %s AND `startDate` = %s"
     for i in result:
@@ -240,7 +238,6 @@ def searchClassroom(building = "" , capacity = -1 , roomname = "" , date = "2020
                     #building , capacity , roomname , status
                     item = (i["building"] , i["capacity"] , i["roomname"] , item)
                     output.append(item)          
-    print(output)
     return result
 
 #search for one classroom and return records of a week
