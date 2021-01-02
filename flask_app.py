@@ -233,7 +233,7 @@ def searchClassroom(building = "" , capacity = -1 , roomname = "" , date = "2020
             tmp = cursor.fetchall()
             if tmp != ():
                 for j in tmp:
-                    item = processRecord(j)
+                    item = processRecord(j , date)
                     #building , capacity , roomname , status
                     item = (i["building"] , i["capacity"] , i["roomname"] , item)
                     output.append(item)          
@@ -644,11 +644,8 @@ def search_page():
         return redirect(url_for('login_page'))
     if request.method =='POST':
         result = request.form
-        print(result)
-        print('---')
         building = re.findall("[A-Z]+",result['building'])[0]
         print(building)
-        print('---')
         search_result = searchClassroom(building = building , capacity = result['capacity'] , roomname = result['CR_ID'] , date = result['date'])
         print("===")
         print(search_result)
