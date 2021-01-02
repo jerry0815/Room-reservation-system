@@ -709,7 +709,7 @@ def main_page():
     if request.method =='POST':
         #TODO encryption
         status , result = validateLogin(request.form['email'], request.form['password'])
-        if status == 0
+        if status == 0:
             resp = make_response(render_template("main.html"))
             #set cookie
             resp.set_cookie('email', request.form['email']) #TODO set age
