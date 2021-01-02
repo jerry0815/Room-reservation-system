@@ -654,6 +654,7 @@ def search_page():
         print("===")
         return render_template("search.html", building=buildings, date=result['date'], result=search_result)
     print("template")
+    print(buildings)
     return render_template("search.html", building=buildings, date=get_current_time(), result=None)
     
 @app.route('/borrow',methods=['POST','GET'])
