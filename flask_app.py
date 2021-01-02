@@ -66,17 +66,17 @@ def validateLogin(email , password):
     with connection.cursor() as cursor:
         cursor.execute(sql,email)
         result = cursor.fetchone()
-    #wrong email
+    #1 : wrong email
     if result == None:
         return (1 , None)
-    #wrong passward
+    #2 : wrong passward
     if result["password"] != password:
         return (2,None)
     else:
         return (0,result)
 
 #for cookie
-def loginCheck(email,passward):
+def loginCheck(email,password):
     sql = "SELECT passward FROM users WHERE `email`=%s"
     connection.ping(reconnect = True)
     with connection.cursor() as cursor:
@@ -622,7 +622,7 @@ def cookie_check():
     """
     email = request.cookies.get("email")
     password = request.cookies.get('password')
-    if authentication(email, password):
+    if loginCheck(email,password):
         return True
     return False
 
@@ -708,7 +708,8 @@ def main_page():
 
     if request.method =='POST':
         #TODO encryption
-        if authentication(request.form['email'], request.form['password']):
+        status , result = validateLogin(request.form['email'], request.form['password'])
+        if status == 0
             resp = make_response(render_template("main.html"))
             #set cookie
             resp.set_cookie('email', request.form['email']) #TODO set age
