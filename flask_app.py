@@ -61,9 +61,8 @@ def register(data):
 #status:
 # 0:success 1:wrong email 2:wrong passward
 def validateLogin(email , password):
-    if email == "":
+    if email == "" or email == None:
         return (1 , None)
-    print(email)
     sql = "SELECT * FROM `users` WHERE `email` = %s"
     connection.ping(reconnect = True)
     with connection.cursor() as cursor:
@@ -80,11 +79,8 @@ def validateLogin(email , password):
 
 #for cookie
 def loginCheck(email,password):
-    if email == "":
+    if email == "" or email == None:
         return 1
-    print(email)
-    print("123")
-    sql = "SELECT `userName`  FROM `users` WHERE `userID`= %s"
     sql = "SELECT `password` FROM `users` WHERE `email` = %s"
     connection.ping(reconnect = True)
     with connection.cursor() as cursor:
