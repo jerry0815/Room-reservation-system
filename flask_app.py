@@ -312,15 +312,21 @@ def getRecordByBooker(userName):
     with connection.cursor() as cursor:
         cursor.execute(sql,B_ID)
         results = cursor.fetchall()
-    sql = "SELECT `userName`  FROM `users` WHERE `userID`= %s"
+    sql1 = "SELECT `userName`  FROM `users` WHERE `userID`= %s"
+    sql2 = "SELECT `roomname`  FROM `classroom` WHERE `CR_ID`= %s"
     for result in results:
+        connection.ping(reconnect = True)
+        with connection.cursor() as cursor:
+            cursor.execute(sql2,result['CR_ID'])
+            tmp = cursor.fetchone()
+        result['roomName'] = tmp
         p_name = []
         participants = result['participant']
         participants = participants.split(',')
         for i in participants:
             connection.ping(reconnect = True)
             with connection.cursor() as cursor:
-                cursor.execute(sql,i)
+                cursor.execute(sql1,i)
                 tmp = cursor.fetchone()
                 if tmp != None:
                     p_name.append(tmp['userName'])
@@ -342,15 +348,21 @@ def getRecordByBookerEmail(email):
     with connection.cursor() as cursor:
         cursor.execute(sql,B_ID)
         results = cursor.fetchall()
-    sql = "SELECT `userName`  FROM `users` WHERE `userID`= %s"
+    sql1 = "SELECT `userName`  FROM `users` WHERE `userID`= %s"
+    sql2 = "SELECT `roomname`  FROM `classroom` WHERE `CR_ID`= %s"
     for result in results:
+        connection.ping(reconnect = True)
+        with connection.cursor() as cursor:
+            cursor.execute(sql2,result['CR_ID'])
+            tmp = cursor.fetchone()
+        result['roomName'] = tmp
         p_name = []
         participants = result['participant']
         participants = participants.split(',')
         for i in participants:
             connection.ping(reconnect = True)
             with connection.cursor() as cursor:
-                cursor.execute(sql,i)
+                cursor.execute(sql1,i)
                 tmp = cursor.fetchone()
                 if tmp != None:
                     p_name.append(tmp['userName'])
