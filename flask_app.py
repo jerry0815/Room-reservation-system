@@ -77,7 +77,7 @@ def validateLogin(email , password):
 
 #for cookie
 def loginCheck(email,password):
-    sql = "SELECT passward FROM users WHERE `email`=%s"
+    sql = "SELECT password FROM users WHERE `email`=%s"
     connection.ping(reconnect = True)
     with connection.cursor() as cursor:
         cursor.execute(sql,email)
