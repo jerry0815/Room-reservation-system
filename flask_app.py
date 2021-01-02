@@ -642,7 +642,9 @@ def register_page():
         return redirect(url_for('main_page'))
     if request.method == 'POST':
         print('yes123')
-        if register(request.form):
+        result = request.form
+        print(result)
+        if register(result):
             #註冊成功
             print("success")
             return redirect(url_for('login_page'))
