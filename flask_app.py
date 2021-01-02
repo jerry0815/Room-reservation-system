@@ -373,6 +373,9 @@ def getRecordById(id):
     with connection.cursor() as cursor:
         cursor.execute(sql,id)
         result = cursor.fetchone()
+    if result == None:
+        print("no id of this result")
+        return None
     sql1 = "SELECT `userName`  FROM `users` WHERE `userID`= %s"
     sql2 = "SELECT `roomname`  FROM `classroom` WHERE `CR_ID`= %s"
     connection.ping(reconnect = True)
