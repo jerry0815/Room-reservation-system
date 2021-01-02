@@ -52,7 +52,7 @@ def register(data):
     with connection.cursor() as cursor:
         cursor.execute(sql,data['userName'])
         result = cursor.fetchone()
-    if result == None:
+    if result != None:
         return False
     insertUser(userName = data['userName'], nickName = "", password = data['passward'], email = data['email'], identity = '0' , banned = '0')
     return True
