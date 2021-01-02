@@ -7,9 +7,9 @@
 <body>
     {%if data%}
         {%for item in data%}
-       		<p>{{item["userName"]}}</p>
-            <p>{{item["nickName"]}}</p>
-            <p>{{item["password"]}}</p>   
+       		<p>{{item["title"]}}</p>
+            <p>{{item["startDate"]}}</p>
+            <p>{{item["participant"]}}</p>   
        	{%endfor%}
     {%else%}
     	<p>No Data</p>

@@ -298,6 +298,7 @@ def getRecordByBooker(userName):
     for result in results:
         p_name = []
         participants = result['participant']
+        participants = participants.split(',')
         for i in participants:
             connection.ping(reconnect = True)
             with connection.cursor() as cursor:
