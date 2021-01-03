@@ -439,7 +439,7 @@ def authentication(email:str, password:str):
 def modify_record(data1):
     data = data1
     print(data)
-    recordId = data['recordId']
+    recordId = data['recordID']
     participants = []
     for i in range(int(data['counter'])):
         p = data.get('participant' + str(i))
