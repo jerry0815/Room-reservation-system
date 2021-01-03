@@ -425,24 +425,7 @@ def showRecord():
     return result
 #=======================================================================
 
-"""
-with connection.cursor() as cursor:
-    # Create a new record
-    sql = "INSERT INTO `Account` (`email`, `password` , `name`) VALUES (%s, %s , %s)"
-    cursor.execute(sql, ('alien@gmail.com', 'QQQQQQ' , 'Alien'))
 
-connection.commit()
-"""
-
-record_ex = {'recordId':'123', 'title':'上課','start_date':'2021-01-30', 'start_section':1, 'end_date':'2021-01-30', 'end_section':10,
-'roomName':'TR313', 'building':'研揚大樓(TR)', 'participant':['茶是一種蔬菜湯','茶葉蛋',
-'神棍局局長']}
-
-record_ex2 = {'recordId':'456', 'title':'創業', 'start_date':'2021-02-01', 'start_section':1, 'end_date':'2021-02-03', 'end_section':10,
-'roomName':'TR411', 'building':'研揚大樓(TR)', 'participant':['勞工',
-'CEO','CTO','PM']}
-
-records = [record_ex, record_ex2]
 
 def get_current_time():
     taipei = pytz.timezone('Asia/Taipei')
@@ -456,7 +439,8 @@ def authentication(email:str, password:str):
         return False
     return True
 
-def modify_record(data):
+def modify_record(data1):
+    data = data1
     recordId = data['recordId']
     participants = []
     for i in range(int(data['counter'])):
