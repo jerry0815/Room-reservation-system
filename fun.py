@@ -499,22 +499,17 @@ def filter_classroom(data1): #開始日期 startDate,開始節數 startSection,�
     with connection.cursor() as cursor:
         cursor.execute(sql)
         classroom_total = cursor.fetchall()
-    print(classroom_total)
     classroom_total = pd.DataFrame(classroom_total)
-    print(classroom_total)
-    print(data['building'])
     if data['building'] != None:
         building = re.findall("[A-Z]+",data['building'])
         if(len(building) > 0):
             building = building[0]
         else:
             building = ""
-        print(building)
         classroom_total = classroom_total.loc[classroom_total["building"] ==  building ]
-
     if data['capacity'] != None:
         classroom_total = classroom_total.loc[classroom_total["capacity"] > int(data["capacity"]) ]
-
+    print(classroom_total)
     sql = "SELECT * FROM Record"
     connection.ping(reconnect = True)
     with connection.cursor() as cursor:
@@ -528,7 +523,7 @@ def filter_classroom(data1): #開始日期 startDate,開始節數 startSection,�
     d_startTime = datetime.fromisoformat(str(data["startDate"]))
     d_endTime = datetime.fromisoformat(str(data["endDate"]))
     for r in record_CR_ID:
-        startTime = datetime.fromisoformat(str(["startDate"]))
+        startTime = datetime.fromisoformat(str(r["startDate"]))
         endTime = datetime.fromisoformat(str(r["endDate"]))
 
         after_record = (endTime < d_startTime or (endTime == d_startTime and int(r["endSection"]) < int(data["startSection"])))
