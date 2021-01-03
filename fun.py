@@ -186,7 +186,8 @@ def listIdToStr(id_list):
     return participant
 
 #insert record O
-def insertRecord(title = "testing record", roomname  = "TR-306", startDate = "2020-12-30", startSection  = "5", endDate = "2020-12-30", endSection  = "8", participant = ['jerry','alien','wacky'], bookName = "jerry",type = "0"):
+def insertRecord(title = "testing record", roomname  = "TR-306", startDate = "2020-12-30", startSection  = "5", \
+    endDate = "2020-12-30", endSection  = "8", participant = ['jerry','alien','wacky'], bookName = "jerry",type = "0"):
 
     #get booker userid
     sql = "SELECT  `userID` FROM `users` WHERE `userName`= %s"
@@ -535,3 +536,17 @@ def filter_classroom(data1): #開始日期 startDate,開始節數 startSection,�
     classroom_total = classroom_total.T.to_dict().values() 
     print(classroom_total)
     return classroom_total
+
+def borrow(data, borrow_type):
+    participants = []
+    for i in range(int(data['counter'])):
+        p = data.get('participant' + str(i))
+        if  p != None and p != '':
+            participants.append(data['participant' + str(i)])
+
+    insertRecord(title = data['title'], roomname  = data['roomName'], \
+    startDate = data['startDate'], startSection  = data['startSection'], \
+    endDate = data['endDate'], endSection  = data['endSection'], participant = data['participant'], \
+    bookName = "alien",type = borrow_type)
+
+    return True
