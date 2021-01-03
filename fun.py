@@ -500,8 +500,15 @@ def filter_classroom(data1): #開始日期 startDate,開始節數 startSection,�
         cursor.execute(sql)
         classroom_total = cursor.fetchall()
     classroom_total = pd.DataFrame(classroom_total)
+    print(data['building'])
     if data['building'] != None:
-        classroom_total = classroom_total.loc[str(classroom_total["building"]) ==  str(data["building"])]
+        building = re.findall("[A-Z]+",data['building'])
+        if(len(building) > 0):
+            building = building[0]
+        else:
+            building = ""
+        print(building)
+        classroom_total = classroom_total.loc[str(classroom_total["building"]) ==  building]
 
     if data['capacity'] != None:
         classroom_total = classroom_total.loc[int(classroom_total["capacity"]) > int(data["capacity"])]
