@@ -4,9 +4,7 @@ from flask import redirect , url_for, make_response
 import os
 import re
 import pymysql
-import requests
 import datetime
-import os.path
 import google.oauth2.credentials
 import google_auth_oauthlib.flow
 import googleapiclient.discovery
@@ -14,6 +12,7 @@ from fun import *
 
 app = Flask(__name__)
 
+"""
 # Connect to the database
 connection = pymysql.connect(host=os.environ.get('CLEARDB_DATABASE_HOST'),
                              user=os.environ.get('CLEARDB_DATABASE_USER'),
@@ -415,7 +414,7 @@ def updateRecord(id , title ,participants):
             result = cursor.fetchone()
         if result == None:
             print("no id of this result")
-            return None
+            return False
         ppl = result['participant']
         ppl = ppl + ',' + listIdToStr(participants)
         sql = "UPDATE `record` SET `participant` = %s WHERE `recordID` = %s"
@@ -423,6 +422,7 @@ def updateRecord(id , title ,participants):
         with connection.cursor() as cursor:
             cursor.execute(sql,(ppl,id))
             cursor.commit()
+    return True
 
 
 
@@ -437,7 +437,6 @@ def showRecord():
     return result
 #=======================================================================
 
-"""
 with connection.cursor() as cursor:
     # Create a new record
     sql = "INSERT INTO `Account` (`email`, `password` , `name`) VALUES (%s, %s , %s)"
@@ -675,35 +674,13 @@ def oauth2callback():
 #calendar part
 #===============================================================================
 
-"""
-if __name__ == '__main__':
-    app.debug = True
-    app.run() #啟動伺服器
-"""
+
 
 
 #================================================================
 #new
 
-buildings=['研揚大樓(TR)','第四教學大樓(T4)','綜合研究大樓(RB)','國際大樓(IB)','電資館(EE)']
 
-record_ex = {'recordId':'123', 'title':'上課','start_date':'2021-01-30', 'start_section':1, 'end_date':'2021-01-30', 'end_section':10,
-'roomName':'TR313', 'building':'研揚大樓(TR)', 'participant':['茶是一種蔬菜湯','茶葉蛋',
-'神棍局局長']}
-
-record_ex2 = {'recordId':'456', 'title':'創業', 'start_date':'2021-02-01', 'start_section':1, 'end_date':'2021-01-31', 'end_section':10,
-'roomName':'TR411', 'building':'研揚大樓(TR)', 'participant':['勞工',
-'CEO','CTO','PM']}
-
-records = [record_ex, record_ex2]
-
-search_ex = {'building':'研揚大樓','roomName':'TR313','capacity':20,
-'status':{1:(1,'電機系上課','咕你媽逼'), 10:(0, '投影機故障', 'admin')}}
-
-search_ex2 = {'building':'研揚大樓','roomName':'TR414','capacity':30,
-'status':{5:(1,'開會','Jerry'), 14:(0, '椅子壞掉', 'admin')}}
-
-search_result = [search_ex, search_ex2]
 
 def cookie_check():
     """
@@ -775,14 +752,21 @@ def record_page():
         records = getRecordByBookerEmail(email)
     return render_template("record.html", records=records)
 
+
 @app.route('/single_record',methods=['POST'])
 def single_record_page():
     if not cookie_check():
         return redirect(url_for('login_page'))
     if request.method =='POST':
-        return render_template("single_record.html",record=getRecordById(request.form['id']))
-    
-    return render_template("single_record.html")
+        if request.form['postType'] == 'get':
+            return render_template("single_record.html",record=getRecordById(request.form['id']))
+        elif request.form['postType'] == 'modify':
+            modify_record(request.form)
+            return redirect(url_for('record_page'))
+        elif request.form['postType'] == 'delete':
+            delete_record(request.form)
+            return redirect(url_for('record_page'))
+    return redirect(url_for('main_page'))
 
 @app.route('/', methods=['POST', 'GET'])
 def main_page():
