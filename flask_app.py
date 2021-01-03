@@ -402,8 +402,8 @@ def getRecordById(id):
 #update record by record id
 def updateRecord(id , title ,participants):
     if title != None and title != "":
-       sql = "UPDATE `record` SET `title` = %s WHERE `recordID` = %s"
-       connection.ping(reconnect = True)
+        sql = "UPDATE `record` SET `title` = %s WHERE `recordID` = %s"
+        connection.ping(reconnect = True)
         with connection.cursor() as cursor:
             cursor.execute(sql,id)
             cursor.commit()
