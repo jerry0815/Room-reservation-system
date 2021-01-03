@@ -246,7 +246,7 @@ def searchClassroom(building, capacity = -1 , roomname = "" , date = "2020-01-01
                 for j in tmp:
                     item = processRecord(j , date)
                     #building , capacity , roomname , status
-                    item = {"building" : i["building"] , "capacity" : i["capacity"] , "roomName" : i["roomname"] , "status" : item}
+                    item = {"CR_ID" : i["CR_ID"] , "building" : i["building"] , "capacity" : i["capacity"] , "roomName" : i["roomname"] , "status" : item}
                     output.append(item)          
     return output
 
