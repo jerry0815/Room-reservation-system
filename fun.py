@@ -67,7 +67,7 @@ def validateLogin(email , password):
 #for cookie
 def loginCheck(email : str ,password : str):
     if email == "" or email == None:
-        return 1
+        return (1,None)
     sql = "SELECT `password` , `identity` FROM `users` WHERE `email` = %s"
     connection.ping(reconnect = True)
     with connection.cursor() as cursor:
