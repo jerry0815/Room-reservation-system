@@ -510,10 +510,10 @@ def filter_classroom(data1): #開始日期 startDate,開始節數 startSection,�
         else:
             building = ""
         print(building)
-        classroom_total = classroom_total.loc[str(classroom_total["building"]) ==  building]
+        classroom_total = classroom_total.loc[classroom_total["building"] ==  building ]
 
     if data['capacity'] != None:
-        classroom_total = classroom_total.loc[int(classroom_total["capacity"]) > int(data["capacity"])]
+        classroom_total = classroom_total.loc[classroom_total["capacity"] > int(data["capacity"]) ]
 
     sql = "SELECT * FROM Record"
     connection.ping(reconnect = True)
