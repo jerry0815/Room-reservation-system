@@ -67,7 +67,7 @@ def validateLogin(email , password):
 #for cookie
 def loginCheck(email : str ,password : str):
     if email == "" or email == None:
-        return (1,None)
+        return (False,None)
     sql = "SELECT `password` , `identity` FROM `users` WHERE `email` = %s"
     connection.ping(reconnect = True)
     with connection.cursor() as cursor:
@@ -75,16 +75,16 @@ def loginCheck(email : str ,password : str):
         result = cursor.fetchone()
     #wrong email
     if result == None:
-        return (1,None)
+        return (False,None)
     #wrong passward
     if result["password"] != password:
-        return (2,None)
+        return (False,None)
     else:
         if result["identity"] == 0:
             admin = 'normal'
         else:
             admin = 'admin'
-        return (0,admin)
+        return (True,admin)
 
 #modify user's nickname 
 def modifyNickName(userName , nickName):
