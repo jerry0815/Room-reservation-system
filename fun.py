@@ -397,16 +397,7 @@ def updateRecord(recrodID , title ,participants):
             cursor.execute(sql,(title,recrodID))
             connection.commit()
     if participants != None:
-        sql = "SELECT `participant` FROM `record` WHERE `recordID` = %s"
-        connection.ping(reconnect = True)
-        with connection.cursor() as cursor:
-            cursor.execute(sql,recrodID)
-            result = cursor.fetchone()
-        if result == None:
-            print("no id of this result")
-            return False
-        ppl = result['participant']
-        ppl = listIdToStr(ppl)
+        ppl = listIdToStr(participants)
         sql = "UPDATE `record` SET `participant` = %s WHERE `recordID` = %s"
         connection.ping(reconnect = True)
         with connection.cursor() as cursor:
