@@ -15,7 +15,7 @@ connection = pymysql.connect(host=os.environ.get('CLEARDB_DATABASE_HOST'),
 #======================================================================
 #user table
 #insert user into database userName , nickName , password , email , identity , banned
-def insertUser(userName = "jerry", nickName = "", password = "123456798", email = "jerry@gmail.com", identity = '0' , banned = '0'):
+def insertUser(userName = "jerry", nickName = "", password = "123456798", email = "jerry@gmail.com", identity = '0' , banned = False):
     if nickName == "":
         nickName = userName
     sql = "INSERT INTO `users` (`userName`, `nickName`,`password` , `email` , `identity` , `banned`) VALUES (%s,%s,%s,%s,%s,%s)"
@@ -41,7 +41,7 @@ def register(data):
         result = cursor.fetchone()
     if result != None:
         return False
-    insertUser(userName = data['userName'], nickName = "", password = data['password'], email = data['email'], identity = '0' , banned = '0')
+    insertUser(userName = data['userName'], nickName = "", password = data['password'], email = data['email'], identity = '0' , banned = False)
     return True
 
 #login and return user information. return status,result
@@ -106,7 +106,7 @@ def banAccount(userID):
     sql = " UPDATE `users` SET `banned` = %s WHERE `userID` = %s "
     connection.ping(reconnect = True)
     with connection.cursor() as cursor:
-        cursor.execute(sql , (False , userID))
+        cursor.execute(sql , (True , userID))
         connection.commit()
     return True
 
@@ -114,7 +114,7 @@ def unBanAccount(userID):
     sql = " UPDATE `users` SET `banned` = %s WHERE `userID` = %s "
     connection.ping(reconnect = True)
     with connection.cursor() as cursor:
-        cursor.execute(sql , (True , userID))
+        cursor.execute(sql , (False , userID))
         connection.commit()
     return True
 
