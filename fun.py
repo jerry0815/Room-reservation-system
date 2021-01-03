@@ -389,12 +389,12 @@ def getRecordById(id):
     return result
 
 #update record by record id
-def updateRecord(recrodID , title ,participants):
+def updateRecord(recordID , title ,participants):
     if title != None and title != "":
         sql = "UPDATE `record` SET `title` = %s WHERE `recordID` = %s"
         connection.ping(reconnect = True)
         with connection.cursor() as cursor:
-            cursor.execute(sql,(title,recrodID))
+            cursor.execute(sql,(title,recordID))
             connection.commit()
     if participants != None:
         p_id = []
@@ -409,10 +409,17 @@ def updateRecord(recrodID , title ,participants):
         sql = "UPDATE `record` SET `participant` = %s WHERE `recordID` = %s"
         connection.ping(reconnect = True)
         with connection.cursor() as cursor:
-            cursor.execute(sql,(p_id_str,recrodID))
+            cursor.execute(sql,(p_id_str,recorID))
             connection.commit()
     return True
 
+def deleteRecord(recordID):
+    sql = "DELETE FROM `record` WHERE `recordID` = %s"
+    connection.ping(reconnect = True)
+    with connection.cursor() as cursor:
+        cursor.execute(sql,recordID)
+        connection.commit()
+    return True
 #display all record
 def showRecord():
     sql = "SELECT * FROM record"
@@ -451,6 +458,7 @@ def modify_record(data1):
 
 def delete_record(data):
     print(data)
-    recordId = data['recordId']
-    print("delete", recordId)
+    recordID = data['recordID']
+    deleteRecord(recordID)
+    print("delete", recordID)
 
