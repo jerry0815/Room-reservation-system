@@ -138,11 +138,12 @@ def getUser(userName):
     if result == None:
         return (False,None)
     print(result)
-    print(result['banned'])
-    if result['banned'] == 1:
-        print("True")
-    elif result['banned'] == 0:
+    result = dict(result)
+    if int(result['banned']) == 1:
+        result['banned'] = True
+    elif int(result['banned']) == 0:
         print("False")
+        result['banned'] = False
     else :
         print("error")
     return (True , result)
