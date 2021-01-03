@@ -399,7 +399,7 @@ def updateRecord(recrodID , title ,participants):
     if participants != None:
         p_id = []
         sql = "SELECT  `userID` FROM `users` WHERE `userName`= %s"
-        for ppl in participant:
+        for ppl in participants:
             connection.ping(reconnect = True)
             with connection.cursor() as cursor:
                 cursor.execute(sql,ppl)
