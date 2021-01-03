@@ -353,8 +353,8 @@ def borrow_search_page():
 
     if request.method == "POST":
         print('borrow_search:',request.form)
-        #to to search for borrow
-        result = search_for_borrow(request.form)
+        #to to search for boroow
+        result = filter_classroom(request.form)
         return render_template("borrow_search.html", result=result)
 
     return render_template("borrow_search.html")
