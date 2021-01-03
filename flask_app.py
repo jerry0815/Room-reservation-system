@@ -420,9 +420,9 @@ def updateRecord(id , title ,participants):
         ppl = ppl + ',' + listIdToStr(participants)
         sql = "UPDATE `record` SET `participant` = %s WHERE `recordID` = %s"
         connection.ping(reconnect = True)
-            with connection.cursor() as cursor:
-                cursor.execute(sql,(ppl,id))
-                cursor.commit()
+        with connection.cursor() as cursor:
+            cursor.execute(sql,(ppl,id))
+            cursor.commit()
 
 
 
