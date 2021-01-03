@@ -205,9 +205,9 @@ def processRecord(record,date):
 
 #give the condition to search classroom
 #parameter (building ,capacity ,roomname ,date)
-def searchClassroom(building = "" , capacity = -1 , roomname = "" , date = "2020-01-01"):
+def searchClassroom(building, capacity = -1 , roomname = "" , date = "2020-01-01"):
     if rooomname != None and roomname != "":
-        if  building != None and building != "":
+        if  building != "":
             if roomname[0:2] != building:
                 return None
         if  capacity != None and capacity != "" and int(capacity) > 0:
@@ -218,13 +218,13 @@ def searchClassroom(building = "" , capacity = -1 , roomname = "" , date = "2020
             condition = roomname
     else:
         if capacity != None and capacity != "" and int(capacity) > 0:
-            if building != None and building != "":
+            if building != "":
                 sql = "SELECT * FROM classroom WHERE `building` = %s AND `capacity` > %s"
                 condition = (building,capacity)
             else:
                 sql = "SELECT * FROM classroom WHERE `capacity` > %s"
                 condition = capacity
-        elif building != None and building != "":
+        elif building != "":
             sql = "SELECT * FROM classroom WHERE `building` = %s"
             condition = building
         else:
@@ -389,18 +389,18 @@ def getRecordById(id):
     return result
 
 #update record by record id
-def updateRecord(id , title ,participants):
+def updateRecord(recrodID , title ,participants):
     if title != None and title != "":
         sql = "UPDATE `record` SET `title` = %s WHERE `recordID` = %s"
         connection.ping(reconnect = True)
         with connection.cursor() as cursor:
-            cursor.execute(sql,(title,id))
-            cursor.commit()
+            cursor.execute(sql,(title,recrodID))
+            #cursor.commit()
     if participants != None:
         sql = "SELECT `participant` FROM `record` WHERE `recordID` = %s"
         connection.ping(reconnect = True)
         with connection.cursor() as cursor:
-            cursor.execute(sql,id)
+            cursor.execute(sql,recrodID)
             result = cursor.fetchone()
         if result == None:
             print("no id of this result")
@@ -410,8 +410,8 @@ def updateRecord(id , title ,participants):
         sql = "UPDATE `record` SET `participant` = %s WHERE `recordID` = %s"
         connection.ping(reconnect = True)
         with connection.cursor() as cursor:
-            cursor.execute(sql,(ppl,id))
-            cursor.commit()
+            cursor.execute(sql,(ppl,recrodID))
+            #cursor.commit()
     return True
 
 #display all record
