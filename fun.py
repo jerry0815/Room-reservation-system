@@ -395,7 +395,7 @@ def updateRecord(recrodID , title ,participants):
         connection.ping(reconnect = True)
         with connection.cursor() as cursor:
             cursor.execute(sql,(title,recrodID))
-            #cursor.commit()
+            connection.commit()
     if participants != None:
         sql = "SELECT `participant` FROM `record` WHERE `recordID` = %s"
         connection.ping(reconnect = True)
@@ -411,7 +411,7 @@ def updateRecord(recrodID , title ,participants):
         connection.ping(reconnect = True)
         with connection.cursor() as cursor:
             cursor.execute(sql,(ppl,recrodID))
-            #cursor.commit()
+            connection.commit()
     return True
 
 #display all record
@@ -446,6 +446,7 @@ def modify_record(data1):
         p = data.get('participant' + str(i))
         if  p != None and p != '':
             participants.append(data['participant' + str(i)])
+    print(participants)
     result = updateRecord(recordId,data['title'],participants)
     return result
 
