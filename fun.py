@@ -501,10 +501,10 @@ def filter_classroom(data1): #開始日期 startDate,開始節數 startSection,�
         classroom_total = cursor.fetchall()
     classroom_total = pd.DataFrame(classroom_total)
     if data['building'] != None:
-        classroom_total = classroom_total[classroom_total["building"]==data["building"]]
+        classroom_total = classroom_total[str(classroom_total["building"]) ==  str(data["building"])]
 
     if data['capacity'] != None:
-        classroom_total = classroom_total[classroom_total["capacity"]>data["capacity"]]
+        classroom_total = classroom_total[int(classroom_total["capacity"]) > int(data["capacity"])]
 
     sql = "SELECT * FROM Record"
     connection.ping(reconnect = True)
@@ -516,14 +516,18 @@ def filter_classroom(data1): #開始日期 startDate,開始節數 startSection,�
     for r in record_total:
         if r["CR_ID"] in classroom_total["CR_ID"]:
             record_CR_ID.append(r)
-    
+    d_startTime = datetime.fromisoformat(str(data["startDate"]))
+    d_endTime = datetime.fromisoformat(str(data["endDate"]))
     for r in record_CR_ID:
-        after_record = (r["endDate"] < data["startDate"] or (r["endDate"] == data["startDate"] and r["endSection"] < data["startSection"]))
-        before_record = (r["startDate"] > data["endDate"] or (r["startDate"] == data["endDate"] and r["startSection"] > data["endSection"]))
+        startTime = datetime.fromisoformat(str(["startDate"]))
+        endTime = datetime.fromisoformat(str(r["endDate"]))
+
+        after_record = (endTime < d_startTime or (endTime == d_startTime and int(r["endSection"]) < int(data["startSection"])))
+        before_record = (startTime > d_endTime or (startTime == d_endTime and int(r["startSection"]) > int(data["endSection"])))
         if not (after_record or before_record):
             classroom_total = classroom_total.drop(classroom_total.loc[classroom_total["CR_ID"]==["CR_ID"]].index)
     
     classroom_total = classroom_total.drop("CR_ID",axis = 1)
     classroom_total = classroom_total.T.to_dict().values() 
-    
+    print(classroom_total)
     return classroom_total
