@@ -499,7 +499,9 @@ def filter_classroom(data1): #開始日期 startDate,開始節數 startSection,�
     with connection.cursor() as cursor:
         cursor.execute(sql)
         classroom_total = cursor.fetchall()
+    print(classroom_total)
     classroom_total = pd.DataFrame(classroom_total)
+    print(classroom_total)
     print(data['building'])
     if data['building'] != None:
         building = re.findall("[A-Z]+",data['building'])
