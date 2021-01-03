@@ -39,3 +39,25 @@
 		{% endif %}
 	</div>
 {% endblock %}
+
+{% block head_script%}
+<script type="text/javascript">
+	function error_message() {
+		if("{{message}}" == "error")
+			alert('查無帳號!');
+		else if("{{message}}" == "delete_success")
+			alert('刪除成功!');
+		else if("{{message}}" == "delete_fail")
+			alert('刪除失敗!');
+		else if("{{message}}" == "ban_success")
+			alert('禁用成功!');
+		else if("{{message}}" == "ban_fail")
+			alert('禁用失敗');
+		else if("{{message}}" == "unban_success")
+			alert('解禁成功');
+		else if("{{message}}" == "unban_fail")
+			alert('解禁失敗');
+	}
+    window.onload = error_message();
+</script>
+{% endblock %}

@@ -62,33 +62,61 @@ def validateLogin(email , password):
     if result["password"] != password:
         return (2,None)
     else:
-        return (0,result)
+        return (0,result['userName'])
 
 #for cookie
-def loginCheck(email,password):
+def loginCheck(email : str ,password : str):
     if email == "" or email == None:
         return 1
-    sql = "SELECT `password` FROM `users` WHERE `email` = %s"
+    sql = "SELECT `password` , `identity` FROM `users` WHERE `email` = %s"
     connection.ping(reconnect = True)
     with connection.cursor() as cursor:
         cursor.execute(sql,email)
         result = cursor.fetchone()
     #wrong email
     if result == None:
-        return 1
+        return (1,None)
     #wrong passward
     if result["password"] != password:
-        return 2
+        return (2,None)
     else:
-        return 0
+        if result["identity"] == 0:
+            admin = 'normal'
+        else:
+            admin = 'admin'
+        return (0,admin)
 
 #modify user's nickname 
 def modifyNickName(userName , nickName):
-    sql = " UPDATE users SET nickName = %s WHERE userName = %s "
+    sql = " UPDATE `users` SET nickName = %s WHERE userName = %s "
     connection.ping(reconnect = True)
     with connection.cursor() as cursor:
         cursor.execute(sql , (nickName,userName))
         connection.commit()
+
+def deleteAccount(userID):
+    sql = "DELETE FROM `users` WHERE `userID` = %s"
+    connection.ping(reconnect = True)
+    with connection.cursor() as cursor:
+        cursor.execute(sql,userID)
+        connection.commit()
+    return True
+
+def banAccount(userID):
+    sql = " UPDATE `users` SET `banned` = %s WHERE `userID` = %s "
+    connection.ping(reconnect = True)
+    with connection.cursor() as cursor:
+        cursor.execute(sql , (False , userID))
+        connection.commit()
+    return True
+
+def unbanAccount(userID):
+    sql = " UPDATE `users` SET `banned` = %s WHERE `userID` = %s "
+    connection.ping(reconnect = True)
+    with connection.cursor() as cursor:
+        cursor.execute(sql , (True , userID))
+        connection.commit()
+    return True
 
 #display all users
 def showUsers():
@@ -107,8 +135,9 @@ def getUser(userName):
     with connection.cursor() as cursor:
         cursor.execute(sql,userName)
         result = cursor.fetchone()
-    print(result)
-    return result
+    if result == None:
+        return (False,None)
+    return (True , result)
 #=======================================================================
 
 #=======================================================================
@@ -253,7 +282,8 @@ def searchClassroom(building, capacity = -1 , roomname = "" , date = "2020-01-01
 #search for one classroom and return records of a week
 # return format:  list[ building , capacity , roomname , dict{id : tuple()}(7days) ]
 #parameter (classroom name , date of the week)
-def searchOneClassroom(roomname = "" , date = "2020-12-29") :
+def searchOneClassroom(CR_ID = "" , date = "2020-12-29") :
+    """
     sql = "SELECT * FROM classroom WHERE `roomname` = %s"
     with connection.cursor() as cursor:
         cursor.execute(sql,roomname)
@@ -261,6 +291,7 @@ def searchOneClassroom(roomname = "" , date = "2020-12-29") :
     building = result["building"]
     capacity = result["capacity"]
     CR_ID = result["CR_ID"]
+    """
     today = datetime.fromisoformat(date)
     n = today.weekday()
     delta = timedelta(days = n)
@@ -435,13 +466,6 @@ def get_current_time():
     taipei = pytz.timezone('Asia/Taipei')
     return datetime.strftime(datetime.now(taipei), "%Y-%m-%d")
 
-def authentication(email:str, password:str):
-    """
-    check user iuformation
-    """
-    if email == None or password == None:
-        return False
-    return True
 
 def modify_record(data1):
     data = data1
@@ -462,3 +486,35 @@ def delete_record(data):
     deleteRecord(recordID)
     print("delete", recordID)
 
+def filter_classroom(data): #開始日期 startDate,開始節數 startSection,結束日期endDate ,結束節數endSection,大樓(building),可容納人數(capacity)
+    sql = "SELECT * FROM Classroom"
+    connection.ping(reconnect = True)
+    with connection.cursor() as cursor:
+        cursor.execute(sql)
+        classroom_total = cursor.fetchall()
+        #connection.commit()
+    classroom_total = pd.DataFrame(classroom_total)
+    classroom_total = classroom_total[classroom_total["building"]==data["building"]]
+    classroom_total = classroom_total[classroom_total["capacity"]>data["capacity"]]
+
+    sql = "SELECT * FROM Record"
+    connection.ping(reconnect = True)
+    with connection.cursor() as cursor:
+        cursor.execute(sql)
+        record_total = cursor.fetchall()
+
+    record_CR_ID = []
+    for r in record_total:
+        if r["CR_ID"] in classroom_total["CR_ID"]:
+            record_CR_ID.append(r)
+    
+    for r in record_CR_ID:
+        after_record = (r["endDate"] < data["startDate"] or (r["endDate"] == data["startDate"] and r["endSection"] < data["startSection"]))
+        before_record = (r["startDate"] > data["endDate"] or (r["startDate"] == data["endDate"] and r["startSection"] > data["endSection"]))
+        if not (after_record or before_record):
+            classroom_total = classroom_total.drop(classroom_total.loc[classroom_total["CR_ID"]==["CR_ID"]].index)
+    
+    classroom_total = classroom_total.drop("CR_ID",axis = 1)
+    classroom_total = classroom_total.T.to_dict().values() 
+    
+    return classroom_total

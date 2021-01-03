@@ -11,14 +11,24 @@
 
 	<link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='css/main_page/util.css')}}">
 	<link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='css/main_page/main.css')}}">
-    
+
+	<script type="text/javascript">
+		function error_message() {
+			if("{{message}}" == "email_error")
+				alert('查無帳號!');
+			else if("{{message}}" == "password_error")
+				alert('密碼錯誤!');
+		}
+		window.onload = error_message();
+	</script>
+
 </head>
 <body>
 	<div class="d-flex justify-content-center align-items-center w-100 h-100" style="background: #e9faff;">
 		<div class="wrap-login100 p-l-55 p-r-55 p-t-65 p-b-50">
-			<form method="POST" action={{ url_for('main_page') }}>
+			<form method="POST" action={{ url_for('login_page') }}>
 				<span class="login100-form-title p-b-33">
-					帳號登入(Account Login)
+					帳號登入(Account Login) 
 				</span>
 
 				<div class="form-group">

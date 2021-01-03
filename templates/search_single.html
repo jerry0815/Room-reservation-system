@@ -1,0 +1,133 @@
+{% extends "base.html" %}
+{% block title %} 
+線上教室預約系統 - 查詢
+{% endblock %}
+{% block content %}
+	<div>
+		<div class="d-flex justify-content-center align-items-start h-100 ">
+			<div class="text-dark">
+				<h1 class="text-center mt-3 mb-2">教室查詢與借用</h1>
+
+				<h5 class="text-center">Lookup and Reserve</h5>		
+				
+			</div>
+		</div>
+		<br>
+		<div class="d-flex justify-content-center align-items-center h-auto w-auto">
+			<nav class="navbar navbar-expand-lg navbar-light">
+				<form method="POST" action={{ url_for('search_page') }}>
+					<div class="collapse navbar-collapse" id="navbarSupportedContent">
+						<ul class="navbar-nav">
+							<li class="nav-item mr-3">
+								<p class="text-center"> 教室位置 </p>
+								<div class="container text-center">
+									{{classroom["building"]}}
+								</div>
+							</li>
+	
+							<li class="nav-item mr-3">
+								<p class ="text-center" style="vertical-align:top;"> 可容納人數上限 </p>
+								<div class="container text-center">
+									{{classroom["capacity"]}}
+								</div>
+							</li>
+							<li class="nav-item mr-4">
+								<p class = "text-center"style="vertical-align:top;"> 教室編號 </p>
+								<div class="container text-center">
+									{{classroom["roomName"]}}
+								</div>
+							</li>
+						
+						</ul>
+						
+					</div>
+					<input type="date" class="form-control mt-2" id="date"  name="date" value={{dates[0]}}>
+					
+				</form>
+			
+			</nav>
+		</div>
+
+	<div class="text-center mt-4" style="overflow-x:auto;white-space: nowrap;">
+		<table  class="table table-bordered">
+			<thead class="table-secondary">
+				<tr>
+					<th scope="col">日期</th>
+					<th scope="col">第1節</th>
+					<th scope="col">第2節</th>
+					<th scope="col">第3節</th>
+					<th scope="col">第4節</th>
+					<th scope="col">第5節</th>
+					<th scope="col">第6節</th>
+					<th scope="col">第7節</th>
+					<th scope="col">第8節</th>
+					<th scope="col">第9節</th>
+					<th scope="col">第10節</th>
+					<th scope="col">第11節</th>
+					<th scope="col">第12節</th>
+					<th scope="col">第13節</th>
+					<th scope="col">第14節</th>
+				</tr>
+			</thead>
+			<tbody>
+				
+				{%for day in range(7)%}
+				<tr>
+					<th scope="row" class="text-center align-middle">
+						{{dates[day]}}({{dates_weekdays[day]}})
+					</th>
+					{%for section in range(1, 15)%}
+						{% if classroom['status'][day].get(section) != None %}
+							{% if classroom['status'][day][section][0] == 0 %}
+								<td class="bg-danger text-center align-middle text-light font-weight-bold">
+									原因: {{classroom['status'][day][section][1]}}
+								</td>
+							{% else %}
+								<td class="bg-info text-center align-middle text-light font-weight-bold">
+								會議名稱: {{classroom['status'][day][section][1]}}
+								<br>借用人: {{classroom['status'][day][section][2]}}
+							</td>
+							{% endif %}
+						{% else %}
+						<td class="text-center align-middle">
+						</td>
+						{%endif%}
+					{%endfor%}
+				</tr>
+				{%endfor%}
+			</tbody>
+
+		</table>
+	</div>
+
+	
+{% endblock %}
+
+{% block script %}
+<script>
+
+function addItem(form, name, value)
+{
+	const hiddenField = document.createElement("input");
+
+	hiddenField.type = 'hidden';
+	hiddenField.name =  name;
+	hiddenField.value = value;
+	form.appendChild(hiddenField);
+}
+
+$("#date").on("change", function () {
+	var form = document.createElement("form");
+	const start_date = document.getElementById('date').value;
+	
+	form.setAttribute("action", '{{url_for('search_single_page')}}');
+	form.setAttribute("method", "post");
+	addItem(form, "CR_ID", "{{classroom['CR_ID']}}");
+	addItem(form, "start_date", start_date);
+	document.body.appendChild(form);
+	form.submit();
+});
+
+
+</script>
+{% endblock %}

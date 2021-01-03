@@ -15,28 +15,29 @@
 
 		<div class="d-flex justify-content-center align-items-center mt-4">
 			<div style="width:75%;border-color:black;border-style:solid;border-width:1px;padding:30px;">
-				<form method="POST" action={{url_for('borrow_page')}}>
+				<form method="POST" action={{url_for('borrow_page')}} id="borrow_form">
+					<input hidden name="borrow_type" id="borrow_type" value="borrow">
 					<div class="form-group">
 					  <label for="titleInput">會議名稱(Meeting Title)</label>
 					  <input class="form-control" id="titleInput" aria-describedby="titleHelp" placeholder="輸入名稱" maxlength="10" name="title">
 					  <small id="titleHelp" class="form-text text-muted">會議名稱最多10字</small>
 					</div>
 					<div class="form-group">
-					  <label for="startDate_input">開始</label>
+					  <label for="startDate">開始</label>
 					  <br>
-					  <input style="display: inline ;width: 30%;left:5%" class="form-control" type="date" id="startDate_input" name="startDate">
+					  <input style="display: inline ;width: 30%;left:5%" class="form-control" type="date" id="startDate" name="startDate">
 						<span>
 						,&nbsp;&nbsp;第 <input  class="border-bottom border-dark" style="width:5%;text-align:center"
 							onkeyup="value=value.replace(/[^\d]/g,'') " 　　
 							onbeforepaste="clipboardData.setData('text',clipboardData.getData('text').replace(/[^\d]/g,''))"
-							　　 ID="begin_section" name="startSection">
+							　　 id ="startSection" name="startSection">
 						節
 						</span>
 					</div>
 					<div class="form-group">
-						<label for="endDate_input">結束</label>
+						<label for="endDate">結束</label>
 						<br>
-						<input style="display: inline ;width: 30%;left:5%" class="form-control" type="date" id="endDate_input" name="endDate">
+						<input style="display: inline ;width: 30%;left:5%" class="form-control" type="date" id="endDate" name="endDate">
 						<span>
 						  ,&nbsp;&nbsp;第 <input class="border-bottom border-dark" style="width:5%;text-align:center"
 							  onkeyup="value=value.replace(/[^\d]/g,'') " 　　
@@ -47,9 +48,9 @@
 					  </div>
 
 					<div class="form-group">
-						<label for="buildingSelect">大樓(building)</label>
+						<label for="building">大樓(building)</label>
 						<select class="custom-select mr-sm-2 border border-secondary mt-2 mb-3" 
-							id="buildingSelect" name="building" >
+							id="building" name="building" >
 								<option selected>請選擇大樓...</option>
 								{%for b in buildings%}
 									<option value={{b}}> {{b}} </option>
@@ -57,7 +58,17 @@
 							</select>
 					</div>
 					<div class="form-group">
-						<label for="room_id_input">教室編號(Room Id)</label>
+						<label for="capacity">可容納人數(capacity)</label>
+						<input class="form-control" onkeyup="value=value.replace(/[^\d]/g,'') " 　　
+									onbeforepaste="clipboardData.setData('text',clipboardData.getData('text').replace(/[^\d]/g,''))"
+									　　 id="capacity" name="capacity" placeholder="如:10, 25(人)" > 
+
+					</div>
+					<div class="form-group">
+						<div>
+							<label for="room_id_input">教室編號(Room Id)</label>
+							<button class="btn btn-secondary ml-3 text-center mb-1" style="width: 60px;" type="button" id="search">搜尋</button>
+						</div>
 						<input class="form-control" id="room_id_input" aria-describedby="roomNameHelp" onkeyup="value=value.replace(/[\W]/g,'') " 　　
 							onbeforepaste="clipboardData.setData('text',clipboardData.getData('text').replace(/[^\d]/g,''))"
 						 	placeholder="輸入教室編號" name="roomName">
@@ -86,14 +97,15 @@
 					</div>
 
 					</div>
-					<button type="submit" style="width: 200px;" class="btn btn-primary btn-lg mt-3">
-						搜尋
+					
+					<button type="submit" style="width: 200px;" class="btn btn-primary btn-lg mt-3" type="submit">
+						借用
 						<br>
-						search
+						Borrow
 					</button>
 
 					{% if admin == "admin" %}
-					<button type="submit" style="width: 200px;" class="btn btn-danger btn-lg mt-3 ml-5">
+					<button style="width: 200px;" class="btn btn-danger btn-lg mt-3 ml-5" id="banButton" type="button" >
 						禁用
 						<br>
 						forbid
@@ -103,6 +115,22 @@
 			</div>
 		</div>
 	</div>
+{% endblock %}
+
+{% block head_script %}
+<script type="text/javascript">
+	function error_message() {
+		if("{{message}}" == "borrow_fail")
+			alert('借用失敗!');
+		else if("{{message}}" == "borrow_success")
+			alert('借用成功!');
+		else if("{{message}}" == "ban_success")
+			alert('禁用成功!');
+		else if("{{message}}" == "ban_fail")
+			alert('禁用失敗!');
+	}
+    window.onload = error_message();
+</script>
 {% endblock %}
 
 {% block script %}
@@ -124,7 +152,57 @@
 
     $("table.order-list").on("click", ".ibtnDel", function (event) {
         $(this).closest("tr").remove();
-    });
+	});
+	
+	$("#search").on("click", function () { 
+		var form = document.createElement("form");
+		form.setAttribute("action", '{{url_for('borrow_search_page')}}');
+		form.setAttribute("target","_blank");
+		form.setAttribute("method", "post");
+	
+	
+		const startDate = document.getElementById("startDate").value;
+		const endDate = document.getElementById("endDate").value;
+		const startSection = document.getElementById("startSection").value;
+		const endSection = document.getElementById("startDate").value;
+		const building = document.getElementById("building").value;
+		const capacity = document.getElementById("capacity").value;
+
+		if(startDate == '' || endDate == '' || startSection == '' || endSection == '' || building == '請選擇大樓...' || capacity == ''){
+			alert('開始日期,開始節數,結束日期,結束節數,大樓,可容納人數缺一不可');
+			return;
+		}
+			
+		addItem(form, 'startDate', startDate);
+		addItem(form, 'endDate', endDate);
+		addItem(form, 'startSection', startSection);
+		addItem(form, 'endSection', endSection);
+		addItem(form, 'building', building);
+		addItem(form, 'capacity', capacity);
+
+		document.body.appendChild(form);
+		form.submit();
+	}
+	);
+
+
+	function addItem(form, name, value)
+	{
+		const hiddenField = document.createElement("input");
+
+		hiddenField.type = 'hidden';
+		hiddenField.name =  name;
+		hiddenField.value = value;
+		form.appendChild(hiddenField);
+	}
+
+	$("#banButton").on("click", function () {
+		var borrow_type = document.getElementById('borrow_type');
+		borrow_type.value = "ban";
+		var form = document.getElementById('borrow_form');
+		form.submit();
+	}
+	);
 });
 </script>
 {% endblock %}

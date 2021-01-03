@@ -11,7 +11,15 @@
 
 	<link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='css/main_page/util.css')}}">
 	<link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='css/main_page/main.css')}}">
-    
+    <script type="text/javascript">
+		function error_message() {
+			if("{{message}}" == "register_error")
+				alert('註冊失敗!');
+			else if ("{{message}}" == "register_success")
+				alert('註冊成功!');
+		}
+		window.onload = error_message();
+	</script>
 </head>
 <body>
 	<div class="d-flex justify-content-center align-items-center w-100 h-100" style="background: #e9faff;">

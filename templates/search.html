@@ -94,7 +94,11 @@
 							{{r['building']}}
 						</th>
 						<th scope="row" class="text-center align-middle">
-							{{r['roomName']}}
+							<form method="POST" action="{{url_for('search_single_page')}}">
+								<input hidden name="start_date" value={{date}}>
+								<input hidden name="CR_ID" value={{r['CR_ID']}}>
+								<button class="text-primary font-weight-bold" type="submit"> {{r['roomName']}} </button>
+							</form>
 						</th>
 
 						<th scope="row" class="text-center align-middle">
