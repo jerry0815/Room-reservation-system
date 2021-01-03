@@ -547,7 +547,7 @@ def borrow(data, borrow_type):
     print("123")
     insertRecord(title = data['title'], roomname  = data['roomName'], \
     startDate = data['startDate'], startSection  = data['startSection'], \
-    endDate = data['endDate'], endSection  = data['endSection'], participant = data['participant'], \
+    endDate = data['endDate'], endSection  = data['endSection'], participant = participants, \
     bookName = "alien",type = 1)
 
     return True
