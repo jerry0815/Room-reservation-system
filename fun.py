@@ -110,7 +110,7 @@ def banAccount(userID):
         connection.commit()
     return True
 
-def unbanAccount(userID):
+def unBanAccount(userID):
     sql = " UPDATE `users` SET `banned` = %s WHERE `userID` = %s "
     connection.ping(reconnect = True)
     with connection.cursor() as cursor:
