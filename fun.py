@@ -139,10 +139,12 @@ def getUser(userName):
         return (False,None)
     print(result)
     print(result['banned'])
-    if result['banned']:
+    if result['banned'] == 1:
         print("True")
-    else :
+    else if result['banned'] == 0:
         print("False")
+    else :
+        print("error")
     return (True , result)
 #=======================================================================
 
