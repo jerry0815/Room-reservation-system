@@ -206,7 +206,7 @@ def processRecord(record,date):
 #give the condition to search classroom
 #parameter (building ,capacity ,roomname ,date)
 def searchClassroom(building, capacity = -1 , roomname = "" , date = "2020-01-01"):
-    if rooomname != None and roomname != "":
+    if roomname != None and roomname != "":
         if  building != "":
             if roomname[0:2] != building:
                 return None
