@@ -1,0 +1,89 @@
+{% extends "base.html" %}
+{% block title %} 
+線上教室預約系統 - 管理
+{% endblock %}
+
+{% block content %}
+	<div>
+		<div class="d-flex justify-content-center align-items-start h-100 ">
+			<div class="text-dark">
+				<h1 class="text-center mt-3 mb-2">一般帳號管理</h1>
+
+				<h5 class="text-center">Account Management</h5>		
+				
+			</div>
+		</div>
+		<br>
+	<div class="d-flex justify-content-center align-items-center h-auto w-auto">
+		<nav class="navbar navbar-expand-lg navbar-light">
+			<form method="POST" action={{ url_for('search_page') }}>
+				<div class="collapse navbar-collapse" id="navbarSupportedContent">
+					<ul class="navbar-nav">
+						
+						<li class="nav-item mr-3">
+							<p style="vertical-align:top;"> 帳號 Account Name </p>
+							<div class="container border border-dark mt-2">
+								<input class = "w-100" style="height: 35px;"
+									　　 id="capacity_input" name="capacity" placeholder="如:ChingChongRiceEatingMotherFxxker123" value={{request.form['capacity']}}> 
+							</div>
+						</li>
+						
+					
+					</ul>
+					<li class="nav-item mt-2">
+						<button class="btn btn-primary" style="width: 75px;" type="submit">
+						搜尋
+						</button>
+					</li>
+				</div>
+			</form>
+		
+		</nav>
+	</div>
+
+	<div class="d-flex justify-content-center align-items-center mt-4">
+		<div style="width:75%;border-color:black;border-style:solid;border-width:1px;padding:30px;">
+			<form method="POST" action={{url_for('borrow_page')}}>
+				<div class="form-group">
+				  <label for="titleInput">帳號(Account Name)：</label>
+				</div>
+				<div class="form-group">
+					<label for="titleInput">暱稱(Nickname)：</label>
+				</div>
+				<div class="form-group">
+					<label for="titleInput">禁用狀態(status)：</label>
+					
+				</div>
+				<div class="form-group">
+					<label for="end_date_input">至</label>
+					<input style="display: inline ;width: 30%;left:5%" class="form-control" type="date" id="end_date_input" name="end_date">
+					<span>
+					  ,&nbsp;&nbsp;第 <input class="border-bottom border-dark" style="width:5%;text-align:center"
+						  onkeyup="value=value.replace(/[^\d]/g,'') " 　　
+						  onbeforepaste="clipboardData.setData('text',clipboardData.getData('text').replace(/[^\d]/g,''))"
+						  　　 id="end_section" name="end_section">
+					  節
+					  <br>
+					  自動結束禁用
+					  </span>
+				  </div>
+
+				
+				
+				
+				<button type="submit" style="width: 200px;" class="btn btn-primary btn-lg mt-3">
+					保存修改
+					<br>
+					save
+				</button>
+				<button type="submit" style="width: 200px;" class="btn btn-danger btn-lg mt-3">
+					刪除帳號
+					<br>
+					delete
+				</button>
+			</form>
+		</div>
+	</div>
+
+	
+{% endblock %}

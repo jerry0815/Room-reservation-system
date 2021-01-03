@@ -36,7 +36,11 @@
 					<li class="nav-item">
 						<a class="nav-link" href="{{ url_for('record_page') }}">預約紀錄查詢</a>
 					</li>
-
+					{% if admin == "admin" %}
+					<li class="nav-item">
+						<a class="nav-link" href="{{ url_for('account_management_page') }}">一般帳號管理</a>
+					</li>
+					{% endif %}
 				</ul>
 
 			</div>
@@ -74,7 +78,8 @@
 		type="text/javascript"></script>
 
 	<script src="{{ url_for('static', filename='js/login_page/main.js' ) }}" type="text/javascript"></script>
-
+	{% block script %}
+	{% endblock %}
 </body>
 
 </html>

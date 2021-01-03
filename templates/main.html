@@ -2,6 +2,7 @@
 {% block title %} 
 線上教室預約系統
 {% endblock %}
+
 {% block content %}
 	<div class="h-auto w-auto ">
 		<div class="d-flex justify-content-center align-items-center h-100 ">
@@ -29,5 +30,12 @@
 			預約紀錄查詢
 			<br>Borrowing Record
 		</a>
+		{% if admin == "admin" %}
+		<a class="btn btn-outline-dark btn-lg m-5" style="width: 200px;;height: 100px;"
+			href="{{ url_for('account_management_page') }}" role="button" target="_self">
+			一般帳號管理
+			<br>Account Management
+		</a>
+		{% endif %}
 	</div>
 {% endblock %}

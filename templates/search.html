@@ -22,7 +22,7 @@
 							<p> 教室位置 </p>
 							<select class="custom-select mr-sm-2 border border-secondary mt-2 mb-3" 
 							id="inlineFormCustomSelect" name="building" >
-								<option selected>請選擇大樓...</option>
+								<option selected value="None">請選擇大樓...</option>
 								{%for b in buildings%}
 									{% if b == request.form['building']%}
 										<option value={{b}} selected> {{b}} </option>
@@ -36,7 +36,8 @@
 						<li class="nav-item mr-3">
 							<p style="vertical-align:top;"> 可容納人數上限 </p>
 							<div class="container border border-dark mt-2">
-								<input class = "w-100" style="height: 35px;" 
+								<input class = "w-100" style="height: 35px;" onkeyup="value=value.replace(/[^\d]/g,'') " 　　
+									onbeforepaste="clipboardData.setData('text',clipboardData.getData('text').replace(/[^\d]/g,''))"
 									　　 id="capacity_input" name="capacity" placeholder="如:10, 25(人)" value={{request.form['capacity']}}> 
 							</div>
 						</li>
@@ -44,8 +45,7 @@
 							<p style="vertical-align:top;"> 教室編號 </p>
 							<div class="container border border-dark mt-2">
 								
-								<input class = "w-100" style="height: 35px;" 
-									　　 id="room_id_input" name="roomName" placeholder="如:TR-313" value={{request.form['roomName']}}>
+								<input class = "w-100" style="height: 35px;" id="room_id_input" name="CR_ID" placeholder="如:TR-313" value={{request.form['CR_ID']}}>
 							</div>
 						</li>
 					
