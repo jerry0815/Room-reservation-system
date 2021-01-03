@@ -3,6 +3,7 @@ import pytz
 import os
 import re
 import pymysql
+import pandas as pd
 
 # Connect to the database
 connection = pymysql.connect(host=os.environ.get('CLEARDB_DATABASE_HOST'),
@@ -462,3 +463,34 @@ def delete_record(data):
     deleteRecord(recordID)
     print("delete", recordID)
 
+#---------------------------- chenghan commit ------------------------------
+def filter_classroom(data): #開始日期 startDate,開始節數 startSection,結束日期endDate ,結束節數endSection,大樓(building),可容納人數(capacity)
+    sql = "SELECT * FROM Classroom"
+    connection.ping(reconnect = True)
+    with connection.cursor() as cursor:
+        cursor.execute(sql)
+        classroom_total = cursor.fetchall()
+        #connection.commit()
+    classroom_total = pd.DataFrame(classroom_total)
+    classroom_total = classroom_total[classroom_total["building"]==data["building"]]
+    classroom_total = classroom_total[classroom_total["capacity"]>data["capacity"]]
+
+    sql = "SELECT * FROM Record"
+    connection.ping(reconnect = True)
+    with connection.cursor() as cursor:
+        cursor.execute(sql)
+        record_total = cursor.fetchall()
+
+    record_CR_ID = []
+    for r in record_total:
+        if r["CR_ID"] in classroom_total["CR_ID"]:
+            record_CR_ID.append(r)
+    
+    for r in record_CR_ID:
+        if !((r["endDate"]<data["startDate"] or (r["endDate"]==data["startDate"] and r["endSection"]<data["startSection"])) or (r["startDate"]>data["endDate"] or (r["startDate"]==data["endDate"] and r["startSection"]>data["endSection"])) ):
+            classroom_total = classroom_total.drop(classroom_total.loc[classroom_total["CR_ID"]==["CR_ID"]].index)
+    
+    classroom_total = classroom_total.drop("CR_ID",axis = 1)
+    classroom_total = classroom_total.T.to_dict().values() 
+    
+    return classroom_total
