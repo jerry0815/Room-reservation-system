@@ -394,7 +394,7 @@ def updateRecord(id , title ,participants):
         sql = "UPDATE `record` SET `title` = %s WHERE `recordID` = %s"
         connection.ping(reconnect = True)
         with connection.cursor() as cursor:
-            cursor.execute(sql,id)
+            cursor.execute(sql,(title,id))
             cursor.commit()
     if participants != None:
         sql = "SELECT `participant` FROM `record` WHERE `recordID` = %s"
@@ -406,7 +406,7 @@ def updateRecord(id , title ,participants):
             print("no id of this result")
             return False
         ppl = result['participant']
-        ppl = ppl + ',' + listIdToStr(participants)
+        ppl = listIdToStr(ppl)
         sql = "UPDATE `record` SET `participant` = %s WHERE `recordID` = %s"
         connection.ping(reconnect = True)
         with connection.cursor() as cursor:
@@ -424,8 +424,6 @@ def showRecord():
     print(result)
     return result
 #=======================================================================
-
-
 
 def get_current_time():
     taipei = pytz.timezone('Asia/Taipei')
