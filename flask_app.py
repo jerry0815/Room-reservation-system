@@ -8,6 +8,7 @@ import google.oauth2.credentials
 import google_auth_oauthlib.flow
 import googleapiclient.discovery
 from fun import *
+import datetime
 
 app = Flask(__name__)
 
@@ -437,16 +438,16 @@ def search_single_page():
     if request.method =='POST':
         classroom_data = searchOneClassroom(CR_ID = request.form['CR_ID'] , date = request.form['start_date'])
         start_date = request.form['start_date']
-        start_date = datetime(  int(start_date.split('-')[0]), 
-                                int(start_date.split('-')[1]),
-                                int(start_date.split('-')[2]))
+        start_date = datetime.datetime(int(start_date.split('-')[0]), 
+                                        int(start_date.split('-')[1]),
+                                        int(start_date.split('-')[2]))
         dates = [start_date]
         dates_weekdays = []
         for i in range(1,7):
-            dates.append(start_date + timedelta(i))
+            dates.append(start_date + datetime.timedelta(i))
         for i in range(7):
             dates_weekdays.append(weekdays[dates[i].weekday()])
-            dates[i] = datetime.strftime(dates[i], "%Y-%m-%d")
+            dates[i] = datetime.datetime.strftime(dates[i], "%Y-%m-%d")
             
         print(dates, dates_weekdays)
         return render_template("search_single.html",classroom = classroom_data,
