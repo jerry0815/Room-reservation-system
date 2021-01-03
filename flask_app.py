@@ -244,6 +244,8 @@ def oauth2callback():
 
 #================================================================
 #new
+buildings=['研揚大樓(TR)','第四教學大樓(T4)','綜合研究大樓(RB)','國際大樓(IB)','電資館(EE)']
+
 def cookie_check():
     """
     check cookie's correctness
