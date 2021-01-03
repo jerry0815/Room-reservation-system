@@ -441,6 +441,7 @@ def authentication(email:str, password:str):
 
 def modify_record(data1):
     data = data1
+    print(data)
     recordId = data['recordId']
     participants = []
     for i in range(int(data['counter'])):
