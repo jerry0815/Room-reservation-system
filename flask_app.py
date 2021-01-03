@@ -296,7 +296,7 @@ def search_page():
         return redirect(url_for('login_page'))
     if request.method =='POST':
         result = request.form
-        if result['building'] != None:
+        if result['building'] != None and result['building'] != "":
             building = re.findall("[A-Z]+",result['building'])[0]
         search_result = searchClassroom(building = building , capacity = result['capacity'] , roomname = result['roomName'] , date = result['date'])
         return render_template("search.html", buildings=buildings, date=result['date'], result=search_result)
