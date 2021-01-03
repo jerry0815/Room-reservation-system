@@ -522,15 +522,15 @@ def filter_classroom(data1): #開始日期 startDate,開始節數 startSection,�
             record_CR_ID.append(r)
     d_startTime = datetime.fromisoformat(str(data["startDate"]))
     d_endTime = datetime.fromisoformat(str(data["endDate"]))
+    print("where")
     for r in record_CR_ID:
         startTime = datetime.fromisoformat(str(r["startDate"]))
         endTime = datetime.fromisoformat(str(r["endDate"]))
-
         after_record = (endTime < d_startTime or (endTime == d_startTime and int(r["endSection"]) < int(data["startSection"])))
         before_record = (startTime > d_endTime or (startTime == d_endTime and int(r["startSection"]) > int(data["endSection"])))
         if not (after_record or before_record):
-            classroom_total = classroom_total.drop(classroom_total.loc[classroom_total["CR_ID"] == data["CR_ID"]].index)
-    
+            classroom_total = classroom_total.drop(classroom_total.loc[classroom_total["CR_ID"] == r["CR_ID"]].index)
+    print("here")
     classroom_total = classroom_total.drop("CR_ID",axis = 1)
     classroom_total = classroom_total.T.to_dict().values() 
     print(classroom_total)
