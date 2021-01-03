@@ -242,14 +242,8 @@ def oauth2callback():
 #calendar part
 #===============================================================================
 
-
-
-
 #================================================================
 #new
-
-
-
 def cookie_check():
     """
     check cookie's correctness
@@ -320,7 +314,6 @@ def record_page():
         records = getRecordByBookerEmail(email)
     return render_template("record.html", records=records)
 
-
 @app.route('/single_record',methods=['POST'])
 def single_record_page():
     if not cookie_check():
@@ -329,6 +322,7 @@ def single_record_page():
         if request.form['postType'] == 'get':
             return render_template("single_record.html",record=getRecordById(request.form['id']))
         elif request.form['postType'] == 'modify':
+            print("modify")
             modify_record(request.form)
             return redirect(url_for('record_page'))
         elif request.form['postType'] == 'delete':
