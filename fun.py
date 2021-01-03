@@ -303,7 +303,7 @@ def searchOneClassroom(CR_ID = "" , date = "2020-12-29") :
         cursor.execute(sql,(CR_ID,startDay,endDay))
         tmp = cursor.fetchall()
         if tmp != ():
-            for d in range(0,6):
+            for d in range(0,7):
                 delta = timedelta(days = n - d)
                 dailyItem = {}
                 for j in tmp:
