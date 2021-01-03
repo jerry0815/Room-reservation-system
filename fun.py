@@ -280,18 +280,16 @@ def searchClassroom(building, capacity = -1 , roomname = "" , date = "2020-01-01
     return output
 
 #search for one classroom and return records of a week
-# return format:  list[ building , capacity , roomname , dict{id : tuple()}(7days) ]
+# return format:  dict{ 'CR_ID' : CR_ID ,'building' : building , 'capacity' : capacity , 'roomName' : roomname , 'status' : dict{id : tuple()}(7days) }
 #parameter (classroom name , date of the week)
 def searchOneClassroom(CR_ID = "" , date = "2020-12-29") :
-    """
-    sql = "SELECT * FROM classroom WHERE `roomname` = %s"
+    sql = "SELECT * FROM classroom WHERE `CR_ID` = %s"
     with connection.cursor() as cursor:
-        cursor.execute(sql,roomname)
+        cursor.execute(sql,CR_ID)
         result = cursor.fetchone()
     building = result["building"]
     capacity = result["capacity"]
-    CR_ID = result["CR_ID"]
-    """
+    roomname = result["roomname"]
     today = datetime.fromisoformat(date)
     n = today.weekday()
     delta = timedelta(days = n)
@@ -313,7 +311,7 @@ def searchOneClassroom(CR_ID = "" , date = "2020-12-29") :
                     if item != None:
                         dailyItem.update(item)
                 output.append(dailyItem)  
-            return [building , capacity , roomname , output]
+            return {'CR_ID' : CR_ID , 'building' : building , 'capacity' : capacity , 'roomName' :roomname , 'status' :output}
 
 #search the records the user book
 def getRecordByBooker(userName):
