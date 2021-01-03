@@ -539,11 +539,12 @@ def filter_classroom(data1): #開始日期 startDate,開始節數 startSection,�
 
 def borrow(data, borrow_type):
     participants = []
+    print("987")
     for i in range(int(data['counter'])):
         p = data.get('participant' + str(i))
         if  p != None and p != '':
             participants.append(data['participant' + str(i)])
-
+    print("123")
     insertRecord(title = data['title'], roomname  = data['roomName'], \
     startDate = data['startDate'], startSection  = data['startSection'], \
     endDate = data['endDate'], endSection  = data['endSection'], participant = data['participant'], \
