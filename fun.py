@@ -529,7 +529,7 @@ def filter_classroom(data1): #開始日期 startDate,開始節數 startSection,�
         after_record = (endTime < d_startTime or (endTime == d_startTime and int(r["endSection"]) < int(data["startSection"])))
         before_record = (startTime > d_endTime or (startTime == d_endTime and int(r["startSection"]) > int(data["endSection"])))
         if not (after_record or before_record):
-            classroom_total = classroom_total.drop(classroom_total.loc[classroom_total["CR_ID"]==["CR_ID"]].index)
+            classroom_total = classroom_total.drop(classroom_total.loc[classroom_total["CR_ID"] == data["CR_ID"]].index)
     
     classroom_total = classroom_total.drop("CR_ID",axis = 1)
     classroom_total = classroom_total.T.to_dict().values() 
