@@ -2,6 +2,7 @@ flask
 gunicorn
 pytz
 PyMySQL
+numpy
 pandas
 google-api-python-client 
 google-auth-httplib2 

@@ -3,6 +3,7 @@ import pytz
 import os
 import re
 import pymysql
+import pandas as pd
 
 # Connect to the database
 connection = pymysql.connect(host=os.environ.get('CLEARDB_DATABASE_HOST'),
@@ -491,16 +492,19 @@ def delete_record(data):
     deleteRecord(recordID)
     print("delete", recordID)
 
-def filter_classroom(data): #開始日期 startDate,開始節數 startSection,結束日期endDate ,結束節數endSection,大樓(building),可容納人數(capacity)
+def filter_classroom(data1): #開始日期 startDate,開始節數 startSection,結束日期endDate ,結束節數endSection,大樓(building),可容納人數(capacity)
+    data = data1
     sql = "SELECT * FROM Classroom"
     connection.ping(reconnect = True)
     with connection.cursor() as cursor:
         cursor.execute(sql)
         classroom_total = cursor.fetchall()
-        #connection.commit()
     classroom_total = pd.DataFrame(classroom_total)
-    classroom_total = classroom_total[classroom_total["building"]==data["building"]]
-    classroom_total = classroom_total[classroom_total["capacity"]>data["capacity"]]
+    if data['building'] != None:
+        classroom_total = classroom_total[classroom_total["building"]==data["building"]]
+
+    if data['capacity'] != None:
+        classroom_total = classroom_total[classroom_total["capacity"]>data["capacity"]]
 
     sql = "SELECT * FROM Record"
     connection.ping(reconnect = True)
