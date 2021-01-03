@@ -137,12 +137,10 @@ def getUser(userName):
         result = cursor.fetchone()
     if result == None:
         return (False,None)
-    print(result)
     result = dict(result)
     if int(result['banned']) == 1:
         result['banned'] = True
     elif int(result['banned']) == 0:
-        print("False")
         result['banned'] = False
     else :
         print("error")

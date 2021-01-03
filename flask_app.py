@@ -326,7 +326,7 @@ def borrow_page():
     if not check[0]:
         return redirect(url_for('login_page'))
     if request.method == "POST":
-
+            #To do borrow()
         result = borrow(request.form, request.form['borrow_type'])
         if request.form['borrow_type'] == "borrow":
             if result: 
@@ -353,6 +353,7 @@ def borrow_search_page():
 
     if request.method == "POST":
         print('borrow_search:',request.form)
+        #to to search for borrow
         result = search_for_borrow(request.form)
         return render_template("borrow_search.html", result=result)
 
