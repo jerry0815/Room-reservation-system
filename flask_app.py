@@ -326,7 +326,7 @@ def single_record_page():
         return redirect(url_for('login_page'))
     if request.method =='POST':
         if request.form['postType'] == 'get':
-            return render_template("single_record.html",record=getRecordById(request.form['id']))
+            return render_template("single_record.html",record=getRecordById(request.form['recordID']))
         elif request.form['postType'] == 'modify':
             print("modify")
             modify_record(request.form)
