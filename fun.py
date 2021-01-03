@@ -137,6 +137,7 @@ def getUser(userName):
         result = cursor.fetchone()
     if result == None:
         return (False,None)
+    print(result)
     return (True , result)
 #=======================================================================
 
