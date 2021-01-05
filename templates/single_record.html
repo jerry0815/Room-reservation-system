@@ -64,18 +64,25 @@
                 <br>
 				
 				<div class="form-group">
-					<div>
-						<label for="room_id_input">參與人(Participants)：</label>
+					<div class="d-flex justify-content-start align-items-center">
+						<label for="room_id_input">參與人(Participants)</label>
+						<select class="custom-select border border-secondary w-auto ml-4" 
+						id="userSelect">
+							<option selected>請選擇用戶...</option>
+							{%for b in remainingUserNames%}
+								<option value={{b}}> {{b}} </option>
+							{%endfor%} 
+						</select>
 						<button class="btn btn-success ml-3 text-center mb-1" style="width: 60px;"id="addrow" type="button">新增</button>
 					</div>
-					<div class="text-center" style="overflow-y:auto;white-space: nowrap;height: 200px; width: 400px;">
+					<div class="text-center" style="overflow-y:auto;white-space: nowrap;height: 200px; width: 320px;">
 				<table id="myTable" class="table order-list">
 					<input hidden name ="counter" id="counter" value={{record['participant']|length}}>
 					<tbody>
 						{% for p in record['participant']%}
 						<tr>
 							<td>
-								<input type="text" class="form-control" name ="participant{{loop.index0}}" value={{p}}>
+								<input type="text" class="form-control" name ="participant{{loop.index0}}" value={{p}} readonly>
 							</td>
 							<td>
 								<input type="button" class="ibtnDel btn btn-md btn-danger "  value="Delete">
@@ -110,20 +117,38 @@
 <script>
 	$(document).ready(function () {
 	var id = document.getElementById("counter");
-    
-    $("#addrow").on("click", function () {
-        var newRow = $("<tr>");
-		var cols = "";
-        cols += '<td><input type="text" class="form-control" name="participant' + id.value + '"/></td>';
-        cols += '<td><input type="button" class="ibtnDel btn btn-md btn-danger "  value="Delete"></td>';
-        newRow.append(cols);
-		$("table.order-list").append(newRow);
-		id.value++;
-    });
+	var userSelecter = document.getElementById("userSelect");
+	
+	$("#addrow").on("click", function () {
 
-    $("table.order-list").on("click", ".ibtnDel", function (event) {
-        $(this).closest("tr").remove();
-    });
+		if  ($("#userSelect option:selected").text() != "請選擇用戶...")
+		{
+			var newRow = $("<tr>");
+			var cols = "";
+			
+			cols += '<td><input type="text" class="form-control" name="participant' + id.value + '" value="' +  $("#userSelect option:selected").text() + '"readonly /></td>';
+			cols += '<td><input type="button" class="ibtnDel btn btn-md btn-danger" value="Delete"></td>';
+			newRow.append(cols);
+			$("table.order-list").append(newRow);
+			id.value++;
+
+			userSelecter.options.remove(userSelecter.selectedIndex);
+		}
+		else
+		{
+			alert('請先選擇用戶再按新增!');
+		}
+	});
+
+	$("table.order-list").on("click", ".ibtnDel", function (event) {
+		
+		var delete_val = $(this).parent().siblings().children().attr('value');
+
+		userSelecter.options.add(new Option(delete_val, delete_val));
+
+		$(this).closest("tr").remove();
+	});
+
 });
 </script>
 

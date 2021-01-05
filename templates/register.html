@@ -16,7 +16,10 @@
 			if("{{message}}" == "register_error")
 				alert('註冊失敗!');
 			else if ("{{message}}" == "register_success")
+			{
 				alert('註冊成功!');
+				window.location.href= "{{url_for('login_page')}}";
+			}
 		}
 		window.onload = error_message();
 	</script>
@@ -33,7 +36,7 @@
 				  <label for="emailInput">電子信箱(Email)</label>
 				  <div class="d-flex justify-content-between">
 					<input class="form-control " id ="emailInput" placeholder="Email" name="email">
-					<input class="form-control" value = "@gmail.com" readonly>
+					<p class="form-control" readonly> @gmail.com </p>
 				  </div>
                 </div>
                 

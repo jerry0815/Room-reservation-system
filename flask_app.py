@@ -338,6 +338,8 @@ def borrow_page():
     if userData[1]['banned']:
         return render_template("borrow.html", buildings=buildings, admin=check[1], message="ban")
 
+
+    allUserNames = getAllUserName()
     if request.method == "POST":
             #To do borrow()
         result = borrow(request.form, request.form['borrow_type'] , request.cookies.get("userName"))
@@ -353,9 +355,8 @@ def borrow_page():
             else:
                 message="ban_fail"
         
-        return render_template("borrow.html", buildings=buildings, admin=check[1], message=message)
+        return render_template("borrow.html", buildings=buildings, admin=check[1], message=message, allUserNames=allUserNames)
       
-    
     
     return render_template("borrow.html", buildings=buildings, admin=check[1])
 
@@ -379,6 +380,7 @@ def record_page():
     check = cookie_check()
     if not check[0]:
         return redirect(url_for('login_page'))
+    records = []
     email = request.cookies.get("email")
     if email != None:
         records = getRecordByBookerEmail(email)
@@ -389,9 +391,16 @@ def single_record_page():
     check = cookie_check()
     if not check[0]:
         return redirect(url_for('login_page'))
+        
     if request.method =='POST':
         if request.form['postType'] == 'get':
-            return render_template("single_record.html",record=getRecordById(request.form['recordID']), admin = check[1])
+            allUserNames = getAllUserName()
+            record = getRecordById(request.form['recordID'])
+            remainingUserNames = []
+            for name in allUserNames:
+                if name not in record['participant']:
+                    remainingUserNames.append(name)
+            return render_template("single_record.html",record = record, admin = check[1], remainingUserNames = remainingUserNames)
         elif request.form['postType'] == 'modify':
             modify_record(request.form)
             return redirect(url_for('record_page'))
