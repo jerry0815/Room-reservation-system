@@ -212,8 +212,9 @@ def insertRecord(title = "testing record", roomname  = "TR-306", startDate = "20
         connection.ping(reconnect = True)
         with connection.cursor() as cursor:
             cursor.execute(sql,ppl)
-            result = cursor.fetchone()["userID"]
-            p_id.append(result)
+            result = cursor.fetchone()
+            if result != None:
+                p_id.append(result["userID"])
     p_id_str = listIdToStr(p_id)
     print("p_id_str = " + str(p_id_str))
     #insert record into database
@@ -450,13 +451,14 @@ def updateRecord(recordID , title ,participants):
             connection.ping(reconnect = True)
             with connection.cursor() as cursor:
                 cursor.execute(sql,ppl)
-                result = cursor.fetchone()["userID"]
-                p_id.append(result)
+                result = cursor.fetchone()
+                if result != None:
+                    p_id.append(result["userID"])
         p_id_str = listIdToStr(p_id)
         sql = "UPDATE `record` SET `participant` = %s WHERE `recordID` = %s"
         connection.ping(reconnect = True)
         with connection.cursor() as cursor:
-            cursor.execute(sql,(p_id_str,recorID))
+            cursor.execute(sql,(p_id_str,recordID))
             connection.commit()
     return True
 
