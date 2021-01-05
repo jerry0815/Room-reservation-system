@@ -432,7 +432,7 @@ def account_management_page():
             #do operation
             if request.form['postType'] == "search":
                 result = getUser(request.form['userName'])
-                if result[0]:
+                if not result[0]:
                     message = "error"
                 return render_template("account_management.html", user = result[1], admin=check[1], message = message, allUserNames = allUserNames)
             elif request.form['postType'] == "delete":
