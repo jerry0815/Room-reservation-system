@@ -18,7 +18,8 @@ def isValidMail(email):
         return False
 
 def register(data):
-    if not isValidMail(data['email']):
+    email = data['email'] + "@gmail.com"
+    if not isValidMail(email):
         return False
     sql = "select * from  `users` where `userName`=%s"
     connection.ping(reconnect = True)
@@ -27,7 +28,7 @@ def register(data):
         result = cursor.fetchone()
     if result != None:
         return False
-    insertUser(userName = data['userName'], nickName = "", password = data['password'], email = data['email'], identity = '0' , banned = False)
+    insertUser(userName = data['userName'], nickName = "", password = data['password'], email = email, identity = '0' , banned = False)
     return True
 
 #login and return user information. return status,result

@@ -31,8 +31,10 @@
 
 				<div class="form-group">
 				  <label for="emailInput">電子信箱(Email)</label>
-				  <input type="email" class="form-control" id ="emailInput" aria-describedby="emailHelp" placeholder="Email" name="email">
-				  <small id="emailHelp" class="form-text text-muted">必須以@gmail.com結尾</small>
+				  <div class="d-flex justify-content-between">
+					<input type="email" class="form-control " id ="emailInput" placeholder="Email" name="email">
+					<input class="form-control" value = "@gmail.com" readonly>
+				  </div>
                 </div>
                 
                 <div class="form-group">

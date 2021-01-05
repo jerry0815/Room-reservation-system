@@ -275,9 +275,7 @@ def register_page():
     if cookie_check()[0]:
         return redirect(url_for('main_page'))
     if request.method == 'POST':
-        print('yes123')
         result = request.form
-        print(result)
         if register(result):
             #註冊成功
             return render_template("register.html", message="register_success")
@@ -292,18 +290,19 @@ def login_page():
         return redirect(url_for('main_page'))
     if request.method =='POST':
         #TODO encryption
-        login_status = validateLogin(request.form['email'], request.form['password'])
+        email = request.form['email'] + "@gmail.com";
+        login_status = validateLogin(email, request.form['password'])
         #login fail
-        if login_status[0]: 
+        if login_status[0]:
             if login_status[0] == 1: #email error
                 return render_template("login.html", message="email_error")
             elif login_status[0] == 2: #password error
                 return render_template("login.html", message="password_error")
         #login success
         else:
-            resp = make_response(render_template("main.html", admin=loginCheck(request.form['email'], request.form['password'])[1]))
+            resp = make_response(render_template("main.html", admin=loginCheck(email, request.form['password'])[1]))
             #set cookie
-            resp.set_cookie('email', request.form['email']) 
+            resp.set_cookie('email', email) 
             resp.set_cookie('password', request.form['password'])
             resp.set_cookie('userName', login_status[1])
             return resp
