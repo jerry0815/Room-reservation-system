@@ -60,7 +60,7 @@ def insertEvent(service , title , roomname , startDate , startSection , endDate 
         'timeZone': 'Asia/Taipei',
     },
     'attendees': [
-        {'email': 'linjerry890815@gmail.com'} 
+        {'email': 'chubihaha000@gmail.com'} 
     ],
     'reminders': {
         'useDefault': False,
@@ -166,7 +166,7 @@ def test_api_request():
     service = googleapiclient.discovery.build(
         API_SERVICE_NAME, API_VERSION, credentials=credentials)
 
-    result = insertEvent(service=service , title = "test insert calendar" , roomname = "TR-313",startDate = "2021-01-20" , startSection=5 , endDate = "2021-01-20" , endSection=8,participants=["linjerry890815@gmail.com"])
+    result = insertEvent(service=service , title = "test insert calendar" , roomname = "TR-313",startDate = "2021-02-20" , startSection=5 , endDate = "2021-02-20" , endSection=8,participants=["linjerry890815@gmail.com"])
     print("insert result eventID: " + result)
     # Call the Calendar API
     now = datetime.datetime.utcnow().isoformat() + 'Z' # 'Z' indicates UTC time
