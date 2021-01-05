@@ -3,6 +3,7 @@ from connect import connection
 from datetime import datetime , timedelta
 import re
 import pandas as pd
+import time
 
 #transform list of id to str O
 def listIdToStr(id_list):
@@ -286,6 +287,7 @@ def updateRecord(recordID , title ,participants):
         with connection.cursor() as cursor:
             cursor.execute(sql,(p_id_str,recordID))
             connection.commit()
+            time.sleep(0.5)
     return True
 
 def deleteRecord(recordID):
