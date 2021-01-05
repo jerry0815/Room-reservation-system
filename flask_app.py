@@ -385,7 +385,8 @@ def record_page():
     email = request.cookies.get("email")
     if email != None:
         records = getRecordByBookerEmail(email)
-    print(records['title'] , records['participant'])
+    for i in records:
+        print(i['title'] , i['participant'])
     return render_template("record.html", userName = request.cookies['userName'], records=records, admin = check[1])
 
 @app.route('/single_record',methods=['POST'])
