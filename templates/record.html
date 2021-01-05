@@ -27,7 +27,8 @@
                     <th scope="col">更動</th>
                 </tr>
             </thead>
-            <tbody >
+            <tbody>
+                {%if records|length != 0 %}
                 {%for r in records%}
                     <tr>
                     <th class="text-center align-middle">
@@ -42,8 +43,6 @@
                     </td>
                    
                     <td class="text-center align-middle">
-                        {{r['building']}}
-                        <br>
                         {{r['roomName']}}
                     </td>
                   
@@ -69,6 +68,12 @@
                 {%endfor%}
             </tbody>
         </table>
+        {% else %}
+        </tbody>
+
+        </table>
+        <h1 class="text-center mt-3 mb-2">無資料</h1>
+        {% endif %}
     </div>
 </div>
 {% endblock %}

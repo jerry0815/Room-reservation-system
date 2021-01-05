@@ -119,7 +119,13 @@
 {% block head_script %}
 <script type="text/javascript">
 	function error_message() {
-		if("{{message}}" == "borrow_fail")
+		if("{{message}}" == "ban")
+		{
+			alert('您的帳號已被禁用!\n無法進行借用');
+			window.location.href= "{{url_for('main_page')}}";
+		}
+			
+		else if("{{message}}" == "borrow_fail")
 			alert('借用失敗!');
 		else if("{{message}}" == "borrow_success")
 			alert('借用成功!');

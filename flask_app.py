@@ -70,7 +70,7 @@ def insertEvent(service , title , roomname , startDate , startSection , endDate 
         ],
     },
     }
-    event_result = service.events().insert(calendarId='primary', body=event , sendUpdates = all).execute()
+    event_result = service.events().insert(calendarId='primary', body=event , sendUpdates = "all").execute()
     print("created event")
     print("id: ", event_result['id'])
     print("summary: ", event_result['summary'])
@@ -124,7 +124,7 @@ def updateEvent(service , startDate , startSection , title = "" , participants =
     }
     for i in attendees:
         new_event['attendees'].append({'email' : i })
-    service.events().update(calendarId = 'primary' , eventId = event['id'] , body = new_event , sendUpdates = all).execute()
+    service.events().update(calendarId = 'primary' , eventId = event['id'] , body = new_event , sendUpdates = "all").execute()
     return new_event
 
 def deleteEvent(service , startDate , startSection):
@@ -137,7 +137,7 @@ def deleteEvent(service , startDate , startSection):
     events = events_result.get('items', [])
     event = events[0]
     print(event)
-    service.events().delete(calendarId = 'primary' , eventId = event['id'] , sendUpdates = all).execute()
+    service.events().delete(calendarId = 'primary' , eventId = event['id'] , sendUpdates = "all").execute()
 
 # This variable specifies the name of a file that contains the OAuth 2.0
 # information for this application, including its client_id and client_secret.
@@ -322,15 +322,23 @@ def search_page():
         else:
             building = ""
         search_result = searchClassroom(building = building , capacity = result['capacity'] , roomname = result['roomName'] , date = result['date'])
-        return render_template("search.html", buildings=buildings, date=result['date'], result=search_result)
-    return render_template("search.html", buildings=buildings, date=get_current_time(), result=None)
+        return render_template("search.html", buildings=buildings, date=result['date'], result=search_result, admin = check[1] )
+    return render_template("search.html", buildings=buildings, date=get_current_time(), result=None, admin = check[1] )
     
 #to do
 @app.route('/borrow',methods=['POST','GET'])
 def borrow_page():
+    message = ""
     check = cookie_check()
     if not check[0]:
         return redirect(url_for('login_page'))
+
+    userData = getUser(request.cookies.get('userName'))
+
+    #The user is banned:
+    if userData['banned']:
+        return render_template("borrow.html", buildings=buildings, admin=check[1], message="ban")
+
     if request.method == "POST":
             #To do borrow()
         result = borrow(request.form, request.form['borrow_type'] , request.cookies.get("userName"))
@@ -345,9 +353,11 @@ def borrow_page():
                 message="ban_success"
             else:
                 message="ban_fail"
+        
         return render_template("borrow.html", buildings=buildings, admin=check[1], message=message)
       
-
+    
+    
     return render_template("borrow.html", buildings=buildings, admin=check[1])
 
 #to do
