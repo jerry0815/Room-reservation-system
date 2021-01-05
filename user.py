@@ -112,8 +112,9 @@ def getAllUserName():
     with connection.cursor() as cursor:
         cursor.execute(sql)
         result = cursor.fetchall()
+
     for i in range(len(result)):
-        result[i] = result['userName']
+        result[i] = result[i]['userName']
     return result
 #display all users
 def showUsers():
