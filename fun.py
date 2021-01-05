@@ -180,8 +180,8 @@ def showClassroom():
 #=======================================================================
 #transform list of id to str O
 def listIdToStr(id_list):
-    if id_list == None:
-        return None
+    if id_list == None or len(id_list) == 0:
+        return ""
     participant = str(id_list[0])
     for i in range(1 , len(id_list)):
         participant = participant + "," + str(id_list[i])
