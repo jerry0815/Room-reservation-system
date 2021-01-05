@@ -340,6 +340,7 @@ def borrow_page():
 
 
     allUserNames = getAllUserName()
+    allUserNames.remove(request.cookies.get('userName'))
     if request.method == "POST":
             #To do borrow()
         result = borrow(request.form, request.form['borrow_type'] , request.cookies.get("userName"))
@@ -395,6 +396,7 @@ def single_record_page():
     if request.method =='POST':
         if request.form['postType'] == 'get':
             allUserNames = getAllUserName()
+            allUserNames.remove(request.cookies.get('userName'))
             record = getRecordById(request.form['recordID'])
             remainingUserNames = []
             for name in allUserNames:
@@ -423,7 +425,6 @@ def account_management_page():
     check = cookie_check()
     if check[0] and check[1] == "admin":
         if request.method == "POST":
-            print(request.form)
             if request.form['postType'] == "search":
                 result = getUser(request.form['userName'])
                 if result[0]:
