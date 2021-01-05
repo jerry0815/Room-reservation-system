@@ -448,31 +448,6 @@ def account_management_page():
             else:
                 result = request.form['postType'] + '_fail'
             return render_template("account_management.html", user = None, admin=check[1], message = result, allUserNames = allUserNames)
-            
-            # elif request.form['postType'] == "delete":
-            #     result = deleteAccount(request.form['userID'])
-                
-            #     if result:
-            #         result = "delete_success"
-            #     else:
-            #         result = "delete_fail"
-            #     return render_template("account_management.html", user = None, admin=check[1], message = result)
-
-            # elif request.form['postType'] == "ban":
-            #     result = banAccount(request.form['userID'])
-            #     if result:
-            #         result = "ban_success"
-            #     else:
-            #         result = "ban_fail"
-            #     return render_template("account_management.html", user = None, admin=check[1], message = result)
-
-            # elif request.form['postType'] == "unban":
-            #     result = unBanAccount(request.form['userID'])
-            #     if result:
-            #         result = "unban_success"
-            #     else:
-            #         result = "unban_fail"
-            #     return render_template("account_management.html", user = None, admin=check[1], message = result)
         return render_template("account_management.html", user = None, admin=check[1], allUserNames = allUserNames)
     else:
         return redirect(url_for('login_page'))
