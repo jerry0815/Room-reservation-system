@@ -15,6 +15,8 @@ import datetime
 
 app = Flask(__name__)
 
+dummy_record = {'recordID':'1', 'title':'dummy', 'startDate':'2021-02-01', 'startSection':1, 'endDate':'2021-01-31', 'endSection':10,
+'roomName':'TR-411', 'building':'研揚大樓(TR)', 'participant':[]}
 
 #test DB route
 @app.route('/testDB_classroom',methods=['POST','GET'])
@@ -407,7 +409,7 @@ def single_record_page():
             return render_template("single_record.html",record = record, admin = check[1], remainingUserNames = remainingUserNames)
         elif request.form['postType'] == 'modify':
             modify_record(request.form)
-            return render_template("single_record.html",record ={}, admin = check[1], message="modfiy_success")
+            return render_template("single_record.html",record = dummy_record, admin = check[1], message="modfiy_success")
         elif request.form['postType'] == 'delete':
             deleteRecord(request.form['recordID'])
             return redirect(url_for('record_page'))
