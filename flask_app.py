@@ -70,7 +70,7 @@ def insertEvent(service , title , roomname , startDate , startSection , endDate 
         ],
     },
     }
-    event_result = service.events().insert(calendarId='primary', body=event , sendUpdates = True).execute()
+    event_result = service.events().insert(calendarId='primary', body=event , sendUpdates = all).execute()
     print("created event")
     print("id: ", event_result['id'])
     print("summary: ", event_result['summary'])
@@ -124,7 +124,7 @@ def updateEvent(service , startDate , startSection , title = "" , participants =
     }
     for i in attendees:
         new_event['attendees'].append({'email' : i })
-    service.events().update(calendarId = 'primary' , eventId = event['id'] , body = new_event , sendUpdates = True).execute()
+    service.events().update(calendarId = 'primary' , eventId = event['id'] , body = new_event , sendUpdates = all).execute()
     return new_event
 
 def deleteEvent(service , startDate , startSection):
@@ -137,7 +137,7 @@ def deleteEvent(service , startDate , startSection):
     events = events_result.get('items', [])
     event = events[0]
     print(event)
-    service.events().delete(calendarId = 'primary' , eventId = event['id'] , sendUpdates = True).execute()
+    service.events().delete(calendarId = 'primary' , eventId = event['id'] , sendUpdates = all).execute()
 
 # This variable specifies the name of a file that contains the OAuth 2.0
 # information for this application, including its client_id and client_secret.
