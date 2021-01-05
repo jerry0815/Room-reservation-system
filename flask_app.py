@@ -423,38 +423,57 @@ def main_page():
 def account_management_page():
     #if cookie exists and user information is correct, then enter main page 
     check = cookie_check()
+    message = ""
     if check[0] and check[1] == "admin":
+        allUserNames = getAllUserName()
+        allUserNames.remove(request.cookies.get('userName'))
         if request.method == "POST":
+
+            #do operation
             if request.form['postType'] == "search":
                 result = getUser(request.form['userName'])
                 if result[0]:
-                    return render_template("account_management.html", user = result[1], admin=check[1])
-                else:
-                    return render_template("account_management.html", user = result[1], admin=check[1], message = "error")
+                    message = "error"
+                return render_template("account_management.html", user = result[1], admin=check[1], message = message, allUserNames = allUserNames)
             elif request.form['postType'] == "delete":
                 result = deleteAccount(request.form['userID'])
-                if result:
-                    result = "delete_success"
-                else:
-                    result = "delete_fail"
-                return render_template("account_management.html", user = None, admin=check[1], message = result)
-
             elif request.form['postType'] == "ban":
                 result = banAccount(request.form['userID'])
-                if result:
-                    result = "ban_success"
-                else:
-                    result = "ban_fail"
-                return render_template("account_management.html", user = None, admin=check[1], message = result)
-
             elif request.form['postType'] == "unban":
                 result = unBanAccount(request.form['userID'])
-                if result:
-                    result = "unban_success"
-                else:
-                    result = "unban_fail"
-                return render_template("account_management.html", user = None, admin=check[1], message = result)
-        return render_template("account_management.html", user = None, admin=check[1])
+
+            #check operation result
+            if result:
+                result = request.form['postType'] + '_success'
+            else:
+                result = request.form['postType'] + '_fail'
+            return render_template("account_management.html", user = None, admin=check[1], message = result, allUserNames = allUserNames)
+            
+            # elif request.form['postType'] == "delete":
+            #     result = deleteAccount(request.form['userID'])
+                
+            #     if result:
+            #         result = "delete_success"
+            #     else:
+            #         result = "delete_fail"
+            #     return render_template("account_management.html", user = None, admin=check[1], message = result)
+
+            # elif request.form['postType'] == "ban":
+            #     result = banAccount(request.form['userID'])
+            #     if result:
+            #         result = "ban_success"
+            #     else:
+            #         result = "ban_fail"
+            #     return render_template("account_management.html", user = None, admin=check[1], message = result)
+
+            # elif request.form['postType'] == "unban":
+            #     result = unBanAccount(request.form['userID'])
+            #     if result:
+            #         result = "unban_success"
+            #     else:
+            #         result = "unban_fail"
+            #     return render_template("account_management.html", user = None, admin=check[1], message = result)
+        return render_template("account_management.html", user = None, admin=check[1], allUserNames = allUserNames)
     else:
         return redirect(url_for('login_page'))
       
