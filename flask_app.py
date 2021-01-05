@@ -358,7 +358,7 @@ def borrow_page():
         return render_template("borrow.html", buildings=buildings, admin=check[1], message=message, allUserNames=allUserNames)
       
     
-    return render_template("borrow.html", buildings=buildings, admin=check[1])
+    return render_template("borrow.html", buildings=buildings, admin=check[1], allUserNames=allUserNames)
 
 #to do
 @app.route('/borrow_search',methods=['POST','GET'])
@@ -391,7 +391,7 @@ def single_record_page():
     check = cookie_check()
     if not check[0]:
         return redirect(url_for('login_page'))
-        
+
     if request.method =='POST':
         if request.form['postType'] == 'get':
             allUserNames = getAllUserName()
