@@ -87,7 +87,7 @@
 				</tr>
 			</thead>
 			<tbody>
-				{%if result != None %}
+				{%if result != None and result|length != 0%}
 					{%for r in result%}
 					<tr>
 						<th scope="row" class="text-center align-middle">

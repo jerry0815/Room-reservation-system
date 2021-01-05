@@ -336,7 +336,7 @@ def borrow_page():
     userData = getUser(request.cookies.get('userName'))
 
     #The user is banned:
-    if userData['banned']:
+    if userData[1]['banned']:
         return render_template("borrow.html", buildings=buildings, admin=check[1], message="ban")
 
     if request.method == "POST":
