@@ -7,7 +7,11 @@ import pymysql
 import google.oauth2.credentials
 import google_auth_oauthlib.flow
 import googleapiclient.discovery
-from fun import *
+import pytz
+#from fun import *
+from user import *
+from record import *
+from classroom import *
 import datetime
 
 app = Flask(__name__)
@@ -256,7 +260,9 @@ def cookie_check():
     password = request.cookies.get('password')
     return loginCheck(email, password)
 
-
+def get_current_time():
+    taipei = pytz.timezone('Asia/Taipei')
+    return datetime.strftime(datetime.now(taipei), "%Y-%m-%d")
 @app.route('/logout')
 def logout():
     res = make_response(redirect(url_for("login_page")))
@@ -382,7 +388,7 @@ def single_record_page():
             modify_record(request.form)
             return redirect(url_for('record_page'))
         elif request.form['postType'] == 'delete':
-            delete_record(request.form)
+            deleteRecord(request.form['recordID'])
             return redirect(url_for('record_page'))
     return redirect(url_for('main_page'))
 
