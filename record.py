@@ -273,7 +273,7 @@ def updateRecord(recordID , title ,participants):
             connection.commit()
     if participants != None:
         p_id = []
-        sql = "SELECT  `userID` FROM `users` WHERE `userName`= %s"
+        sql = "SELECT  `userID` FROM `users` WHERE `userName`= %s FOR UPDATE"
         for ppl in participants:
             connection.ping(reconnect = True)
             with connection.cursor() as cursor:
@@ -287,7 +287,6 @@ def updateRecord(recordID , title ,participants):
         with connection.cursor() as cursor:
             cursor.execute(sql,(p_id_str,recordID))
             connection.commit()
-            time.sleep(0.5)
     return True
 
 def deleteRecord(recordID):
