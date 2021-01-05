@@ -181,7 +181,7 @@ def showClassroom():
 #transform list of id to str O
 def listIdToStr(id_list):
     if id_list == None or len(id_list) == 0:
-        return ""
+        return ","
     participant = str(id_list[0])
     for i in range(1 , len(id_list)):
         participant = participant + "," + str(id_list[i])
@@ -325,7 +325,11 @@ def searchOneClassroom(CR_ID = "" , date = "2020-12-29") :
                     if item != None:
                         dailyItem.update(item)
                 output.append(dailyItem)  
-            return {'CR_ID' : CR_ID , 'building' : building , 'capacity' : capacity , 'roomName' :roomname , 'status' :output}
+            return {'CR_ID' : CR_ID , 'building' : building , 'capacity' : capacity , 'roomName' :roomname , 'status' : output}
+        else:
+            for d in range(0,7):
+                output.append({})
+            return {'CR_ID' : CR_ID , 'building' : building , 'capacity' : capacity , 'roomName' :roomname , 'status' : output}
 
 #search the records the user book
 def getRecordByBooker(userName):
