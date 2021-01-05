@@ -180,6 +180,8 @@ def showClassroom():
 #=======================================================================
 #transform list of id to str O
 def listIdToStr(id_list):
+    if id_list == None:
+        return None
     participant = str(id_list[0])
     for i in range(1 , len(id_list)):
         participant = participant + "," + str(id_list[i])
@@ -285,7 +287,10 @@ def searchClassroom(building, capacity = -1 , roomname = "" , date = "2020-01-01
                     item = processRecord(j , date)
                     #building , capacity , roomname , status
                     item = {"CR_ID" : i["CR_ID"] , "building" : i["building"] , "capacity" : i["capacity"] , "roomName" : i["roomname"] , "status" : item}
-                    output.append(item)          
+                    output.append(item)        
+            else:
+                item = {"CR_ID" : i["CR_ID"] , "building" : i["building"] , "capacity" : i["capacity"] , "roomName" : i["roomname"] , "status" : {}}
+                output.append(item)
     return output
 
 #search for one classroom and return records of a week
@@ -537,17 +542,19 @@ def filter_classroom(data1): #開始日期 startDate,開始節數 startSection,�
     print(classroom_total)
     return classroom_total
 
-def borrow(data, borrow_type):
+def borrow(data, borrow_type , booker):
     participants = []
-    print("987")
+    if borrow_type == 'ban':
+        borrow_type = 0
+    else:
+        borrow_type = 1
     for i in range(int(data['counter'])):
         p = data.get('participant' + str(i))
         if  p != None and p != '':
             participants.append(data['participant' + str(i)])
-    print("123")
     insertRecord(title = data['title'], roomname  = data['roomName'], \
     startDate = data['startDate'], startSection  = data['startSection'], \
     endDate = data['endDate'], endSection  = data['endSection'], participant = participants, \
-    bookName = "alien",type = 1)
+    bookName = booker,type = borrow_type)
 
     return True

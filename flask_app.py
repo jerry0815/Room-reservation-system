@@ -262,11 +262,12 @@ def logout():
     res = make_response(redirect(url_for("login_page")))
     res.set_cookie(key='email', value='', expires=0)
     res.set_cookie(key='password', value='', expires=0)
+    res.set_cookie(key='userName', value='', expires=0)
     return res
 
 @app.route('/register',methods=['POST','GET'])
 def register_page():
-    if cookie_check():
+    if cookie_check()[0]:
         return redirect(url_for('main_page'))
     if request.method == 'POST':
         print('yes123')
@@ -327,7 +328,7 @@ def borrow_page():
         return redirect(url_for('login_page'))
     if request.method == "POST":
             #To do borrow()
-        result = borrow(request.form, request.form['borrow_type'])
+        result = borrow(request.form, request.form['borrow_type'] , request.cookies.get("userName"))
         if request.form['borrow_type'] == "borrow":
             if result: 
                 message="borrow_success"
