@@ -407,7 +407,7 @@ def single_record_page():
             return render_template("single_record.html",record = record, admin = check[1], remainingUserNames = remainingUserNames)
         elif request.form['postType'] == 'modify':
             modify_record(request.form)
-            return redirect(url_for('record_page'))
+            return render_template("single_record.html", admin = check[1], meesage="modfiy_success")
         elif request.form['postType'] == 'delete':
             deleteRecord(request.form['recordID'])
             return redirect(url_for('record_page'))

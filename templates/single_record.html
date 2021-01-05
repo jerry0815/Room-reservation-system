@@ -111,6 +111,20 @@
 	</div>
 {% endblock %}
 
+{% block head_script %}
+<script type="text/javascript">
+	function error_message() {
+		if("{{message}}" == "modify_success")
+		{
+			alert('修改成功!');
+			window.location.href= '{{url_for('record_page')}}';
+		}
+	}
+    window.onload = error_message();
+</script>
+{% endblock %}
+
+
 
 {% block script %}
 
