@@ -261,7 +261,7 @@ def cookie_check():
 
 def get_current_time():
     taipei = pytz.timezone('Asia/Taipei')
-    return datetime.strftime(datetime.now(taipei), "%Y-%m-%d")
+    return datetime.datetime.strftime(datetime.datetime.now(taipei), "%Y-%m-%d")
 @app.route('/logout')
 def logout():
     res = make_response(redirect(url_for("login_page")))
