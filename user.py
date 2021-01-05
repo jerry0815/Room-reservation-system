@@ -1,3 +1,4 @@
+from os import O_RSYNC
 import pymysql
 from connect import connection
 
@@ -111,6 +112,8 @@ def getAllUserName():
     with connection.cursor() as cursor:
         cursor.execute(sql)
         result = cursor.fetchall()
+    for i in range(len(result)):
+        result[i] = result['userName']
     return result
 #display all users
 def showUsers():

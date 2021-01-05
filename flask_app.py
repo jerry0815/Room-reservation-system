@@ -340,7 +340,6 @@ def borrow_page():
 
 
     allUserNames = getAllUserName()
-    allUserNames = ['你好','你也好','我好']
     if request.method == "POST":
             #To do borrow()
         result = borrow(request.form, request.form['borrow_type'] , request.cookies.get("userName"))
