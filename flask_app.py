@@ -214,6 +214,7 @@ def calendar_process():
     calendar_type = request.args.get('calendar_type')
     #insert
     if calendar_type == 0:
+        print("insert calendar")
         data = request.args.get('data')
         attend = []
         for i in range(int(data['counter'])):
@@ -221,6 +222,7 @@ def calendar_process():
             if  p != None and p != '':
                 participants.append(data['participant' + str(i)])
         attend = getUserMail(participants)
+        print(attend)
         try:
             result = insertEvent(service=service , title = data['title'], roomname  = data['roomName'],\
             startDate = data['startDate'], startSection  = data['startSection'],\
@@ -229,7 +231,7 @@ def calendar_process():
         except:
             flask.session.pop('credentials')
             print("insert error")
-        return redirect(url_for('borrow' , message = "borrow_success" , isCalendar = True))
+        return redirect(url_for('borrow_page' , message = "borrow_success" , isCalendar = True))
     #update
     elif calendar_type == 1:
         data = request.args.get('data')
