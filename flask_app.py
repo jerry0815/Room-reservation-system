@@ -133,7 +133,8 @@ def updateEvent(service , startDate , startSection , title = "" , participants =
     return new_event
 
 def deleteEvent(service , startDate , startSection):
-    startTime = datetime.datetime.fromisoformat(startDate)
+    print(startDate)
+    startTime = datetime.datetime.fromisoformat(str(startDate))
     startHours = datetime.timedelta(hours = int(startSection) + 7)
     startTime = startTime + startHours
     events_result = service.events().list(calendarId="primary", timeMin= startTime.strftime("%Y-%m-%dT%H:%M:%S+08:00"),
