@@ -198,6 +198,8 @@ def test_api_request():
     #              credentials in a persistent database instead.
     flask.session['credentials'] = credentials_to_dict(credentials)
  
+
+"""
 def calendar_process(data , calendar_type):
     """
     if 'credentials' not in flask.session:
@@ -258,7 +260,7 @@ def calendar_process(data , calendar_type):
         except:
             #flask.session.pop('credentials')
             print("delete error")
-
+"""
 @app.route('/authorize')
 def authorize():
     # Create flow instance to manage the OAuth 2.0 Authorization Grant Flow steps.
