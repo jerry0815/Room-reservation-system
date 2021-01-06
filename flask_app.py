@@ -534,12 +534,11 @@ def search_single_page():
         classroom_data = searchOneClassroom(CR_ID = request.form['CR_ID'] , date = request.form['start_date'])
     
 
-        today = datetime.fromisoformat(request.form['start_date'])
+        today = datetime.datetime.fromisoformat(request.form['start_date'])
 
-        start_date = today - timedelta(days = today.weekday())
+        start_date = today - datetime.timedelta(days = today.weekday())
         
         dates = [start_date]
-        dates_weekdays = []
         for i in range(1,7):
             dates.append(start_date + datetime.timedelta(i))
         for i in range(7):
