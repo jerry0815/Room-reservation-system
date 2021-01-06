@@ -274,7 +274,7 @@ def updateRecord(recordID , title ,participants):
         with connection.cursor() as cursor:
             cursor.execute(sql,(title,recordID))
             connection.commit()
-    if participants != None and participants != "":
+    if participants != None and len(participants) != 0:
         p_id = []
         """
         sql = "SELECT  `userID` FROM `users` WHERE `userName`= %s FOR UPDATE"
