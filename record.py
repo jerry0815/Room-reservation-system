@@ -337,10 +337,16 @@ def borrow(data, borrow_type , booker):
         borrow_type = 0
     else:
         borrow_type = 1
+    sql = "SELECT `CR_ID` FROM `classroom` WHERE `roomname` = %s"
+    connection.ping(reconnect = True)
+    with connection.cursor() as cursor:
+        cursor.execute(sql,data['roomName'])
+        CR_ID = cursor.fetchone()['CR_ID']
+        
     sql = "SELECT * FROM `record` WHERE `CR_ID` = %s"
     connection.ping(reconnect = True)
     with connection.cursor() as cursor:
-        cursor.execute(sql,data['CR_ID'])
+        cursor.execute(sql,CR_ID)
         record_total = cursor.fetchall()
     d_startTime = datetime.fromisoformat(str(data["startDate"]))
     d_endTime = datetime.fromisoformat(str(data["endDate"]))
