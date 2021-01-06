@@ -4,86 +4,6 @@ from datetime import datetime , timedelta
 import re
 import pandas as pd
 import time
-import google.oauth2.credentials
-import google_auth_oauthlib.flow
-import googleapiclient.discovery
-import flask
-
-# This variable specifies the name of a file that contains the OAuth 2.0
-# information for this application, including its client_id and client_secret.
-CLIENT_SECRETS_FILE = "credentials.json"
-
-# This OAuth 2.0 access scope allows for full read/write access to the
-# authenticated user's account and requires requests to use an SSL connection.
-SCOPES = ['https://www.googleapis.com/auth/calendar' , 'https://www.googleapis.com/auth/calendar.events']
-API_SERVICE_NAME = 'calendar'
-API_VERSION = 'v3'
-# Note: A secret key is included in the sample so that it works.
-# If you use this code in your application, replace this with a truly secret
-# key. See https://flask.palletsprojects.com/quickstart/#sessions.
-app.secret_key = "My key"
-
-
-def calendar_process(data , calendar_type):
-    """
-    if 'credentials' not in flask.session:
-        return redirect(url_for('authorize' , data = request.args.get('data') , calendar_type = request.args.get('calendar_type')))
-    """
-    cred = flask.session['credentials']
-    """
-    if cred['refresh_token']:
-        return redirect(url_for('authorize' , data = request.args.get('data') , calendar_type = request.args.get('calendar_type')))
-    """
-    # Load credentials from the session.
-    credentials = google.oauth2.credentials.Credentials(
-        **flask.session['credentials'])
-    service = googleapiclient.discovery.build(
-        API_SERVICE_NAME, API_VERSION, credentials=credentials)
-    print(data)
-    #insert
-    if calendar_type == 0:
-        print("insert calendar")
-        attend = []
-        for i in range(int(data['counter'])):
-            p = data.get('participant' + str(i))
-            if  p != None and p != '':
-                attend.append(data['participant' + str(i)])
-        attend = getUserMail(attend)
-        print(attend)
-        #try:
-        result = insertEvent(service=service , title = data['title'], roomname  = data['roomName'],\
-        startDate = data['startDate'], startSection  = data['startSection'],\
-        endDate = data['endDate'], endSection  = data['endSection'],\
-        participants = attend)
-        print("insert success")
-        #except:
-            #flask.session.pop('credentials')
-            #print("insert error")
-        return 
-    #update
-    elif calendar_type == 1:
-        attend = []
-        record = getRecordById(data['recordID'])
-        for i in range(int(data['counter'])):
-            p = data.get('participant' + str(i))
-            if  p != None and p != '':
-                attend.append(data['participant' + str(i)])
-        attend = getUserMail(attend)
-        try:
-            result = updateEvent(service=service , startDate = record['startDate'], startSection  = record['startSection'],\
-            title = data['title'], participants = attend)
-        except:
-            #flask.session.pop('credentials')
-            print("update error")
-    #delete
-    elif calendar_type == 2:
-        try:
-            data = getRecordById(data['recordID'])
-            result = deleteEvent(service=service , startDate = data['startDate'], startSection  = data['startSection'])
-            print("delete success")
-        except:
-            #flask.session.pop('credentials')
-            print("delete error")
 
 #transform list of id to str O
 def listIdToStr(id_list):
@@ -417,7 +337,6 @@ def borrow(data, borrow_type , booker):
         borrow_type = 0
     else:
         borrow_type = 1
-
     sql = "SELECT * FROM `record` WHERE `CR_ID` = %s"
     connection.ping(reconnect = True)
     with connection.cursor() as cursor:
@@ -437,10 +356,8 @@ def borrow(data, borrow_type , booker):
     #already have record
     if borrow_type == 1 and have == 1:
         return False
-
     if borrow_type == 0:
         for r in record_delete:
-            calendar_process(r,2)
             deleteRecord(r['recordID'])
     for i in range(int(data['counter'])):
         p = data.get('participant' + str(i))
