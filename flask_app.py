@@ -102,7 +102,6 @@ def updateEvent(service , startDate , startSection , title = "" , participants =
     attendees = []
     for i in event['attendees']:
         attendees.append(i['email'])
-    attendees = attendees + participants
     if title == "":
         title = event['summary']
     print(title)
@@ -474,9 +473,11 @@ def single_record_page():
             return render_template("single_record.html",record = record, admin = check[1], remainingUserNames = remainingUserNames)
         elif request.form['postType'] == 'modify':
             modify_record(request.form)
+            calendar_process(request.form , 1)
             return render_template("single_record.html",record = dummy_record, admin = check[1], message="modify_success")
         elif request.form['postType'] == 'delete':
             deleteRecord(request.form['recordID'])
+            calendar_process(request.form , 2)
             return redirect(url_for('record_page'))
     return redirect(url_for('main_page'))
 
