@@ -45,8 +45,8 @@ def testDB_record():
 def insertEvent(service , title , roomname , startDate , startSection , endDate , endSection , participants):
     startTime = datetime.datetime.fromisoformat(startDate)
     endTime = datetime.datetime.fromisoformat(endDate)
-    startHours = datetime.timedelta(hours= startSection + 7)
-    endHours = datetime.timedelta(hours= endSection + 8)
+    startHours = datetime.timedelta(hours= int(startSection) + 7)
+    endHours = datetime.timedelta(hours= int(endSection) + 8)
     startTime = startTime + startHours
     endTime = endTime + endHours
     event = {
