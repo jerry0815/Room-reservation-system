@@ -224,7 +224,7 @@ def getRecordByBookerEmail(email):
         sql1 = "SELECT `userName` FROM `users` WHERE `userID` IN ({seq})".format(seq=','.join(['%s']*len(participants)))
         connection.ping(reconnect = True)
         with connection.cursor() as cursor:
-            cursor.execute(sql,participants)
+            cursor.execute(sql1,participants)
             tmp = cursor.fetchall()
         for i in tmp:
             if i != None:
