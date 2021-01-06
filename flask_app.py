@@ -218,7 +218,7 @@ def calendar_process(data , calendar_type):
             p = data.get('participant' + str(i))
             if  p != None and p != '':
                 attend.append(data['participant' + str(i)])
-        attend = getUserMail(participants)
+        attend = getUserMail(attend)
         print(attend)
         try:
             result = insertEvent(service=service , title = data['title'], roomname  = data['roomName'],\
@@ -236,7 +236,7 @@ def calendar_process(data , calendar_type):
             p = data.get('participant' + str(i))
             if  p != None and p != '':
                 attend.append(data['participant' + str(i)])
-        attend = getUserMail(participants)
+        attend = getUserMail(attend)
         try:
             result = updateEvent(service=service , startDate = data['startDate'], startSection  = data['startSection'],\
             title = data['title'], participants = attend)
