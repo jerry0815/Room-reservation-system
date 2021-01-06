@@ -183,6 +183,8 @@ def getRecordByBooker(userName):
         p_name = []
         participants = result['participant']
         participants = participants.split(',')
+        if len(participants) == 0:
+            continue
         sql1 = "SELECT `userName` FROM `users` WHERE `userID` IN ({seq})".format(seq=','.join(['%s']*len(participants)))
         connection.ping(reconnect = True)
         with connection.cursor() as cursor:
@@ -191,7 +193,6 @@ def getRecordByBooker(userName):
         for i in tmp:
             if i != None:
                 p_name.append(i['userName'])
-        result['participant'] = p_name
         result['participant'] = p_name
     return results
 
@@ -220,7 +221,8 @@ def getRecordByBookerEmail(email):
         p_name = []
         participants = result['participant']
         participants = participants.split(',')
-
+        if len(participants) == 0:
+            continue
         sql1 = "SELECT `userName` FROM `users` WHERE `userID` IN ({seq})".format(seq=','.join(['%s']*len(participants)))
         connection.ping(reconnect = True)
         with connection.cursor() as cursor:
@@ -272,7 +274,7 @@ def updateRecord(recordID , title ,participants):
         with connection.cursor() as cursor:
             cursor.execute(sql,(title,recordID))
             connection.commit()
-    if participants != None:
+    if participants != None and participants != "":
         p_id = []
         """
         sql = "SELECT  `userID` FROM `users` WHERE `userName`= %s FOR UPDATE"
