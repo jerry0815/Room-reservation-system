@@ -194,8 +194,7 @@ def test_api_request():
     #              credentials in a persistent database instead.
     flask.session['credentials'] = credentials_to_dict(credentials)
  
-@app.route('/calendar_process')
-def calendar_process():
+def calendar_process(data , calendar_type):
     """
     if 'credentials' not in flask.session:
         return redirect(url_for('authorize' , data = request.args.get('data') , calendar_type = request.args.get('calendar_type')))
@@ -211,11 +210,9 @@ def calendar_process():
     service = googleapiclient.discovery.build(
         API_SERVICE_NAME, API_VERSION, credentials=credentials)
     
-    calendar_type = request.args.get('calendar_type')
     #insert
     if calendar_type == 0:
         print("insert calendar")
-        data = request.args.get('data')
         attend = []
         for i in range(int(data['counter'])):
             p = data.get('participant' + str(i))
@@ -234,7 +231,6 @@ def calendar_process():
         return redirect(url_for('borrow_page' , message = "borrow_success" , isCalendar = True))
     #update
     elif calendar_type == 1:
-        data = request.args.get('data')
         attend = []
         for i in range(int(data['counter'])):
             p = data.get('participant' + str(i))
@@ -417,7 +413,7 @@ def borrow_page():
         if request.form['borrow_type'] == "borrow":
             if result: 
                 message="borrow_success"
-                return redirect(url_for('calendar_process' , data = request.form , calendar_type = 0))
+                calendar_process(request.form , 0)
             else:
                 message="borrow_fail"
         elif request.form['borrow_type'] == "ban":
