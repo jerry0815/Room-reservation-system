@@ -228,7 +228,7 @@ def calendar_process(data , calendar_type):
         except:
             flask.session.pop('credentials')
             print("insert error")
-        return redirect(url_for('borrow_page' , message = "borrow_success" , isCalendar = True))
+        return 
     #update
     elif calendar_type == 1:
         attend = []
@@ -404,9 +404,6 @@ def borrow_page():
     allUserNames = getAllUserName()
     allUserNames.remove(request.cookies.get('userName'))
 
-    isCalendar = request.args.get('isCalendar')
-    if isCalendar:
-        return render_template("borrow.html", buildings=buildings, admin=check[1], message= "borrow_success", allUserNames=allUserNames)
     if request.method == "POST":
             #To do borrow()
         result = borrow(request.form, request.form['borrow_type'] , request.cookies.get("userName"))
