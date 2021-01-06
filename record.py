@@ -172,7 +172,7 @@ def getRecordByBooker(userName):
     with connection.cursor() as cursor:
         cursor.execute(sql,B_ID)
         results = cursor.fetchall()
-    sql1 = "SELECT `userName`  FROM `users` WHERE `userID`= %s"
+    #sql1 = "SELECT `userName`  FROM `users` WHERE `userID`= %s"
     sql2 = "SELECT `roomname`  FROM `classroom` WHERE `CR_ID`= %s"
     for result in results:
         connection.ping(reconnect = True)
@@ -183,15 +183,15 @@ def getRecordByBooker(userName):
         p_name = []
         participants = result['participant']
         participants = participants.split(',')
-        for i in participants:
-            connection.ping(reconnect = True)
-            with connection.cursor() as cursor:
-                cursor.execute(sql1,i)
-                tmp = cursor.fetchone()
-                if tmp != None:
-                    p_name.append(tmp['userName'])
-                else :
-                    print(i)
+        sql1 = "SELECT `userName` FROM `users` WHERE `userID` IN ({seq})".format(seq=','.join(['%s']*len(participants)))
+        connection.ping(reconnect = True)
+        with connection.cursor() as cursor:
+            cursor.execute(sql,participants)
+            tmp = cursor.fetchall()
+        for i in tmp:
+            if i != None:
+                p_name.append(i['userName'])
+        result['participant'] = p_name
         result['participant'] = p_name
     return results
 
@@ -208,8 +208,9 @@ def getRecordByBookerEmail(email):
     with connection.cursor() as cursor:
         cursor.execute(sql,B_ID)
         results = cursor.fetchall()
-    sql1 = "SELECT `userName`  FROM `users` WHERE `userID`= %s"
+    #sql1 = "SELECT `userName`  FROM `users` WHERE `userID`= %s"
     sql2 = "SELECT `roomname`  FROM `classroom` WHERE `CR_ID`= %s"
+
     for result in results:
         connection.ping(reconnect = True)
         with connection.cursor() as cursor:
@@ -219,15 +220,15 @@ def getRecordByBookerEmail(email):
         p_name = []
         participants = result['participant']
         participants = participants.split(',')
-        for i in participants:
-            connection.ping(reconnect = True)
-            with connection.cursor() as cursor:
-                cursor.execute(sql1,i)
-                tmp = cursor.fetchone()
-                if tmp != None:
-                    p_name.append(tmp['userName'])
-                else :
-                    print(i)
+
+        sql1 = "SELECT `userName` FROM `users` WHERE `userID` IN ({seq})".format(seq=','.join(['%s']*len(participants)))
+        connection.ping(reconnect = True)
+        with connection.cursor() as cursor:
+            cursor.execute(sql,participants)
+            tmp = cursor.fetchall()
+        for i in tmp:
+            if i != None:
+                p_name.append(i['userName'])
         result['participant'] = p_name
     return results
 
@@ -291,8 +292,6 @@ def updateRecord(recordID , title ,participants):
         for i in result:
             if i != None:
                 p_id.append(i["userID"])
-        print(participants)
-        print(p_id)
         p_id_str = listIdToStr(p_id)
         sql = "UPDATE `record` SET `participant` = %s WHERE `recordID` = %s"
         connection.ping(reconnect = True)
