@@ -212,7 +212,7 @@ def calendar_process(data , calendar_type):
         **flask.session['credentials'])
     service = googleapiclient.discovery.build(
         API_SERVICE_NAME, API_VERSION, credentials=credentials)
-    
+    print(data)
     #insert
     if calendar_type == 0:
         print("insert calendar")
@@ -477,8 +477,8 @@ def single_record_page():
             calendar_process(request.form , 1)
             return render_template("single_record.html",record = dummy_record, admin = check[1], message="modify_success")
         elif request.form['postType'] == 'delete':
-            deleteRecord(request.form['recordID'])
             calendar_process(request.form , 2)
+            deleteRecord(request.form['recordID'])
             return redirect(url_for('record_page'))
     return redirect(url_for('main_page'))
 
