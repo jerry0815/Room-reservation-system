@@ -236,13 +236,14 @@ def calendar_process(data , calendar_type):
     #update
     elif calendar_type == 1:
         attend = []
+        record = getRecordById(data['recordID'])
         for i in range(int(data['counter'])):
             p = data.get('participant' + str(i))
             if  p != None and p != '':
                 attend.append(data['participant' + str(i)])
         attend = getUserMail(attend)
         try:
-            result = updateEvent(service=service , startDate = data['startDate'], startSection  = data['startSection'],\
+            result = updateEvent(service=service , startDate = record['startDate'], startSection  = record['startSection'],\
             title = data['title'], participants = attend)
         except:
             #flask.session.pop('credentials')
@@ -250,6 +251,7 @@ def calendar_process(data , calendar_type):
     #delete
     elif calendar_type == 2:
         #try:
+        data = getRecordById(data['recordID'])
         result = deleteEvent(service=service , startDate = data['startDate'], startSection  = data['startSection'])
         print("delete success")
         #except:
