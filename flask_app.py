@@ -156,12 +156,16 @@ API_VERSION = 'v3'
 app.secret_key = "My key"
 @app.route('/test')
 def test_api_request():
+    """
     if 'credentials' not in flask.session:
         return flask.redirect('authorize')
+    """
     cred = flask.session['credentials']
+    """
     if cred['refresh_token']:
         print("I right")
         return flask.redirect('authorize')
+    """
     # Load credentials from the session.
     credentials = google.oauth2.credentials.Credentials(
         **flask.session['credentials'])
@@ -192,11 +196,15 @@ def test_api_request():
  
 @app.route('/calendar_process')
 def calendar_process():
+    """
     if 'credentials' not in flask.session:
         return redirect(url_for('authorize' , data = request.args.get('data') , calendar_type = request.args.get('calendar_type')))
+    """
     cred = flask.session['credentials']
+    """
     if cred['refresh_token']:
         return redirect(url_for('authorize' , data = request.args.get('data') , calendar_type = request.args.get('calendar_type')))
+    """
     # Load credentials from the session.
     credentials = google.oauth2.credentials.Credentials(
         **flask.session['credentials'])
@@ -255,7 +263,7 @@ def authorize():
     # for the OAuth 2.0 client, which you configured in the API Console. If this
     # value doesn't match an authorized URI, you will get a 'redirect_uri_mismatch'
     # error.
-    flow.redirect_uri = url_for('oauth2callback', _external=True, data = request.args.get('data') , calendar_type = request.args.get('calendar_type') )
+    flow.redirect_uri = url_for('oauth2callback', _external=True)
 
     authorization_url, state = flow.authorization_url(
         # Enable offline access so that you can refresh an access token without
@@ -297,7 +305,8 @@ def oauth2callback():
     credentials = flow.credentials
     flask.session['credentials'] = credentials_to_dict(credentials)
 
-    return flask.redirect(url_for('calendar_process' , data = request.args.get('data') , calendar_type = request.args.get('calendar_type')))
+    return redirect(url_for('main_page'))
+    #return flask.redirect(url_for('calendar_process' , data = request.args.get('data') , calendar_type = request.args.get('calendar_type')))
 
 #calendar part
 #===============================================================================
@@ -357,7 +366,8 @@ def login_page():
                 return render_template("login.html", message="password_error")
         #login success
         else:
-            resp = make_response(render_template("main.html", admin=loginCheck(email, request.form['password'])[1]))
+            resp = make_response(redirect('authorize'))
+            #resp = make_response(render_template("main.html", admin=loginCheck(email, request.form['password'])[1]))
             #set cookie
             resp.set_cookie('email', email) 
             resp.set_cookie('password', request.form['password'])
