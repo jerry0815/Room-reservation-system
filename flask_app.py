@@ -220,14 +220,15 @@ def calendar_process(data , calendar_type):
                 attend.append(data['participant' + str(i)])
         attend = getUserMail(attend)
         print(attend)
-        try:
-            result = insertEvent(service=service , title = data['title'], roomname  = data['roomName'],\
-            startDate = data['startDate'], startSection  = data['startSection'],\
-            endDate = data['endDate'], endSection  = data['endSection'],\
-            participants = attend)
-        except:
-            flask.session.pop('credentials')
-            print("insert error")
+        #try:
+        result = insertEvent(service=service , title = data['title'], roomname  = data['roomName'],\
+        startDate = data['startDate'], startSection  = data['startSection'],\
+        endDate = data['endDate'], endSection  = data['endSection'],\
+        participants = attend)
+        print("insert success")
+        #except:
+            #flask.session.pop('credentials')
+            #print("insert error")
         return 
     #update
     elif calendar_type == 1:
@@ -241,14 +242,14 @@ def calendar_process(data , calendar_type):
             result = updateEvent(service=service , startDate = data['startDate'], startSection  = data['startSection'],\
             title = data['title'], participants = attend)
         except:
-            flask.session.pop('credentials')
+            #flask.session.pop('credentials')
             print("update error")
     #delete
     elif calendar_type == 2:
         try:
             result = deleteEvent(service=service , startDate = data['startDate'], startSection  = data['startSection'])
         except:
-            flask.session.pop('credentials')
+            #flask.session.pop('credentials')
             print("delete error")
 
 @app.route('/authorize')
