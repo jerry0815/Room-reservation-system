@@ -4,6 +4,70 @@ from datetime import datetime , timedelta
 import re
 import pandas as pd
 import time
+import google.oauth2.credentials
+import google_auth_oauthlib.flow
+import googleapiclient.discovery
+import flask
+def calendar_process(data , calendar_type):
+    """
+    if 'credentials' not in flask.session:
+        return redirect(url_for('authorize' , data = request.args.get('data') , calendar_type = request.args.get('calendar_type')))
+    """
+    cred = flask.session['credentials']
+    """
+    if cred['refresh_token']:
+        return redirect(url_for('authorize' , data = request.args.get('data') , calendar_type = request.args.get('calendar_type')))
+    """
+    # Load credentials from the session.
+    credentials = google.oauth2.credentials.Credentials(
+        **flask.session['credentials'])
+    service = googleapiclient.discovery.build(
+        API_SERVICE_NAME, API_VERSION, credentials=credentials)
+    print(data)
+    #insert
+    if calendar_type == 0:
+        print("insert calendar")
+        attend = []
+        for i in range(int(data['counter'])):
+            p = data.get('participant' + str(i))
+            if  p != None and p != '':
+                attend.append(data['participant' + str(i)])
+        attend = getUserMail(attend)
+        print(attend)
+        #try:
+        result = insertEvent(service=service , title = data['title'], roomname  = data['roomName'],\
+        startDate = data['startDate'], startSection  = data['startSection'],\
+        endDate = data['endDate'], endSection  = data['endSection'],\
+        participants = attend)
+        print("insert success")
+        #except:
+            #flask.session.pop('credentials')
+            #print("insert error")
+        return 
+    #update
+    elif calendar_type == 1:
+        attend = []
+        record = getRecordById(data['recordID'])
+        for i in range(int(data['counter'])):
+            p = data.get('participant' + str(i))
+            if  p != None and p != '':
+                attend.append(data['participant' + str(i)])
+        attend = getUserMail(attend)
+        try:
+            result = updateEvent(service=service , startDate = record['startDate'], startSection  = record['startSection'],\
+            title = data['title'], participants = attend)
+        except:
+            #flask.session.pop('credentials')
+            print("update error")
+    #delete
+    elif calendar_type == 2:
+        try:
+            data = getRecordById(data['recordID'])
+            result = deleteEvent(service=service , startDate = data['startDate'], startSection  = data['startSection'])
+            print("delete success")
+        except:
+            #flask.session.pop('credentials')
+            print("delete error")
 
 #transform list of id to str O
 def listIdToStr(id_list):
@@ -332,10 +396,36 @@ def modify_record(data):
 
 def borrow(data, borrow_type , booker):
     participants = []
+    have = 0
     if borrow_type == 'ban':
         borrow_type = 0
     else:
         borrow_type = 1
+
+    sql = "SELECT * FROM `record` WHERE `CR_ID` = %s"
+    connection.ping(reconnect = True)
+    with connection.cursor() as cursor:
+        cursor.execute(sql,data['CR_ID'])
+        record_total = cursor.fetchall()
+    d_startTime = datetime.fromisoformat(str(data["startDate"]))
+    d_endTime = datetime.fromisoformat(str(data["endDate"]))
+    record_delete = []
+    for r in record_total:
+        startTime = datetime.fromisoformat(str(r["startDate"]))
+        endTime = datetime.fromisoformat(str(r["endDate"]))
+        after_record = (endTime < d_startTime or (endTime == d_startTime and int(r["endSection"]) < int(data["startSection"])))
+        before_record = (startTime > d_endTime or (startTime == d_endTime and int(r["startSection"]) > int(data["endSection"])))
+        if not (after_record or before_record):
+            record_delete.append(r)
+            have = 1
+    #already have record
+    if borrow_type == 1 and have == 1:
+        return False
+
+    if borrow_type == 0:
+        for r in record_delete:
+            calendar_process(r,2)
+            deleteRecord(r['recordID'])
     for i in range(int(data['counter'])):
         p = data.get('participant' + str(i))
         if  p != None and p != '':
