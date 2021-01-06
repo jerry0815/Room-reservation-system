@@ -273,6 +273,7 @@ def updateRecord(recordID , title ,participants):
             connection.commit()
     if participants != None:
         p_id = []
+        """
         sql = "SELECT  `userID` FROM `users` WHERE `userName`= %s FOR UPDATE"
         for ppl in participants:
             connection.ping(reconnect = True)
@@ -281,6 +282,17 @@ def updateRecord(recordID , title ,participants):
                 result = cursor.fetchone()
                 if result != None:
                     p_id.append(result["userID"])
+        """
+        sql = "SELECT `userID` FROM `users` WHERE `userName` IN ({seq})".format(seq=','.join(['%s']*len(participants)))
+        connection.ping(reconnect = True)
+        with connection.cursor() as cursor:
+            cursor.execute(sql,participants)
+            result = cursor.fetchall()
+        for i in result:
+            if i != None:
+                p_id.append(i["userID"])
+        print(participants)
+        print(p_id)
         p_id_str = listIdToStr(p_id)
         sql = "UPDATE `record` SET `participant` = %s WHERE `recordID` = %s"
         connection.ping(reconnect = True)

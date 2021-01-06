@@ -147,7 +147,7 @@ def getUser(userName):
 def getUserMail(userName):
     if userName == None or len(userName) == 0:
         return []
-    sql = "SELECT `email` FROM `users` WHERE `userName` IN ({seq})".format(seq=','.join(['?']*len(userName)))
+    sql = "SELECT `email` FROM `users` WHERE `userName` IN ({seq})".format(seq=','.join(['%s']*len(userName)))
     print(sql)
     print(userName)
     connection.ping(reconnect = True)
