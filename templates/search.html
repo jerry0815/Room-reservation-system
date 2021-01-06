@@ -6,9 +6,9 @@
 	<div>
 		<div class="d-flex justify-content-center align-items-start h-100 ">
 			<div class="text-dark">
-				<h1 class="text-center mt-3 mb-2">教室查詢與借用</h1>
+				<h1 class="text-center mt-3 mb-2">教室查詢</h1>
 
-				<h5 class="text-center">Lookup and Reserve</h5>		
+				<h5 class="text-center">Classroom Search</h5>		
 				
 			</div>
 		</div>
@@ -67,7 +67,6 @@
 		<table  class="table table-bordered">
 			<thead class="table-secondary">
 				<tr>
-					<th scope="col">教室位置</th>
 					<th scope="col">教室</th>
 					<th scope="col">可容納人數</th>
 					<th scope="col">第1節</th>
@@ -90,9 +89,6 @@
 				{%if result != None and result|length != 0%}
 					{%for r in result%}
 					<tr>
-						<th scope="row" class="text-center align-middle">
-							{{r['building']}}
-						</th>
 						<th scope="row" class="text-center align-middle">
 							<form method="POST" action="{{url_for('search_single_page')}}">
 								<input hidden name="start_date" value={{date}}>
