@@ -198,69 +198,6 @@ def test_api_request():
     #              credentials in a persistent database instead.
     flask.session['credentials'] = credentials_to_dict(credentials)
  
-
-"""
-def calendar_process(data , calendar_type):
-    """
-    if 'credentials' not in flask.session:
-        return redirect(url_for('authorize' , data = request.args.get('data') , calendar_type = request.args.get('calendar_type')))
-    """
-    cred = flask.session['credentials']
-    """
-    if cred['refresh_token']:
-        return redirect(url_for('authorize' , data = request.args.get('data') , calendar_type = request.args.get('calendar_type')))
-    """
-    # Load credentials from the session.
-    credentials = google.oauth2.credentials.Credentials(
-        **flask.session['credentials'])
-    service = googleapiclient.discovery.build(
-        API_SERVICE_NAME, API_VERSION, credentials=credentials)
-    print(data)
-    #insert
-    if calendar_type == 0:
-        print("insert calendar")
-        attend = []
-        for i in range(int(data['counter'])):
-            p = data.get('participant' + str(i))
-            if  p != None and p != '':
-                attend.append(data['participant' + str(i)])
-        attend = getUserMail(attend)
-        print(attend)
-        #try:
-        result = insertEvent(service=service , title = data['title'], roomname  = data['roomName'],\
-        startDate = data['startDate'], startSection  = data['startSection'],\
-        endDate = data['endDate'], endSection  = data['endSection'],\
-        participants = attend)
-        print("insert success")
-        #except:
-            #flask.session.pop('credentials')
-            #print("insert error")
-        return 
-    #update
-    elif calendar_type == 1:
-        attend = []
-        record = getRecordById(data['recordID'])
-        for i in range(int(data['counter'])):
-            p = data.get('participant' + str(i))
-            if  p != None and p != '':
-                attend.append(data['participant' + str(i)])
-        attend = getUserMail(attend)
-        try:
-            result = updateEvent(service=service , startDate = record['startDate'], startSection  = record['startSection'],\
-            title = data['title'], participants = attend)
-        except:
-            #flask.session.pop('credentials')
-            print("update error")
-    #delete
-    elif calendar_type == 2:
-        try:
-            data = getRecordById(data['recordID'])
-            result = deleteEvent(service=service , startDate = data['startDate'], startSection  = data['startSection'])
-            print("delete success")
-        except:
-            #flask.session.pop('credentials')
-            print("delete error")
-"""
 @app.route('/authorize')
 def authorize():
     # Create flow instance to manage the OAuth 2.0 Authorization Grant Flow steps.
