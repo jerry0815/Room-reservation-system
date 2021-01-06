@@ -62,7 +62,6 @@ def insertEvent(service , title , roomname , startDate , startSection , endDate 
         'timeZone': 'Asia/Taipei',
     },
     'attendees': [
-        {'email': 'chubihaha000@gmail.com'} 
     ],
     'reminders': {
         'useDefault': False,
@@ -72,6 +71,11 @@ def insertEvent(service , title , roomname , startDate , startSection , endDate 
         ],
     },
     }
+    mail_list = []
+    for i in participants:
+        tmp = {'email' : i}
+        mail_list.append(tmp)
+    event['attendees'] = mail_list
     event_result = service.events().insert(calendarId='primary', body=event , sendUpdates = "all").execute()
     print("created event")
     print("id: ", event_result['id'])
