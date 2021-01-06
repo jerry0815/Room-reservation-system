@@ -249,12 +249,12 @@ def calendar_process(data , calendar_type):
             print("update error")
     #delete
     elif calendar_type == 2:
-        try:
-            result = deleteEvent(service=service , startDate = data['startDate'], startSection  = data['startSection'])
-            print("delete success")
-        except:
+        #try:
+        result = deleteEvent(service=service , startDate = data['startDate'], startSection  = data['startSection'])
+        print("delete success")
+        #except:
             #flask.session.pop('credentials')
-            print("delete error")
+            #print("delete error")
 
 @app.route('/authorize')
 def authorize():
