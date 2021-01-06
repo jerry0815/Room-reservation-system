@@ -86,7 +86,7 @@ def insertEvent(service , title , roomname , startDate , startSection , endDate 
 
 def updateEvent(service , startDate , startSection , title = "" , participants = None):
     startTime = datetime.datetime.fromisoformat(startDate)
-    startHours = datetime.timedelta(hours = startSection + 7)
+    startHours = datetime.timedelta(hours = int(startSection) + 7)
     startTime = startTime + startHours
     events_result = service.events().list(calendarId="primary", timeMin= startTime.strftime("%Y-%m-%dT%H:%M:%S+08:00"),
                                         maxResults=10, singleEvents=True,
@@ -134,7 +134,7 @@ def updateEvent(service , startDate , startSection , title = "" , participants =
 
 def deleteEvent(service , startDate , startSection):
     startTime = datetime.datetime.fromisoformat(startDate)
-    startHours = datetime.timedelta(hours = startSection + 7)
+    startHours = datetime.timedelta(hours = int(startSection) + 7)
     startTime = startTime + startHours
     events_result = service.events().list(calendarId="primary", timeMin= startTime.strftime("%Y-%m-%dT%H:%M:%S+08:00"),
                                         maxResults=10, singleEvents=True,
@@ -251,6 +251,7 @@ def calendar_process(data , calendar_type):
     elif calendar_type == 2:
         try:
             result = deleteEvent(service=service , startDate = data['startDate'], startSection  = data['startSection'])
+            print("delete success")
         except:
             #flask.session.pop('credentials')
             print("delete error")
