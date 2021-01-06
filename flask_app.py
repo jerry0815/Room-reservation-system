@@ -389,7 +389,7 @@ def search_page():
         return redirect(url_for('login_page'))
     if request.method =='POST':
         result = request.form
-        building = re.findall("[A-Z]+",result['building'])
+        building = re.findall("[A-Z0-9]+",result['building'])
         if(len(building) > 0):
             building = building[0]
         else:
