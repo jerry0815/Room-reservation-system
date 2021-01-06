@@ -143,3 +143,18 @@ def getUser(userName):
     else :
         print("error")
     return (True , result)
+
+def getUserMail(userName):
+    if userName == None or len(userName) == 0:
+        return None
+    sql = "SELECT `email` FROM `users` WHERE `userName` IN (%s)"
+    connection.ping(reconnect = True)
+    with connection.cursor() as cursor:
+        cursor.execute(sql,userName)
+        results = cursor.fetchall()
+    if results == None:
+        return None
+    email_list = []
+    for result in results:
+        email_list.append(result['email'])
+    return email_list

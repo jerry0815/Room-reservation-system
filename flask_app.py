@@ -153,7 +153,6 @@ API_VERSION = 'v3'
 # Note: A secret key is included in the sample so that it works.
 # If you use this code in your application, replace this with a truly secret
 # key. See https://flask.palletsprojects.com/quickstart/#sessions.
-app.secret_key = 'REPLACE ME - this value is here as a placeholder.'
 @app.route('/test')
 def test_api_request():
     if 'credentials' not in flask.session:
@@ -189,6 +188,61 @@ def test_api_request():
     # ACTION ITEM: In a production app, you likely want to save these
     #              credentials in a persistent database instead.
     flask.session['credentials'] = credentials_to_dict(credentials)
+ 
+@app.route('/calendar_process')
+def calendar_process():
+    if 'credentials' not in flask.session:
+        return redirect(url_for('authorize' , data = request.args.get('data') , calendar_type = request.args.get('calendar_type')))
+    cred = flask.session['credentials']
+    if cred['refresh_token']:
+        return redirect(url_for('authorize' , data = request.args.get('data') , calendar_type = request.args.get('calendar_type')))
+    # Load credentials from the session.
+    credentials = google.oauth2.credentials.Credentials(
+        **flask.session['credentials'])
+    service = googleapiclient.discovery.build(
+        API_SERVICE_NAME, API_VERSION, credentials=credentials)
+    
+    calendar_type = request.args.get('calendar_type')
+    #insert
+    if calendar_type == 0:
+        data = request.args.get('data')
+        attend = []
+        for i in range(int(data['counter'])):
+            p = data.get('participant' + str(i))
+            if  p != None and p != '':
+                participants.append(data['participant' + str(i)])
+        attend = getUserMail(participants)
+        try:
+            result = insertEvent(service=service , title = data['title'], roomname  = data['roomName'],\
+            startDate = data['startDate'], startSection  = data['startSection'],\
+            endDate = data['endDate'], endSection  = data['endSection'],\
+            participants = attend)
+        except:
+            flask.session.pop('credentials')
+            print("insert error")
+        return redirect(url_for('borrow' , message = "borrow_success" , isCalendar = True))
+    #update
+    elif calendar_type == 1:
+        data = request.args.get('data')
+        attend = []
+        for i in range(int(data['counter'])):
+            p = data.get('participant' + str(i))
+            if  p != None and p != '':
+                participants.append(data['participant' + str(i)])
+        attend = getUserMail(participants)
+        try:
+            result = updateEvent(service=service , startDate = data['startDate'], startSection  = data['startSection'],\
+            title = data['title'], participants = attend)
+        except:
+            flask.session.pop('credentials')
+            print("update error")
+    #delete
+    elif calendar_type == 2:
+        try:
+            result = deleteEvent(service=service , startDate = data['startDate'], startSection  = data['startSection'])
+        except:
+            flask.session.pop('credentials')
+            print("delete error")
 
 @app.route('/authorize')
 def authorize():
@@ -200,7 +254,7 @@ def authorize():
     # for the OAuth 2.0 client, which you configured in the API Console. If this
     # value doesn't match an authorized URI, you will get a 'redirect_uri_mismatch'
     # error.
-    flow.redirect_uri = flask.url_for('oauth2callback', _external=True)
+    flow.redirect_uri = url_for('oauth2callback', _external=True, data = request.args.get('data') , calendar_type = request.args.get('calendar_type') )
 
     authorization_url, state = flow.authorization_url(
         # Enable offline access so that you can refresh an access token without
@@ -242,7 +296,7 @@ def oauth2callback():
     credentials = flow.credentials
     flask.session['credentials'] = credentials_to_dict(credentials)
 
-    return flask.redirect(flask.url_for('test_api_request'))
+    return flask.redirect(url_for('calendar_process' , data = request.args.get('data') , calendar_type = request.args.get('calendar_type')))
 
 #calendar part
 #===============================================================================
@@ -326,7 +380,6 @@ def search_page():
         return render_template("search.html", buildings=buildings, date=result['date'], result=search_result, admin = check[1] )
     return render_template("search.html", buildings=buildings, date=get_current_time(), result=None, admin = check[1] )
     
-#to do
 @app.route('/borrow',methods=['POST','GET'])
 def borrow_page():
     message = ""
@@ -335,23 +388,25 @@ def borrow_page():
         return redirect(url_for('login_page'))
 
     userData = getUser(request.cookies.get('userName'))
-
     #The user is banned:
     if userData[1]['banned']:
         return render_template("borrow.html", buildings=buildings, admin=check[1], message="ban")
 
-
     allUserNames = getAllUserName()
     allUserNames.remove(request.cookies.get('userName'))
+
+    isCalendar = request.args.get('isCalendar')
+    if isCalendar:
+        return render_template("borrow.html", buildings=buildings, admin=check[1], message= "borrow_success", allUserNames=allUserNames)
     if request.method == "POST":
             #To do borrow()
         result = borrow(request.form, request.form['borrow_type'] , request.cookies.get("userName"))
         if request.form['borrow_type'] == "borrow":
             if result: 
                 message="borrow_success"
+                return redirect(url_for('calendar_process' , data = request.form , calendar_type = 0))
             else:
                 message="borrow_fail"
-
         elif request.form['borrow_type'] == "ban":
             if result: 
                 message="ban_success"
@@ -363,7 +418,6 @@ def borrow_page():
     
     return render_template("borrow.html", buildings=buildings, admin=check[1], allUserNames=allUserNames)
 
-#to do
 @app.route('/borrow_search',methods=['POST','GET'])
 def borrow_search_page():
     check = cookie_check()
