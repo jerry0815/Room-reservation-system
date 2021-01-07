@@ -175,7 +175,7 @@
 			}
 			else if(startMonth == endMonth)
 			{
-				if((startDay > endDay) || (startDay == endDay && startSection >= endSection)) return true;
+				if((startDay > endDay) || (startDay == endDay && startSection > endSection)) return true;
 			}
 		}
 		return false;
