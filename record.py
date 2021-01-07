@@ -384,7 +384,7 @@ def filter_classroom(data): #開始日期 startDate,開始節數 startSection,�
         classroom_total = cursor.fetchall()
     classroom_total = pd.DataFrame(classroom_total)
     if data['building'] != None:
-        building = re.findall("[A-Z]+",data['building'])
+        building = re.findall("[A-Z0-9]+",data['building'])
         if(len(building) > 0):
             building = building[0]
         else:
