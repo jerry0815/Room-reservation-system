@@ -22,7 +22,7 @@
 							<p> 教室位置 </p>
 							<select class="custom-select mr-sm-2 border border-secondary mt-2 mb-3" 
 							id="building" name="building" >
-								<option selected value="None">請選擇大樓...</option>
+								<option selected value="請選擇大樓...">請選擇大樓...</option>
 								{%for b in buildings%}
 									{% if b == request.form['building']%}
 										<option value={{b}} selected> {{b}} </option>
