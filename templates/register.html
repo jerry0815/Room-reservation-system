@@ -27,7 +27,7 @@
 <body>
 	<div class="d-flex justify-content-center align-items-center w-100 h-100" style="background: #e9faff;">
 		<div class="wrap-login100 p-l-55 p-r-55 p-t-65 p-b-50">
-			<form method="POST" action={{url_for('register_page')}} >
+			<form method="POST" action={{url_for('register_page')}} id="registerForm">
 				<span class="login100-form-title p-b-33">
 					創建帳號(Create Account)
 				</span>
@@ -54,7 +54,7 @@
                     <label for="confirmPasswordInput">確定密碼(Confirm password)</label>
                     <input type="password" class="form-control" id="confirmPasswordInput" placeholder="Confirm your password" name="confirmPassword">
                   </div>
-				<button type="submit" class="btn btn-primary w-100">註冊(Sign up)</button>
+				<button type="button" class="btn btn-primary w-100" onclick="register">註冊(Sign up)</button>
 			</form>
 			
 
@@ -87,5 +87,25 @@
 	<script src="{{ url_for('static', filename='vendor/daterangepicker/daterangepicker.js') }}" type="text/javascript"></script>
 
 	<script src="{{ url_for('static', filename='vendor/countdowntime/countdowntime.js') }}" type="text/javascript"></script>
+	<script type="text/javascript">
+		function register()
+		{
+			if(document.getElementById('passwordInput') != document.getElementById('confirmPasswordInput'))
+			{
+				alert('兩次輸入密碼不相同，請重新檢查!');
+			}
+			else if(document.getElementById('passwordInput') == '' || document.getElementById('emailInput') == '' || document.getElementById('userName') == '')
+			{
+				alert('信箱, 使用者名稱, 密碼不得為空!');
+			}
+			else
+			{
+				document.getElementById('registerForm').submit();
+			}
+		}
+	</script>
+
 </body>
+
+
 </html>
