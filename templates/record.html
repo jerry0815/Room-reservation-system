@@ -18,10 +18,11 @@
         <table class="table table-bordered ">
             <thead class="table-primary">
                 <tr>
-                    <th scope="col">標題</th>
+                    <th scope="col">會議名稱(Meeting Title)</th>
+                    {%if admin == "admin"%} <th scope="col">種類</th> {%endif%}
                     <th scope="col">借用期間</th>
                     <th scope="col">地點</th>
-                    <th scope="col">與會者</th>
+                    <th scope="col">參與人(Participants)</th>
                     <th scope="col">更動</th>
                 </tr>
             </thead>
@@ -32,6 +33,17 @@
                     <th class="text-center align-middle">
                         {{r['title']}}
                     </th>
+                    {%if admin == "admin"%}
+                        {%if r['type'] == "1"%}
+                            <td class="text-center align-middle text-danger" style="font-weight: bold;">
+                                禁用
+                            </td> 
+                        {% else %}
+                            <td class="text-center align-middle text-success" style="font-weight: bold;">
+                                借用
+                            </td>
+                        {% endif %}
+                    {%endif%}
                     <td class="text-center align-middle">
                         {{r['startDate']}} 第{{r['startSection']}}節
                         <br>
