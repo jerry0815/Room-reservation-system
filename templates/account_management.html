@@ -101,7 +101,10 @@
 		if("{{message}}" == "error")
 			alert('查無帳號!');
 		else if("{{message}}" == "delete_success")
+		{
 			alert('刪除成功!');
+			window.location.reload("");
+		}
 		else if("{{message}}" == "delete_fail")
 			alert('刪除失敗!');
 		else if("{{message}}" == "ban_success")
