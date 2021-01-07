@@ -88,15 +88,17 @@
 
 	<script src="{{ url_for('static', filename='vendor/countdowntime/countdowntime.js') }}" type="text/javascript"></script>
 	<script type="text/javascript">
-		function register()
+			function register()
 		{
-			if(document.getElementById('passwordInput') != document.getElementById('confirmPasswordInput'))
-			{
-				alert('兩次輸入密碼不相同，請重新檢查!');
-			}
-			else if(document.getElementById('passwordInput') == '' || document.getElementById('emailInput') == '' || document.getElementById('userName') == '')
+			if(document.getElementById('passwordInput').value == "" || 
+			document.getElementById('emailInput').value == '' ||
+			 document.getElementById('userName').value == '')
 			{
 				alert('信箱, 使用者名稱, 密碼不得為空!');
+			}
+			else if(document.getElementById('passwordInput').value != document.getElementById('confirmPasswordInput').value)
+			{
+				alert('兩次輸入密碼不相同，請重新檢查!');
 			}
 			else
 			{

@@ -15,7 +15,7 @@
 
 		<div class="d-flex justify-content-center align-items-center mt-4">
 			<div style="width:75%;border-color:black;border-style:solid;border-width:1px;padding:30px;">
-				<form method="POST" action={{url_for('borrow_page')}} id="borrow_form">
+				<form method="POST" action={{url_for('borrow_page')}} id="borrow_form" onsubmit="borrow()">
 					<input hidden name="borrow_type" id="borrow_type" value="borrow">
 					<div class="form-group">
 					  <label for="titleInput">會議名稱(Meeting Title)</label>
@@ -98,7 +98,7 @@
 
 					</div>
 					
-					<button type="submit" style="width: 200px;" class="btn btn-primary btn-lg mt-3" type="submit">
+					<button style="width: 200px;" class="btn btn-primary btn-lg mt-3" type="button" onclick="borrow()">
 						借用
 						<br>
 						Borrow
@@ -140,10 +140,82 @@
 
 {% block script %}
 <script>
+
+	function compareDate(startDate, endDate, startSection, endSection)
+	{
+		const startYear = parseInt(startDate.split('-')[0]);
+		const startMonth = parseInt(startDate.split('-')[1]);
+		const startDay = parseInt(startDate.split('-')[2]);
+
+		const endYear = parseInt(endDate.split('-')[0]);
+		const endMonth = parseInt(endDate.split('-')[1]);
+		const endDay = parseInt(endDate.split('-')[2]);
+
+		
+		if(startYear > endYear) 
+		{
+			return true;
+		}
+		else if (startYear == endYear)
+		{
+			if(startMonth > endMonth)
+			{
+				return true;
+			}
+			else if(startMonth == endMonth)
+			{
+				if((startDay > endDay) || (startDay == endDay && startSection >= endSection)) return true;
+			}
+		}
+		return false;
+	}
+	function borrow()
+	{
+		const startDate = document.getElementById("startDate").value;
+		const endDate = document.getElementById("endDate").value;
+		const startSection = document.getElementById("startSection").value;
+		const endSection = document.getElementById("endSection").value;
+		const building = document.getElementById("building").value;
+		const capacity = document.getElementById("capacity").value;
+
+
+		if(document.getElementById('titleInput').value == '' || startDate == ''
+		|| endDate == '' || startSection == '' || endSection == '' || building == '請選擇大樓...' 
+		|| capacity == '' || document.getElementById('room_id_input').value == '')
+		{
+			alert('不可有欄位為空');
+			return false;
+		}
+		else if(compareDate(startDate, endDate, startSection, endSection))
+		{
+			alert("結束時間不可早於開始時間!");
+			return false;
+		}
+		else
+		{
+			document.getElementById('borrow_form').submit();
+			return true;
+		}
+
+	}
+
+
+	function ban()
+	{
+		var borrow_type = document.getElementById('borrow_type');
+		borrow_type.value = "ban";
+		if(!borrow())
+		{
+			borrow_type.value = "borrow";
+		}
+	}
+
 	$(document).ready(function () {
 	var id = document.getElementById("counter");
 	var userSelecter = document.getElementById("userSelect");
 	
+
+
     $("#addrow").on("click", function () {
 
 		if  ($("#userSelect option:selected").text() != "請選擇用戶...")
@@ -185,11 +257,6 @@
 		form.appendChild(hiddenField);
 	}
 	
-	function borrow()
-	{
-		
-	}
-
 	$("#search").on("click", function () { 
 		var form = document.createElement("form");
 		form.setAttribute("action", '{{url_for('borrow_search_page')}}');
@@ -221,14 +288,6 @@
 	}
 	);
 
-
-	$("#banButton").on("click", function () {
-		var borrow_type = document.getElementById('borrow_type');
-		borrow_type.value = "ban";
-		var form = document.getElementById('borrow_form');
-		form.submit();
-	}
-	);
 });
 </script>
 {% endblock %}
