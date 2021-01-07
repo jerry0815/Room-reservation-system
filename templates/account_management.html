@@ -144,7 +144,7 @@
 	
 	});
 
-	function postData(userID, modifyType)
+	function postData(userID, userName, modifyType)
 	{
 		var form = document.createElement("form");
 		form.setAttribute("method", "post");
@@ -154,6 +154,12 @@
 		hiddenField.type = 'hidden';
 		hiddenField.name = "userID";
 		hiddenField.value = userID;
+		form.appendChild(hiddenField);
+
+		const hiddenField = document.createElement('input');
+		hiddenField.type = 'hidden';
+		hiddenField.name = "userName";
+		hiddenField.value = userName;
 		form.appendChild(hiddenField);
 
 		const hiddenField2 = document.createElement('input');
@@ -170,18 +176,18 @@
 		switch (modifyType) {
 			case "delete":
 				if (confirm("確定刪除帳號 " + userName + "?")) {
-					postData(userID, modifyType);
+					postData(userID, userName, modifyType);
 				}
 				break;
 			case "ban":
 			if (confirm("確定禁用帳號 " + userName + "?")) {
-					postData(userID, modifyType);
+					postData(userID, userName, modifyType);
 				}
 				break;
 		
 			case "unban":
 			if (confirm("確定解禁帳號 " + userName + "?")) {
-					postData(userID, modifyType);
+					postData(userID, userName, modifyType);
 				}
 				break;
 		}
