@@ -23,29 +23,40 @@
 					  <small id="titleHelp" class="form-text text-muted">會議名稱最多10字</small>
 					</div>
 					<div class="form-group">
-					  <label for="startDate">開始</label>
-					  <br>
-					  <input style="display: inline ;width: 30%;left:5%" class="form-control" type="date" id="startDate" name="startDate">
-						<span>
-						,&nbsp;&nbsp;第 <input  class="border-bottom border-dark" style="width:5%;text-align:center"
-							onkeyup="value=value.replace(/[^\d]/g,'') " 　　
-							onbeforepaste="clipboardData.setData('text',clipboardData.getData('text').replace(/[^\d]/g,''))"
-							　　 id ="startSection" name="startSection">
-						節
-						</span>
-					</div>
-					<div class="form-group">
-						<label for="endDate">結束</label>
-						<br>
-						<input style="display: inline ;width: 30%;left:5%" class="form-control" type="date" id="endDate" name="endDate">
-						<span>
-						  ,&nbsp;&nbsp;第 <input class="border-bottom border-dark" style="width:5%;text-align:center"
-							  onkeyup="value=value.replace(/[^\d]/g,'') " 　　
-							  onbeforepaste="clipboardData.setData('text',clipboardData.getData('text').replace(/[^\d]/g,''))"
-							  　　 id="endSection" name="endSection">
-						  節
-						  </span>
+						<label for="startDate">開始</label>
+						  <div>
+							  <input style="display: inline ;width: 30%;left:5%" class="form-control" type="date" id="startDate" name="startDate">
+								  <span>
+										  ,&nbsp;&nbsp;
+										  第 
+										  <select class="custom-select border border-secondary w-auto h-auto" 
+										  id="startSection" name="startSection" >
+											  {%for i in range(1, 15)%}
+												  <option value={{i}}> {{i}} </option>
+											  {%endfor%} 
+										  </select>
+									  節
+								  </span>
+						  </div>
 					  </div>
+  
+					  <div class="form-group">
+						  <label for="startDate">結束</label>
+							<div>
+								<input style="display: inline ;width: 30%;left:5%" class="form-control" type="date" id="endDate" name="endDate">
+									<span>
+											,&nbsp;&nbsp;
+											第 
+											<select class="custom-select border border-secondary w-auto h-auto" 
+											id="endSection" name="endSection" >
+												{%for i in range(1, 15)%}
+													<option value={{i}}> {{i}} </option>
+												{%endfor%} 
+											</select>
+										節
+									</span>
+							</div>
+						</div>
 
 					<div class="form-group">
 						<label for="building">大樓(building)</label>
