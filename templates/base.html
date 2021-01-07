@@ -46,9 +46,12 @@
 
 			</div>
 		</div>
-		<button class="btn btn-success btn-lg" type="button" id="logoutButton">
-			登出
-		</button>
+		<div class="container-fluid align-content-end justify-content-end">
+			<p class="mr-3 w-auto" style="font-size: 20px;white-space: nowrap;">{{request.cookies.get('userName')}}</p>
+			<button class="btn btn-success btn-lg" type="button" id="logoutButton">
+				登出
+			</button>
+		</div>
 	</nav>
     {% block content %}
     {% endblock %}
