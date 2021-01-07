@@ -156,16 +156,16 @@
 		hiddenField.value = userID;
 		form.appendChild(hiddenField);
 
-		const hiddenField = document.createElement('input');
-		hiddenField.type = 'hidden';
-		hiddenField.name = "userName";
-		hiddenField.value = userName;
-		form.appendChild(hiddenField);
-
 		const hiddenField2 = document.createElement('input');
 		hiddenField2.type = 'hidden';
-		hiddenField2.name = "postType";
-		hiddenField2.value = modifyType;
+		hiddenField2.name = "userName";
+		hiddenField2.value = userName;
+		form.appendChild(hiddenField);
+
+		const hiddenField3 = document.createElement('input');
+		hiddenField3.type = 'hidden';
+		hiddenField3.name = "postType";
+		hiddenField3.value = modifyType;
 		form.appendChild(hiddenField2);
 
 		document.body.appendChild(form);
