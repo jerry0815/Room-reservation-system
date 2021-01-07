@@ -512,6 +512,7 @@ def account_management_page():
                 return render_template("account_management.html", user = result[1], admin=check[1], message = message, allUserNames = allUserNames)
             elif request.form['postType'] == "delete":
                 result = deleteAccount(request.form['userID'])
+                
             elif request.form['postType'] == "ban":
                 result = banAccount(request.form['userID'])
             elif request.form['postType'] == "unban":
@@ -520,8 +521,11 @@ def account_management_page():
             #check operation result
             if result:
                 result = request.form['postType'] + '_success'
+                if request.form['postType'] == "delete":
+                    allUserNames.remove(request.form['userName'])
             else:
                 result = request.form['postType'] + '_fail'
+
             return render_template("account_management.html", user = None, admin=check[1], message = result, allUserNames = allUserNames)
         return render_template("account_management.html", user = None, admin=check[1], allUserNames = allUserNames)
     else:
