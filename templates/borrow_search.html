@@ -18,7 +18,6 @@
     <table  class="table table-bordered">
         <thead class="table-secondary">
             <tr>
-                <th scope="col">教室位置</th>
                 <th scope="col">教室</th>
                 <th scope="col">可容納人數</th>
             </tr>
@@ -27,9 +26,6 @@
             {%if result != None %}
                 {%for r in result%}
                 <tr>
-                    <th scope="row" class="text-center align-middle">
-                        {{r['building']}}
-                    </th>
                     <th scope="row" class="text-center align-middle">
                         {{r['roomname']}}
                     </th>

@@ -49,7 +49,7 @@
 				<label for="titleInput">帳號(Account Name)： {{user["userName"]}} </label>
 			</div>
 			<div class="form-group text-center">
-				<label for="titleInput">禁用狀態(message)：
+				<label for="titleInput">禁用狀態(Status)：
 					{% if not user %}
 						
 					{% elif user["banned"] %}
@@ -63,7 +63,7 @@
 				{% if user %}
 					{% if not user["banned"] %}
 					<button type="submit" style="width: 200px;" class="btn btn-primary btn-lg mt-3" 
-					onclick="modify_account('{{user['userID']}}', '{{user['userName']}}', 'ban')">
+					onclick="modify_account('{{user['userID']}}', '{{user['userName']}}', 'ban')" {% if user['identity'] == 1 %} disabled="disabled"{% endif %}>
 						禁用帳號
 						<br>
 						Ban Account
