@@ -23,6 +23,7 @@ def showClassroom():
     connection.ping(reconnect = True)
     with connection.cursor() as cursor:
         cursor.execute(sql)
+        connection.commit()
         result = cursor.fetchall()
     print(result)
     return result

@@ -26,6 +26,7 @@ def register(data):
     connection.ping(reconnect = True)
     with connection.cursor() as cursor:
         cursor.execute(sql,data['userName'])
+        connection.commit()
         result = cursor.fetchone()
     if result != None:
         return False
@@ -42,6 +43,7 @@ def validateLogin(email , password):
     connection.ping(reconnect = True)
     with connection.cursor() as cursor:
         cursor.execute(sql,email)
+        connection.commit()
         result = cursor.fetchone()
     #1 : wrong email
     if result == None:
@@ -60,6 +62,7 @@ def loginCheck(email : str ,password : str):
     connection.ping(reconnect = True)
     with connection.cursor() as cursor:
         cursor.execute(sql,email)
+        connection.commit()
         result = cursor.fetchone()
     #wrong email
     if result == None:
@@ -111,6 +114,7 @@ def getAllUserName():
     connection.ping(reconnect = True)
     with connection.cursor() as cursor:
         cursor.execute(sql)
+        connection.commit()
         result = cursor.fetchall()
 
     for i in range(len(result)):
@@ -122,6 +126,7 @@ def showUsers():
     connection.ping(reconnect = True)
     with connection.cursor() as cursor:
         cursor.execute(sql)
+        connection.commit()
         result = cursor.fetchall()
     print(result)
     return result
@@ -132,6 +137,7 @@ def getUser(userName):
     connection.ping(reconnect = True)
     with connection.cursor() as cursor:
         cursor.execute(sql,userName)
+        connection.commit()
         result = cursor.fetchone()
     if result == None:
         return (False,None)
@@ -153,6 +159,7 @@ def getUserMail(userName):
     connection.ping(reconnect = True)
     with connection.cursor() as cursor:
         cursor.execute(sql,userName)
+        connection.commit()
         results = cursor.fetchall()
     if results == None:
         return []

@@ -23,6 +23,7 @@ def insertRecord(title = "testing record", roomname  = "TR-306", startDate = "20
     connection.ping(reconnect = True)
     with connection.cursor() as cursor:
         cursor.execute(sql,bookName)
+        connection.commit()
         B_ID = cursor.fetchone()["userID"]
 
     #get classroom CR_ID
@@ -30,6 +31,7 @@ def insertRecord(title = "testing record", roomname  = "TR-306", startDate = "20
     connection.ping(reconnect = True)
     with connection.cursor() as cursor:
         cursor.execute(sql,roomname)
+        connection.commit()
         CR_ID = cursor.fetchone()["CR_ID"]
     print("CR_ID = "  + str(CR_ID))
     #process participant
@@ -39,6 +41,7 @@ def insertRecord(title = "testing record", roomname  = "TR-306", startDate = "20
         connection.ping(reconnect = True)
         with connection.cursor() as cursor:
             cursor.execute(sql,ppl)
+            connection.commit()
             result = cursor.fetchone()
             if result != None:
                 p_id.append(result["userID"])
@@ -67,6 +70,7 @@ def processRecord(record,date):
         connection.ping(reconnect = True)
         with connection.cursor() as cursor:
             cursor.execute(sql,record["B_ID"])
+            connection.commit()
             name = cursor.fetchone()["userName"]
         recordDict[i] = (record["type"],record["title"] , name)
     return recordDict
@@ -101,6 +105,7 @@ def searchClassroom(building, capacity = -1 , roomname = "" , date = "2020-01-01
     connection.ping(reconnect = True)
     with connection.cursor() as cursor:
         cursor.execute(sql,condition)
+        connection.commit()
         result = cursor.fetchall()
     output = []
     sql = "SELECT * FROM record WHERE `CR_ID` = %s AND `startDate` = %s"
@@ -109,6 +114,7 @@ def searchClassroom(building, capacity = -1 , roomname = "" , date = "2020-01-01
         connection.ping(reconnect = True)
         with connection.cursor() as cursor:
             cursor.execute(sql,(i["CR_ID"],date))
+            connection.commit()
             tmp = cursor.fetchall()
             if tmp != ():
                 for j in tmp:
@@ -128,6 +134,7 @@ def searchOneClassroom(CR_ID = "" , date = "2020-12-29") :
     sql = "SELECT * FROM classroom WHERE `CR_ID` = %s"
     with connection.cursor() as cursor:
         cursor.execute(sql,CR_ID)
+        connection.commit()
         result = cursor.fetchone()
     building = result["building"]
     capacity = result["capacity"]
@@ -143,6 +150,7 @@ def searchOneClassroom(CR_ID = "" , date = "2020-12-29") :
     output = []
     with connection.cursor() as cursor:
         cursor.execute(sql,(CR_ID,startDay,endDay))
+        connection.commit()
         tmp = cursor.fetchall()
         if tmp != ():
             for d in range(0,7):
@@ -165,12 +173,14 @@ def getRecordByBooker(userName):
     connection.ping(reconnect = True)
     with connection.cursor() as cursor:
         cursor.execute(sql,userName)
+        connection.commit()
         B_ID = cursor.fetchone()["userID"]
 
     sql = "SELECT  * FROM `record` WHERE `B_ID`= %s"
     connection.ping(reconnect = True)
     with connection.cursor() as cursor:
         cursor.execute(sql,B_ID)
+        connection.commit()
         results = cursor.fetchall()
     #sql1 = "SELECT `userName`  FROM `users` WHERE `userID`= %s"
     sql2 = "SELECT `roomname`  FROM `classroom` WHERE `CR_ID`= %s"
@@ -178,6 +188,7 @@ def getRecordByBooker(userName):
         connection.ping(reconnect = True)
         with connection.cursor() as cursor:
             cursor.execute(sql2,result['CR_ID'])
+            connection.commit()
             tmp = cursor.fetchone()
         result['roomName'] = tmp
         p_name = []
@@ -189,6 +200,7 @@ def getRecordByBooker(userName):
         connection.ping(reconnect = True)
         with connection.cursor() as cursor:
             cursor.execute(sql,participants)
+            connection.commit()
             tmp = cursor.fetchall()
         for i in tmp:
             if i != None:
@@ -202,12 +214,14 @@ def getRecordByBookerEmail(email):
     connection.ping(reconnect = True)
     with connection.cursor() as cursor:
         cursor.execute(sql,email)
+        connection.commit()
         B_ID = cursor.fetchone()["userID"]
 
     sql = "SELECT  * FROM `record` WHERE `B_ID`= %s"
     connection.ping(reconnect = True)
     with connection.cursor() as cursor:
         cursor.execute(sql,B_ID)
+        connection.commit()
         results = cursor.fetchall()
     #sql1 = "SELECT `userName`  FROM `users` WHERE `userID`= %s"
     sql2 = "SELECT `roomname`  FROM `classroom` WHERE `CR_ID`= %s"
@@ -216,6 +230,7 @@ def getRecordByBookerEmail(email):
         connection.ping(reconnect = True)
         with connection.cursor() as cursor:
             cursor.execute(sql2,result['CR_ID'])
+            connection.commit()
             tmp = cursor.fetchone()
         result['roomName'] = tmp['roomname']
         p_name = []
@@ -227,6 +242,7 @@ def getRecordByBookerEmail(email):
         connection.ping(reconnect = True)
         with connection.cursor() as cursor:
             cursor.execute(sql1,participants)
+            connection.commit()
             tmp = cursor.fetchall()
         for i in tmp:
             if i != None:
@@ -240,6 +256,7 @@ def getRecordById(id):
     connection.ping(reconnect = True)
     with connection.cursor() as cursor:
         cursor.execute(sql,id)
+        connection.commit()
         result = cursor.fetchone()
     if result == None:
         print("no id of this result")
@@ -249,6 +266,7 @@ def getRecordById(id):
     connection.ping(reconnect = True)
     with connection.cursor() as cursor:
         cursor.execute(sql2,result['CR_ID'])
+        connection.commit()
         tmp = cursor.fetchone()
     result['roomName'] = tmp['roomname']
     p_name = []
@@ -258,6 +276,7 @@ def getRecordById(id):
         connection.ping(reconnect = True)
         with connection.cursor() as cursor:
             cursor.execute(sql1,i)
+            connection.commit()
             tmp = cursor.fetchone()
             if tmp != None:
                 p_name.append(tmp['userName'])
@@ -290,6 +309,7 @@ def updateRecord(recordID , title ,participants):
         connection.ping(reconnect = True)
         with connection.cursor() as cursor:
             cursor.execute(sql,participants)
+            connection.commit()
             result = cursor.fetchall()
         for i in result:
             if i != None:
@@ -315,6 +335,7 @@ def showRecord():
     connection.ping(reconnect = True)
     with connection.cursor() as cursor:
         cursor.execute(sql)
+        connection.commit()
         result = cursor.fetchall()
     print(result)
     return result
@@ -341,12 +362,14 @@ def borrow(data, borrow_type , booker):
     connection.ping(reconnect = True)
     with connection.cursor() as cursor:
         cursor.execute(sql,data['roomName'])
+        connection.commit()
         CR_ID = cursor.fetchone()['CR_ID']
         
     sql = "SELECT * FROM `record` WHERE `CR_ID` = %s"
     connection.ping(reconnect = True)
     with connection.cursor() as cursor:
         cursor.execute(sql,CR_ID)
+        connection.commit()
         record_total = cursor.fetchall()
     d_startTime = datetime.fromisoformat(str(data["startDate"]))
     d_endTime = datetime.fromisoformat(str(data["endDate"]))
@@ -381,6 +404,7 @@ def filter_classroom(data): #開始日期 startDate,開始節數 startSection,�
     connection.ping(reconnect = True)
     with connection.cursor() as cursor:
         cursor.execute(sql)
+        connection.commit()
         classroom_total = cursor.fetchall()
     classroom_total = pd.DataFrame(classroom_total)
     if data['building'] != None:
@@ -397,6 +421,7 @@ def filter_classroom(data): #開始日期 startDate,開始節數 startSection,�
     connection.ping(reconnect = True)
     with connection.cursor() as cursor:
         cursor.execute(sql)
+        connection.commit()
         record_total = cursor.fetchall()
     record_CR_ID = []
     for r in record_total:

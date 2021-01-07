@@ -1,0 +1,14 @@
+# lulalatest
+教室預訂系統
+
+# physical
+這個project是將網頁放置在Heroku上，以此來讓整個系統可以透過網路連接。
+database的部分則是使用Heroku的Add-ons中的clearDB服務
+寫入calendar的部分則是使是google api的googel calendar
+
+若要重現這個project，則需建立一個Heroku的python專案，
+並在Heroku的Add-ons使用clearDB的服務，並將clearDB提供的資訊填入connect.py中連接database的參數。
+另外由於有使用到google calendar，因此還要另外申請一個網頁服務的google api，
+並且將會用到的測試email與redirect URL加入API中，
+最後將建立好的專案的OAuth 2.0 ID下載並更名為"credentials.json"
+將project中的"credentials.json"取代掉。
