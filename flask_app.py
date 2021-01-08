@@ -32,6 +32,7 @@ app.secret_key = "My key"
 dummy_record = {'recordID':'1', 'title':'dummy', 'startDate':'2021-02-01', 'startSection':1, 'endDate':'2021-01-31', 'endSection':10,
 'roomName':'TR-411', 'building':'研揚大樓(TR)', 'participant':[]}
 
+"""
 #test DB route
 @app.route('/testDB_classroom',methods=['POST','GET'])
 def testDB_classroom():
@@ -53,6 +54,7 @@ def testDB_record():
     print(result)
     return render_template("testDB_record.html" , data = result)
     #return result
+"""
 
 #==============================================================================
 #calendar part

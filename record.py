@@ -352,6 +352,10 @@ def modify_record(data):
     return result
 
 def borrow(data, borrow_type , booker):
+    """
+    borrow a classroom
+    process data and call insertRecord
+    """
     participants = []
     have = 0
     if borrow_type == 'ban':
@@ -400,6 +404,9 @@ def borrow(data, borrow_type , booker):
     return True
 
 def filter_classroom(data): #開始日期 startDate,開始節數 startSection,結束日期endDate ,結束節數endSection,大樓(building),可容納人數(capacity)
+    """
+    get the record that between the time period
+    """
     sql = "SELECT * FROM Classroom"
     connection.ping(reconnect = True)
     with connection.cursor() as cursor:

@@ -1,8 +1,11 @@
 import pymysql
 from connect import connection
-#classroom table
-#insert some default classroom
+
 def insertClassroom():
+    """
+    classroom table
+    insert some default classroom(["TR" , "T4" , "RB" , "IB" , "EE"] 204 ~ 407 , capacity:50)
+    """
     record = []
     sql = "INSERT INTO `classroom` (`building`, `roomname` , `capacity`) VALUES (%s, %s , %s)"
     build = ["TR" , "T4" , "RB" , "IB" , "EE"]
@@ -16,14 +19,3 @@ def insertClassroom():
     with connection.cursor() as cursor:
         cursor.executemany(sql,record)
         connection.commit()
-
-#display all classroom
-def showClassroom():
-    sql = "SELECT * FROM Classroom"
-    connection.ping(reconnect = True)
-    with connection.cursor() as cursor:
-        cursor.execute(sql)
-        connection.commit()
-        result = cursor.fetchall()
-    print(result)
-    return result

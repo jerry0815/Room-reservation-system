@@ -3,6 +3,15 @@ import pymysql
 from connect import connection
 
 def insertUser(userName = "jerry", nickName = "", password = "123456798", email = "jerry@gmail.com", identity = '0' , banned = False):
+    """
+    insert a user account in database
+    parameter:
+    str: userName ,
+    str: nickName(default same as userName),
+    str: passward,
+    str: email,
+
+    """
     if nickName == "":
         nickName = userName
     sql = "INSERT INTO `users` (`userName`, `nickName`,`password` , `email` , `identity` , `banned`) VALUES (%s,%s,%s,%s,%s,%s)"
@@ -19,6 +28,9 @@ def isValidMail(email):
         return False
 
 def register(data):
+    """
+    register a account
+    """
     email = data['email'] + "@gmail.com"
     if not isValidMail(email):
         return False
@@ -86,6 +98,9 @@ def modifyNickName(userName , nickName):
         connection.commit()
 
 def deleteAccount(userID):
+    """
+    remove an account by userID
+    """
     sql = "DELETE FROM `users` WHERE `userID` = %s"
     connection.ping(reconnect = True)
     with connection.cursor() as cursor:
@@ -94,6 +109,9 @@ def deleteAccount(userID):
     return True
 
 def banAccount(userID):
+    """
+    set account as banned
+    """
     sql = " UPDATE `users` SET `banned` = %s WHERE `userID` = %s "
     connection.ping(reconnect = True)
     with connection.cursor() as cursor:
@@ -102,6 +120,9 @@ def banAccount(userID):
     return True
 
 def unBanAccount(userID):
+    """
+    unban account
+    """
     sql = " UPDATE `users` SET `banned` = %s WHERE `userID` = %s "
     connection.ping(reconnect = True)
     with connection.cursor() as cursor:
@@ -110,6 +131,9 @@ def unBanAccount(userID):
     return True
 
 def getAllUserName():
+    """
+    get all users' name
+    """
     sql = "SELECT `userName` FROM `users`"
     connection.ping(reconnect = True)
     with connection.cursor() as cursor:
@@ -120,6 +144,7 @@ def getAllUserName():
     for i in range(len(result)):
         result[i] = result[i]['userName']
     return result
+
 #display all users
 def showUsers():
     sql = "SELECT * FROM users"
@@ -151,6 +176,9 @@ def getUser(userName):
     return (True , result)
 
 def getUserMail(userName):
+    """
+    get user's mail by userName
+    """
     if userName == None or len(userName) == 0:
         return []
     sql = "SELECT `email` FROM `users` WHERE `userName` IN ({seq})".format(seq=','.join(['%s']*len(userName)))
