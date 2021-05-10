@@ -1,5 +1,6 @@
 # lulalatest
 教室預訂系統
+https://lulalatest.herokuapp.com
 
 # physical
 此project是以python flask框架製作並部屬在Heroku上的網頁，以此來讓整個系統可以透過網路連接。
