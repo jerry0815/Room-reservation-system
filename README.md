@@ -1,4 +1,4 @@
-# lulalatest
+# Room reservation system
 教室預訂系統
 https://lulalatest.herokuapp.com
 
