@@ -13,3 +13,6 @@ database的部分使用Heroku的Add-ons中的clearDB服務
 並且將會用到的測試email與redirect URL加入API中，
 最後將建立好的專案的OAuth 2.0 ID下載並更名為"credentials.json"
 將project中的"credentials.json"取代掉。
+
+demo:
+https://youtu.be/ejXWyUn8tDk
